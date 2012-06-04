@@ -1,4 +1,6 @@
 *.class
+pc.classpath
+laptop.classpath
 
 # Package Files #
 *.jar
