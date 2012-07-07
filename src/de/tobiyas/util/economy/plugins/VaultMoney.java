@@ -100,8 +100,7 @@ public class VaultMoney implements MoneyPlugin {
 
 	@Override
 	public boolean hasBankSupport() {
-		// TODO Auto-generated method stub
-		return false;
+		return vaultEconomy.hasBankSupport();
 	}
 
 }

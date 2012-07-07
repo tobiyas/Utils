@@ -9,15 +9,24 @@ import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.tobiyas.util.debug.erroruploader.ErrorUploader;
+
 public class DebugLogger {
 	
 	private JavaPlugin plugin;
 	private Logger debugLogger;
+	private Logger errorLogger;
 	
-	private FileHandler fileHandler;
-	private File saveFile;
+	private ErrorUploader errorUploader;
+	
+	private FileHandler debugFileHandler;
+	private FileHandler errorFileHandler;
+	
+	private File debugSaveFile;
+	private File errorSaveFile;
 	
 	private boolean enabled;
+	private boolean enableUploads;
 	private boolean alsoOutputToDefaultLogger;
 	
 	/**
@@ -27,9 +36,11 @@ public class DebugLogger {
 		this.plugin = plugin;
 		this.alsoOutputToDefaultLogger = false;
 		this.enabled = true;
+		this.enableUploads = true;
+		this.errorUploader = new ErrorUploader(plugin, this);
 		createStructur();
 	
-		initLogger();
+		initLoggers();
 	}
 	
 	private void createStructur(){
@@ -40,29 +51,76 @@ public class DebugLogger {
 			pathFile.mkdirs();
 		
 		String debugFileName = "debug.log";
-		saveFile = new File(pathFile, debugFileName);
+		debugSaveFile = new File(pathFile, debugFileName);
 		
-		if(!saveFile.exists())
+		if(!debugSaveFile.exists())
 			try {
-				saveFile.createNewFile();
+				debugSaveFile.createNewFile();
 			} catch (IOException e) {
 				plugin.getLogger().log(Level.WARNING, ChatColor.YELLOW + "[" + plugin.getName() + "] Debug File could not be created!");
 			}
+		
+		
+		//Error logger
+		path = plugin.getDataFolder() + File.separator + "Debug" + File.separator;
+		pathFile = new File(path);
+		
+		if(!pathFile.exists())
+			pathFile.mkdirs();
+		
+		String errorFileName = "error.log";
+		errorSaveFile = new File(pathFile, errorFileName);
+		
+		if(!errorSaveFile.exists())
+			try {
+				errorSaveFile.createNewFile();
+			} catch (IOException e) {
+				plugin.getLogger().log(Level.WARNING, ChatColor.YELLOW + "[" + plugin.getName() + "] Debug File could not be created!");
+			}
+		
+		
 	}
 	
-	private void initLogger(){
-		debugLogger = Logger.getLogger("minecraft." + plugin.getName());
+	private void initLoggers(){
+		initDebugLogger();
+		initErrorLogger();
+	}
+	
+	private void initDebugLogger(){
+		debugLogger = Logger.getLogger("minecraft." + plugin.getName() + ".debug");
 		debugLogger.setUseParentHandlers(alsoOutputToDefaultLogger);
 		
 		try {
 			// This block configure the logger with handler and formatter
-			fileHandler = new FileHandler(saveFile.toString(), true);
-			debugLogger.addHandler(fileHandler);
+			debugFileHandler = new FileHandler(debugSaveFile.toString(), true);
+			debugLogger.addHandler(debugFileHandler);
 			debugLogger.setLevel(Level.ALL);
-			fileHandler.setFormatter(new ConsoleLogFormatter(true));
+			debugFileHandler.setFormatter(new ConsoleLogFormatter(true));
 
-			// the following statement is used to log any messages   
-			log("Debugger for Plugin" + plugin.getName() + 
+			// the following statement is the initiation of the logger displaying version + plugin 
+			log("Debugger for Plugin:" + plugin.getName() + " Version: " + plugin.getDescription().getVersion() +   
+						" Started! System-Time: " + Calendar.getInstance().getTime().toString());
+
+		 } catch (SecurityException e) {
+			 e.printStackTrace();
+		 } catch (IOException e) {
+			 e.printStackTrace();
+		 }
+	}
+	
+	private void initErrorLogger(){
+		errorLogger = Logger.getLogger("minecraft." + plugin.getName() + ".debug.error");
+		errorLogger.setUseParentHandlers(false);
+		
+		try {
+			// This block configure the logger with handler and formatter
+			errorFileHandler = new FileHandler(errorSaveFile.toString(), true);
+			errorLogger.addHandler(errorFileHandler);
+			errorLogger.setLevel(Level.ALL);
+			errorFileHandler.setFormatter(new ConsoleLogFormatter(true));
+
+			// the following statement is the initiation of the logger displaying version + plugin 
+			errorLogger.log(Level.INFO, "Debugger for Plugin:" + plugin.getName() + " Version: " + plugin.getDescription().getVersion() +   
 						" Started! System-Time: " + Calendar.getInstance().getTime().toString());
 
 		 } catch (SecurityException e) {
@@ -100,8 +158,14 @@ public class DebugLogger {
 	 * @param msg
 	 */
 	public void logError(String msg){
+		logError(msg, true);
+	}
+	
+	private void logError(String msg, boolean logToErrorlogger){
 		if(enabled)
 			debugLogger.log(Level.SEVERE, msg);
+		if(logToErrorlogger)
+			errorLogger.log(Level.SEVERE, msg);
 	}
 	
 	public void setAlsoToPlugin(boolean value){
@@ -112,8 +176,10 @@ public class DebugLogger {
 	}
 
 	public void shutDown() {
-		debugLogger.removeHandler(fileHandler);
-		fileHandler.close();
+		debugLogger.removeHandler(debugFileHandler);
+		debugFileHandler.close();
+		errorLogger.removeHandler(errorFileHandler);
+		errorFileHandler.close();
 	}
 
 	public void disable() {
@@ -122,5 +188,24 @@ public class DebugLogger {
 	
 	public void enable(){
 		this.enabled = true;
+	}
+	
+	public void disableUploads(){
+		this.enableUploads = false;
+	}
+
+	public void logStackTrace(Exception error) {
+		logError("Stacktrace in error.log!", false);
+		errorLogger.log(Level.SEVERE, "Error: " + error.getClass().getName() + " message: '" + error.getLocalizedMessage() + "'");
+		for(StackTraceElement element : error.getStackTrace()){
+			errorLogger.log(Level.SEVERE, element.toString());
+		}
+		
+		if(enableUploads)
+			errorUploader.uploadStacktrace(error);
+	}
+	
+	public void writebackForUploader(String returnMessage){
+		errorLogger.log(Level.INFO, "Upload finished with code: " + returnMessage);
 	}
 }

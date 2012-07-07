@@ -5,6 +5,7 @@
 package de.tobiyas.util.permissions;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
@@ -12,7 +13,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.tobiyas.util.permissions.plugins.BukkitPermissionsPermissions;
+import de.tobiyas.util.permissions.plugins.BPermissionsPermissions;
+import de.tobiyas.util.permissions.plugins.PermissionsBukkitPermissions;
 import de.tobiyas.util.permissions.plugins.GroupManagerPermissions;
 import de.tobiyas.util.permissions.plugins.OpPermissions;
 import de.tobiyas.util.permissions.plugins.PEXPermissions;
@@ -27,59 +29,87 @@ public class PermissionManager{
 	/**
 	 * Sets up the Permission Manager for the Plugin
 	 *
+	 * @param denialList: a string list of PermissionPlugins to be ignored while check
+	 * @param plugin: the Plugin it is using
+	 */
+	public PermissionManager(JavaPlugin plugin, ArrayList<String> denialList){
+		this.plugin = plugin;
+		permPlugin = checkForPermissionsPlugin(denialList);
+	}
+	
+	
+	/**
+	 * Sets up the Permission Manager for the Plugin
+	 *
 	 * @param plugin the Plugin it is using
 	 */
 	public PermissionManager(JavaPlugin plugin){
 		this.plugin = plugin;
-		permPlugin = checkForPermissionsPlugin();
+		permPlugin = checkForPermissionsPlugin(null);
 	}
 	
-	private PermissionPlugin checkForPermissionsPlugin(){
+	private PermissionPlugin checkForPermissionsPlugin(ArrayList<String> denialList){
+		if(denialList == null)
+			denialList = new ArrayList<String>();
+		
 		PermissionPlugin tempPlugin;
-		try{
-			tempPlugin = new VaultPermissions();
-			tempPlugin.init();
-			if(tempPlugin.isActive()){
-				return tempPlugin;
-			}
-		}catch(NoClassDefFoundError e){}
+		if(!containsStringIgnoreCase("Vault", denialList))
+			try{
+				tempPlugin = new VaultPermissions();
+				tempPlugin.init();
+				if(tempPlugin.isActive()){
+					return tempPlugin;
+				}
+			}catch(NoClassDefFoundError e){}
 		
-		try{
-			tempPlugin = new PEXPermissions();
-			tempPlugin.init();
-			if(tempPlugin.isActive()){
-				return tempPlugin;
-			}
-		}catch(NoClassDefFoundError e){}
+		if(!containsStringIgnoreCase("PermissionsEX", denialList))
+			try{
+				tempPlugin = new PEXPermissions();
+				tempPlugin.init();
+				if(tempPlugin.isActive()){
+					return tempPlugin;
+				}
+			}catch(NoClassDefFoundError e){}
 		
-		try{
-			tempPlugin = new GroupManagerPermissions();
-			tempPlugin.init();
-			if(tempPlugin.isActive()){
-				return tempPlugin;
-			}
-		}catch(NoClassDefFoundError e){}
+		if(!containsStringIgnoreCase("GroupManager", denialList))
+			try{
+				tempPlugin = new GroupManagerPermissions();
+				tempPlugin.init();
+				if(tempPlugin.isActive()){
+					return tempPlugin;
+				}
+			}catch(NoClassDefFoundError e){}
 		
-		try{
-			tempPlugin = new BukkitPermissionsPermissions();
-			tempPlugin.init();
-			if(tempPlugin.isActive()){
-				return tempPlugin;
-			}
-		}catch(NoClassDefFoundError e){}
+		if(!containsStringIgnoreCase("PermissionsBukkit", denialList))
+			try{
+				tempPlugin = new PermissionsBukkitPermissions();
+				tempPlugin.init();
+				if(tempPlugin.isActive()){
+					return tempPlugin;
+				}
+			}catch(NoClassDefFoundError e){}
 		
-		try{
-			tempPlugin = new BukkitPermissionsPermissions();
-			tempPlugin.init();
-			if(tempPlugin.isActive()){
-				return tempPlugin;
-			}
-		}catch(NoClassDefFoundError e){}
+		if(!containsStringIgnoreCase("BPermissions", denialList))
+			try{
+				tempPlugin = new BPermissionsPermissions();
+				tempPlugin.init();
+				if(tempPlugin.isActive()){
+					return tempPlugin;
+				}
+			}catch(NoClassDefFoundError e){}
 		
 		
 		tempPlugin = new OpPermissions();
 		plugin.getLogger().log(Level.WARNING,"Info: No Permission-System hooked. Plugin will use Op-State to consider Permissions.");
 		return tempPlugin;
+	}
+	
+	private boolean containsStringIgnoreCase(String noCheck, List<String> list){
+		for(String name : list){
+			if(name.equalsIgnoreCase(noCheck))
+				return true;
+		}
+		return false;
 	}
 
 	

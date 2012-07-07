@@ -143,6 +143,18 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	public Location getLocation(String path){
 		return getLocation(path, null);
 	}
+	
+	public void setDrop(String path, int itemID, int damageValue, int minAmount, int maxAmount, double probability){
+		String pre = path + "." + itemID;
+		if(damageValue != -1)
+			pre += "-" + damageValue;
+		
+		createSection(pre);
+		set(pre + ".min", minAmount);
+		set(pre + ".max", maxAmount);
+		set(pre + ".probability", probability);
+	}
+
 }
 
 
