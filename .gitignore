@@ -6,3 +6,5 @@ laptop.classpath
 *.jar
 *.war
 *.ear
+target/*
+upload.php

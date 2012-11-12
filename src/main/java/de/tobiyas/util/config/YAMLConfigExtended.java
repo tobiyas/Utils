@@ -10,17 +10,42 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
+
+import de.tobiyas.util.config.returncontainer.DropContainer;
 
 
 public class YAMLConfigExtended extends YamlConfiguration {
 
 	private String savePath;
+	
+	private String totalPath;
 	private boolean validLoad;
+	
+	public YAMLConfigExtended(File file){
+		super();
+		validLoad = false;
+		this.savePath = file.getParent();
+		
+		this.totalPath = file.getPath();
+	}
+	
+	public YAMLConfigExtended(String savePath, String fileName){
+		super();
+		validLoad = false;
+		this.savePath = savePath;
+		
+		this.totalPath = savePath + File.separator + fileName;
+	}
 	
 	public YAMLConfigExtended(String savePath){
 		super();
 		validLoad = false;
-		this.savePath = savePath;
+		
+		File tempFile = new File(savePath);
+		this.savePath = tempFile.getParent();
+		
+		this.totalPath = savePath;
 	}
 	
 	/**
@@ -42,7 +67,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	}
 	
 	public boolean save(){
-		File file = fileCheck(savePath);
+		File file = fileCheck();
 		try {
 			this.save(file);
 		} catch (IOException e) {
@@ -54,11 +79,11 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	}
 	
 	public YAMLConfigExtended load(){
-		File savePathFile = new File(savePath);
+		File savePathFile = new File(totalPath);
 		if(!savePathFile.exists())
 			savePathFile.mkdir();
 		
-		File saveFile = fileCheck(savePath);
+		File saveFile = fileCheck();
 		if(saveFile == null) {
 			System.out.println("saveFile == null: " + savePath);
 			validLoad = false;
@@ -99,9 +124,13 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		return saveFile.delete();
 	}
 	
-	private File fileCheck(String file){		
-		File fileFile = new File(file);
+	private File fileCheck(){		
+		File fileFile = new File(totalPath);
 		if(!fileFile.exists()){
+			File saveDir = new File(savePath);
+			if(!saveDir.exists())
+				saveDir.mkdirs();
+				
 			try {
 				fileFile.createNewFile();
 			} catch (IOException e) {
@@ -144,7 +173,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		return getLocation(path, null);
 	}
 	
-	public void setDrop(String path, int itemID, int damageValue, int minAmount, int maxAmount, double probability){
+	public void setDropContainer(String path, int itemID, int damageValue, int minAmount, int maxAmount, double probability){
 		String pre = path + "." + itemID;
 		if(damageValue != -1)
 			pre += "-" + damageValue;
@@ -153,6 +182,54 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		set(pre + ".min", minAmount);
 		set(pre + ".max", maxAmount);
 		set(pre + ".probability", probability);
+	}
+	
+	public void setDropContainer(String path, DropContainer container){
+		String pre = path + "." + container.getItem().getTypeId();
+		if(container.getItem().getDurability() != 0)
+			pre += "-" + container.getItem().getDurability();
+		
+		createSection(pre);
+		set(pre + ".min", container.getMin());
+		set(pre + ".max", container.getMax());
+		set(pre + ".probability", container.getProbability());
+	}
+	
+	public DropContainer getDropContainer(String path){
+		int itemID = getItemID(path);
+		short damageValue = getItemDamageValue(path);
+		
+		int minAmount = getInt(path + ".min", 0);
+		int maxAmount = getInt(path + ".max", 0);
+		double probability = getDouble(path + ".probability", 0);
+		
+		ItemStack item = new ItemStack(itemID, 1, damageValue);
+		
+		return new DropContainer(item, minAmount, maxAmount, probability);
+	}
+	
+	private int getItemID(String path){
+		try{
+			String[] split = path.split(".");
+			String combinedValue = split[split.length - 1];
+			String[] combinedSplit = combinedValue.split("-");
+		
+			return Integer.parseInt(combinedSplit[0]);
+		}catch(Exception exc){
+			return 1;
+		}
+	}
+	
+	private short getItemDamageValue(String path){
+		try{
+			String[] split = path.split(".");
+			String combinedValue = split[split.length - 1];
+			String[] combinedSplit = combinedValue.split("-");
+		
+			return Short.parseShort(combinedSplit[1]);
+		}catch(Exception exc){
+			return 0;
+		}
 	}
 
 }

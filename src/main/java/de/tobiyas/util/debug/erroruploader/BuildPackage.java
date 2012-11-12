@@ -7,6 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 
@@ -21,15 +23,15 @@ public class BuildPackage extends Thread{
 	private String utilsState;
 	
 	private Exception error;
-	private ErrorUploader uploader;
+	private Logger logger;
 	
 	
-	public BuildPackage(String pluginVersion, String pluginName, Exception error, ErrorUploader uploader){
+	public BuildPackage(String pluginVersion, String pluginName, Exception error, Logger logger){
 		this.pluginVersion = pluginVersion;
 		this.pluginName = pluginName;
 		this.utilsVersion = UtilConsts.utilsBuildVersion;
 		this.utilsState = UtilConsts.utilsBuildState;
-		this.uploader = uploader;
+		this.logger = logger;
 		
 		this.error = error;
 	}
@@ -90,9 +92,10 @@ public class BuildPackage extends Thread{
 	        writer.close();
 	        reader.close();
 			
-	        uploader.writeback(response);
+	       	logger.log(Level.INFO, "Responce Code: " + response + " " + ErrorUploaderResponceCode.getMessageToError(response));
 		} catch (Exception e){
-			uploader.writeback("Error while uploading error: " + e.getClass().getName());
+			logger.log(Level.WARNING, "Error while uploading log: " + e.getLocalizedMessage().toString());
+			e.printStackTrace();
 		}
 	}
 }

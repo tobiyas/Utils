@@ -11,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import de.tobiyas.util.debug.erroruploader.ErrorUploader;
 
-public class DebugLogger {
+public class DebugLogger{
 	
 	private JavaPlugin plugin;
 	private Logger debugLogger;
@@ -37,10 +37,11 @@ public class DebugLogger {
 		this.alsoOutputToDefaultLogger = false;
 		this.enabled = true;
 		this.enableUploads = true;
-		this.errorUploader = new ErrorUploader(plugin, this);
 		createStructur();
-	
+		
 		initLoggers();
+		
+		this.errorUploader = new ErrorUploader(plugin, errorLogger);
 	}
 	
 	private void createStructur(){
@@ -203,9 +204,5 @@ public class DebugLogger {
 		
 		if(enableUploads)
 			errorUploader.uploadStacktrace(error);
-	}
-	
-	public void writebackForUploader(String returnMessage){
-		errorLogger.log(Level.INFO, "Upload finished with code: " + returnMessage);
 	}
 }
