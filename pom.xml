@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.tobiyas</groupId>
   <artifactId>Utils</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.6-SNAPSHOT</version>
   <name>Utils</name>
   
    <repositories>
@@ -25,57 +25,99 @@
   </properties>
   
   <dependencies>
-  	<dependency>
-  		<groupId>org.bukkit</groupId>
-  		<artifactId>bukkit</artifactId>
-  		<version>1.4.5-R0.3-SNAPSHOT</version>
-  		<optional>true</optional>
-  	</dependency>
-  	<dependency>
-  		<groupId>net.milkbowl</groupId>
-  		<artifactId>vault</artifactId>
-  		<version>1.2.12</version>
-  		<optional>true</optional>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.easymock</groupId>
-  		<artifactId>easymock</artifactId>
-  		<version>3.1</version>
-  		<optional>true</optional>
-  		<scope>test</scope>
-  	</dependency>
-  	
-  	<dependency>
-  		<groupId>junit</groupId>
-  		<artifactId>junit</artifactId>
-  		<version>4.8.2</version>
-  		<optional>true</optional>
-  		<scope>test</scope>
-  	</dependency>
-	
-	<dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-module-junit4</artifactId>
-      <version>${powermock.version}</version>
-      <scope>test</scope>
-      <optional>true</optional>
-	</dependency>
+	  	<dependency>
+	  		<groupId>org.bukkit</groupId>
+	  		<artifactId>bukkit</artifactId>
+	  		<optional>true</optional>
+	  	</dependency>
+	  	<dependency>
+	  		<groupId>net.milkbowl</groupId>
+	  		<artifactId>vault</artifactId>
+	  		<optional>true</optional>
+	  	</dependency>
+	  	<dependency>
+	  		<groupId>org.easymock</groupId>
+	  		<artifactId>easymock</artifactId>
+	  		<optional>true</optional>
+	  		<scope>test</scope>
+	  	</dependency>
+	  	
+	  	<dependency>
+	  		<groupId>junit</groupId>
+	  		<artifactId>junit</artifactId>
+	  		<optional>true</optional>
+	  		<scope>test</scope>
+	  	</dependency>
+		
+		<dependency>
+	      <groupId>org.powermock</groupId>
+	      <artifactId>powermock-module-junit4</artifactId>
+	      <scope>test</scope>
+	      <optional>true</optional>
+		</dependency>
    
-   <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-api-easymock</artifactId>
-      <version>${powermock.version}</version>
-      <scope>test</scope>
-      <optional>true</optional>
-   </dependency>
+	   <dependency>
+	      <groupId>org.powermock</groupId>
+	      <artifactId>powermock-api-easymock</artifactId>
+	      <scope>test</scope>
+	      <optional>true</optional>
+	   </dependency>
    
-   <dependency>
-     <groupId>org.mockito</groupId>
-  	 <artifactId>mockito-all</artifactId>
-     <version>1.9.0</version>
-     <scope>test</scope>
-     <optional>true</optional>
-   </dependency>
+	   <dependency>
+	     <groupId>org.mockito</groupId>
+	  	 <artifactId>mockito-all</artifactId>
+	     <scope>test</scope>
+	     <optional>true</optional>
+	   </dependency>
+   
+	   <!-- Local Dependencies -->
+	   <dependency>
+	  		<groupId>org.anjocaido</groupId>
+	    	<artifactId>groupmanager</artifactId>
+	   		<scope>system</scope>
+	    	<systemPath>D:\Dropbox\Workspace\Workspace-Minecraft\Libaries\Permissions\EssentialsGroupManager.jar</systemPath>
+	    	<optional>true</optional>
+	  </dependency>
+	  
+	  <dependency>
+  		<groupId>de.bananaco</groupId>
+    	<artifactId>bPermissions</artifactId>
+   		<scope>system</scope>
+    	<systemPath>D:\Dropbox\Workspace\Workspace-Minecraft\Libaries\Permissions\bpermissions.jar</systemPath>
+    	<optional>true</optional>
+ 	 </dependency>
+ 	 
+	  <dependency>
+  		<groupId>com.platymuus</groupId>
+    	<artifactId>bukkit-permissions</artifactId>
+   		<scope>system</scope>
+    	<systemPath>D:\Dropbox\Workspace\Workspace-Minecraft\Libaries\Permissions\PermissionsBukkit.jar</systemPath>
+    	<optional>true</optional>
+ 	 </dependency>
+ 	 
+ 	 <dependency>
+  		<groupId>ru.tehkode</groupId>
+    	<artifactId>PermissionsEx</artifactId>
+   		<scope>system</scope>
+    	<systemPath>D:\Dropbox\Workspace\Workspace-Minecraft\Libaries\Permissions\PermissionsEx.jar</systemPath>
+    	<optional>true</optional>
+ 	 </dependency>
+ 	 
+ 	 <dependency>
+  		<groupId>com.iCo6</groupId>
+    	<artifactId>iConomy</artifactId>
+   		<scope>system</scope>
+    	<systemPath>D:\Dropbox\Workspace\Workspace-Minecraft\Libaries\Money\iConomy.jar</systemPath>
+    	<optional>true</optional>
+ 	 </dependency>
+ 	 
+ 	  <dependency>
+  		<groupId>com.earth2me</groupId>
+    	<artifactId>essentials</artifactId>
+   		<scope>system</scope>
+    	<systemPath>D:\Dropbox\Workspace\Workspace-Minecraft\Libaries\Money\Essentials.jar</systemPath>
+    	<optional>true</optional>
+ 	 </dependency>
    	
   </dependencies>
   
@@ -86,12 +128,82 @@
      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
+        <version>2.3</version>
         <configuration>
-        	<source>1.7</source>
-        	<target>1.7</target>
+         <target>1.6</target>
+         <source>1.6</source>
         </configuration>
       </plugin>
     </plugins>
   </build>
+  <dependencyManagement>
+  	<dependencies>
+  		<dependency>
+  			<groupId>org.bukkit</groupId>
+  			<artifactId>bukkit</artifactId>
+  			<version>1.4.6-R0.2-SNAPSHOT</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>net.milkbowl</groupId>
+  			<artifactId>vault</artifactId>
+  			<version>1.2.12</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>org.easymock</groupId>
+  			<artifactId>easymock</artifactId>
+  			<version>3.1</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>junit</groupId>
+  			<artifactId>junit</artifactId>
+  			<version>4.8.2</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>org.powermock</groupId>
+  			<artifactId>powermock-module-junit4</artifactId>
+  			<version>${powermock.version}</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>org.powermock</groupId>
+  			<artifactId>powermock-api-easymock</artifactId>
+  			<version>${powermock.version}</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>org.mockito</groupId>
+  			<artifactId>mockito-all</artifactId>
+  			<version>1.9.0</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>org.anjocaido</groupId>
+  			<artifactId>groupmanager</artifactId>
+  			<version>1.9.60</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>de.bananaco</groupId>
+  			<artifactId>bPermissions</artifactId>
+  			<version>dev-SNAPSHOT</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>com.platymuus</groupId>
+  			<artifactId>bukkit-permissions</artifactId>
+  			<version>2.0</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>ru.tehkode</groupId>
+  			<artifactId>PermissionsEx</artifactId>
+  			<version>1.19.2</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>com.iCo6</groupId>
+  			<artifactId>iConomy</artifactId>
+  			<version>7.0</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>com.earth2me</groupId>
+  			<artifactId>essentials</artifactId>
+  			<version>2.9.1</version>
+  		</dependency>
+  	</dependencies>
+  </dependencyManagement>
+  
 </project>
