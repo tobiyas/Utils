@@ -27,7 +27,7 @@
   <dependencies>
 	  	<dependency>
 	  		<groupId>org.bukkit</groupId>
-	  		<artifactId>bukkit</artifactId>
+	  		<artifactId>craftbukkit</artifactId>
 	  		<optional>true</optional>
 	  	</dependency>
 	  	<dependency>
@@ -140,8 +140,8 @@
   	<dependencies>
   		<dependency>
   			<groupId>org.bukkit</groupId>
-  			<artifactId>bukkit</artifactId>
-  			<version>1.4.6-R0.2-SNAPSHOT</version>
+  			<artifactId>craftbukkit</artifactId>
+  			<version>1.5.2-R0.2-SNAPSHOT</version>
   		</dependency>
   		<dependency>
   			<groupId>net.milkbowl</groupId>

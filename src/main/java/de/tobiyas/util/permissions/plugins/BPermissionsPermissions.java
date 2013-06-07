@@ -10,6 +10,7 @@ import org.bukkit.plugin.Plugin;
 import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.util.CalculableType;
 
+@SuppressWarnings("deprecation")
 public class BPermissionsPermissions implements PermissionPlugin{
 	
 	private boolean isActive;

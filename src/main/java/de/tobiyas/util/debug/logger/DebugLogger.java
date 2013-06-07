@@ -36,7 +36,7 @@ public class DebugLogger{
 		this.plugin = plugin;
 		this.alsoOutputToDefaultLogger = false;
 		this.enabled = true;
-		this.enableUploads = true;
+		this.enableUploads = false;
 		createStructur();
 		
 		initLoggers();
@@ -191,8 +191,8 @@ public class DebugLogger{
 		this.enabled = true;
 	}
 	
-	public void disableUploads(){
-		this.enableUploads = false;
+	public void enableUploads(boolean enable){
+		this.enableUploads = enable;
 	}
 
 	public void logStackTrace(Exception error) {

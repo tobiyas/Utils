@@ -16,19 +16,13 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/Dropbox/Workspace/Workspace-Minecraft/Libaries/Money/Essentials.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/Workspace/Workspace-Minecraft/Libaries/Money/iConomy.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/Workspace/Workspace-Minecraft/Libaries/Permissions/bpermissions.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/Workspace/Workspace-Minecraft/Libaries/Permissions/EssentialsGroupManager.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/Workspace/Workspace-Minecraft/Libaries/Permissions/PermissionsBukkit.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/Workspace/Workspace-Minecraft/Libaries/Permissions/PermissionsEx.jar"/>
 	<classpathentry kind="src" output="target/test-classes" path="test/main/java">
 		<attributes>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>

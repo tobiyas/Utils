@@ -28,7 +28,7 @@ public class BankStore {
 		YAMLConfigExtended config = new YAMLConfigExtended(path);
 		if(!config.load().getValidLoad()) return accounts;
 		
-		Set<String> names = config.getYAMLChildren("accounts");
+		Set<String> names = config.getChildren("accounts");
 		
 		for(String name : names)
 			accounts.add(new BankAccount(name, config.getDouble("accounts." + name)));

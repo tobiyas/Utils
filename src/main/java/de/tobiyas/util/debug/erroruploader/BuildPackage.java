@@ -16,6 +16,9 @@ import de.tobiyas.util.config.UtilConsts;
 
 public class BuildPackage extends Thread{
 
+	//Actual adress to send error to
+	private static final String sendAdress = "http://tobiyas.lima-city.de/upload.php";
+	
 	private String pluginVersion;
 	private String pluginName;
 	
@@ -74,7 +77,7 @@ public class BuildPackage extends Thread{
 	
 	private void sendError(){
 		try {
-			URL url = new URL("http://0x002a.de/upload.php");
+			URL url = new URL(sendAdress);
 			
 			URLConnection connection = url.openConnection();
 			connection.setDoOutput(true);

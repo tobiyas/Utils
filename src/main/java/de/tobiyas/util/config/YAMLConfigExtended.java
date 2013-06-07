@@ -54,9 +54,26 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 * @param yamlNode the Node to get the children from
 	 * @return the children as Set<String>
 	 */
-	public Set<String> getYAMLChildren(String yamlNode){
+	public Set<String> getChildren(String yamlNode){
 		try{
 			ConfigurationSection tempMem = getConfigurationSection(yamlNode);
+			Set<String> tempSet = tempMem.getKeys(false);
+			return tempSet;
+			
+		}catch(Exception e){
+			Set<String> empty = new LinkedHashSet<String>();
+			return empty;
+		}
+	}
+	
+	/**
+	 * Util for YAMLReader to get all child-keys as Set<String> for the root
+	 * 
+	 * @return the children as Set<String>
+	 */
+	public Set<String> getRootChildren(){
+		try{
+			ConfigurationSection tempMem = getRoot();
 			Set<String> tempSet = tempMem.getKeys(false);
 			return tempSet;
 			
@@ -72,7 +89,6 @@ public class YAMLConfigExtended extends YamlConfiguration {
 			this.save(file);
 		} catch (IOException e) {
 			return false;
-			//plugin.log("saving config failed.");
 		}
 		
 		return true;
@@ -80,9 +96,12 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	
 	public YAMLConfigExtended load(){
 		File savePathFile = new File(totalPath);
-		if(!savePathFile.exists())
-			savePathFile.mkdir();
-		
+		if(!savePathFile.exists()){
+			try {
+				savePathFile.createNewFile();
+			} catch (IOException e) {}
+		}
+			
 		File saveFile = fileCheck();
 		if(saveFile == null) {
 			System.out.println("saveFile == null: " + savePath);
@@ -173,63 +192,28 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		return getLocation(path, null);
 	}
 	
+	
 	public void setDropContainer(String path, int itemID, int damageValue, int minAmount, int maxAmount, double probability){
-		String pre = path + "." + itemID;
-		if(damageValue != -1)
-			pre += "-" + damageValue;
-		
-		createSection(pre);
-		set(pre + ".min", minAmount);
-		set(pre + ".max", maxAmount);
-		set(pre + ".probability", probability);
+		DropContainer container = new DropContainer(itemID, minAmount, maxAmount, probability);
+		setDropContainer(path, container);
 	}
 	
 	public void setDropContainer(String path, DropContainer container){
-		String pre = path + "." + container.getItem().getTypeId();
-		if(container.getItem().getDurability() != 0)
-			pre += "-" + container.getItem().getDurability();
-		
+		String pre = path;		
 		createSection(pre);
+		set(pre + ".item", container.getItem());
 		set(pre + ".min", container.getMin());
 		set(pre + ".max", container.getMax());
 		set(pre + ".probability", container.getProbability());
 	}
 	
-	public DropContainer getDropContainer(String path){
-		int itemID = getItemID(path);
-		short damageValue = getItemDamageValue(path);
-		
+	public DropContainer getDropContainer(String path){		
+		ItemStack item = getItemStack(path + ".item", new ItemStack(0));
 		int minAmount = getInt(path + ".min", 0);
 		int maxAmount = getInt(path + ".max", 0);
 		double probability = getDouble(path + ".probability", 0);
-		
-		ItemStack item = new ItemStack(itemID, 1, damageValue);
-		
+
 		return new DropContainer(item, minAmount, maxAmount, probability);
-	}
-	
-	private int getItemID(String path){
-		try{
-			String[] split = path.split(".");
-			String combinedValue = split[split.length - 1];
-			String[] combinedSplit = combinedValue.split("-");
-		
-			return Integer.parseInt(combinedSplit[0]);
-		}catch(Exception exc){
-			return 1;
-		}
-	}
-	
-	private short getItemDamageValue(String path){
-		try{
-			String[] split = path.split(".");
-			String combinedValue = split[split.length - 1];
-			String[] combinedSplit = combinedValue.split("-");
-		
-			return Short.parseShort(combinedSplit[1]);
-		}catch(Exception exc){
-			return 0;
-		}
 	}
 
 }
