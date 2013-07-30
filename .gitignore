@@ -9,3 +9,8 @@ laptop.classpath
 target/*
 upload.php
 /target
+/.settings
+/bin
+/test
+/.classpath
+/.project
