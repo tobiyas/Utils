@@ -8,3 +8,4 @@ laptop.classpath
 *.ear
 target/*
 upload.php
+/target

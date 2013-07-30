@@ -2,7 +2,7 @@ package de.tobiyas.util.config.returncontainer;
 
 import java.util.Random;
 
-import net.minecraft.server.v1_5_R3.NBTTagCompound;
+import net.minecraft.server.v1_6_R2.NBTTagCompound;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

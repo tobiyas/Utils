@@ -213,4 +213,15 @@ public class PermissionManager{
 		return hasPerm;
 	}
 	
+	/**
+	 * Returns the underlying Permission Plugin used.
+	 * 
+	 * WARNING: Only use this when absolutely needed!
+	 * 
+	 * @return
+	 */
+	public PermissionPlugin getHandle(){
+		return permPlugin;
+	}
+	
 }

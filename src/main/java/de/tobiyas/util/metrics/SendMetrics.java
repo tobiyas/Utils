@@ -3,20 +3,21 @@ package de.tobiyas.util.metrics;
 import java.io.IOException;
 
 import org.bukkit.plugin.Plugin;
+import org.mcstats.Metrics;
 
 public class SendMetrics {
 
-	public static void sendMetrics(Plugin plugin, boolean debug){
+	public static void sendMetrics(Plugin plugin){
 		try {
 		    Metrics metrics = new Metrics(plugin);
-		    metrics.setDebug(debug);
 		    metrics.start();
 		} catch (IOException e) {
-		    // Failed to submit the stats :-(
+			//error on uploading.
 		}
 	}
 	
-	public static void sendMetrics(Plugin plugin){
-		sendMetrics(plugin, false);
+	public static void sendMetrics(Plugin plugin, boolean useless){
+		//to keep compatibility.
+		sendMetrics(plugin);
 	}
 }

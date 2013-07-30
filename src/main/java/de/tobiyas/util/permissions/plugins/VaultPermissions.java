@@ -74,4 +74,13 @@ public class VaultPermissions implements PermissionPlugin {
 		return "Vault";
 	}
 
+	
+	/**
+	 * Returns the underlying Vault permission system
+	 * 
+	 * @return
+	 */
+	public Permission getHandle(){
+		return vaultPermission;
+	}
 }
