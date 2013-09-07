@@ -17,6 +17,8 @@ public class DebugLogger{
 	private Logger debugLogger;
 	private Logger errorLogger;
 	
+	private final String pluginPrefix;
+	
 	private ErrorUploader errorUploader;
 	
 	private FileHandler debugFileHandler;
@@ -30,6 +32,8 @@ public class DebugLogger{
 	private boolean alsoOutputToDefaultLogger;
 	
 	/**
+	 * The Logger for writing to the somewhere
+	 * 
 	 * @param plugin
 	 */
 	public DebugLogger(JavaPlugin plugin){
@@ -37,8 +41,9 @@ public class DebugLogger{
 		this.alsoOutputToDefaultLogger = false;
 		this.enabled = true;
 		this.enableUploads = false;
-		createStructur();
+		this.pluginPrefix = "[" + plugin.getDescription().getName() + "]";
 		
+		createStructur();
 		initLoggers();
 		
 		this.errorUploader = new ErrorUploader(plugin, errorLogger);
@@ -138,7 +143,7 @@ public class DebugLogger{
 	 * @param msg
 	 */
 	public void log(String msg){
-		debugLogger.log(Level.INFO, msg);
+		debugLogger.log(Level.INFO, pluginPrefix + msg);
 	}
 	
 	/**
@@ -149,7 +154,7 @@ public class DebugLogger{
 	 */
 	public void logWarning(String msg){
 		if(enabled)
-			debugLogger.log(Level.WARNING, msg);
+			debugLogger.log(Level.WARNING, pluginPrefix + msg);
 	}
 	
 	/**
@@ -164,9 +169,9 @@ public class DebugLogger{
 	
 	private void logError(String msg, boolean logToErrorlogger){
 		if(enabled)
-			debugLogger.log(Level.SEVERE, msg);
+			debugLogger.log(Level.SEVERE, pluginPrefix + msg);
 		if(logToErrorlogger)
-			errorLogger.log(Level.SEVERE, msg);
+			errorLogger.log(Level.SEVERE, pluginPrefix + msg);
 	}
 	
 	public void setAlsoToPlugin(boolean value){
@@ -202,7 +207,8 @@ public class DebugLogger{
 			errorLogger.log(Level.SEVERE, element.toString());
 		}
 		
-		if(enableUploads)
+		if(enableUploads){
 			errorUploader.uploadStacktrace(error);
+		}
 	}
 }

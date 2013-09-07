@@ -2,10 +2,8 @@ package de.tobiyas.util.config.returncontainer;
 
 import java.util.Random;
 
-import net.minecraft.server.v1_6_R2.NBTTagCompound;
-
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+//import net.minecraft.server.v1_6_R2.NBTTagCompound;
 
 public class DropContainer {
 
@@ -65,6 +63,7 @@ public class DropContainer {
 		return total;	
 	}
 	
+	/*
 	public NBTTagCompound generateNBTTag(){
 		NBTTagCompound compound = new NBTTagCompound();
 		compound.setInt("max", max);
@@ -82,4 +81,5 @@ public class DropContainer {
 		
 		return new DropContainer(Material.APPLE.getId(), min, max, probability);
 	}
+	*/
 }

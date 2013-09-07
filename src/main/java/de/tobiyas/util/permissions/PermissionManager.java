@@ -114,8 +114,8 @@ public class PermissionManager{
 
 	
 	/**
-	 * The Check of Permissions on the inited Permission-System
-	 * It will notice the Player, if he has no Permissions
+	 * The Check of Permissions on the initialized Permission-System.
+	 * It checks the Permission and the lower-cased Permission. 
 	 * 
 	 * @param player the Player to check
 	 * @param permissionNode the String to check
@@ -123,8 +123,11 @@ public class PermissionManager{
 	 */
 	private boolean checkPermissionsIntern(CommandSender sender, String permissionNode){
 		if(sender == null) return false;
-		return permPlugin.getPermissions(sender, permissionNode);
+		boolean hasPermissionsNormal = permPlugin.getPermissions(sender, permissionNode);
+		boolean hasPermissionsLowercase = permPlugin.getPermissions(sender, permissionNode.toLowerCase());
+		return hasPermissionsNormal || hasPermissionsLowercase;
 	}
+	
 	
 	/**
 	 * The Check of Permissions on the inited Permission-System
@@ -136,8 +139,9 @@ public class PermissionManager{
 	 */
 	public boolean checkPermissions(CommandSender sender, String permissionNode){
 		boolean perm = checkPermissionsIntern(sender, permissionNode);
-		if(!perm)
+		if(!perm){
 			sender.sendMessage(ChatColor.RED + "You don't have Permissions!");
+		}
 		
 		return perm;
 	}
@@ -191,8 +195,9 @@ public class PermissionManager{
 	 */
 	public boolean hasAnyPermissionSilent(CommandSender sender, String[] permissions){
 		for(String perm : permissions){
-			if(checkPermissionsIntern(sender, perm))
+			if(checkPermissionsIntern(sender, perm)){
 				return true;
+			}
 		}
 		
 		return false;

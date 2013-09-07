@@ -33,23 +33,29 @@
 
 	<dependencies>
 	    <!-- MC Stats -->
+		
+		<!-- Depends from Repos -->
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>1.6.2-R0.2-SNAPSHOT</version>
+			<optional>true</optional>
+		</dependency>
+
+		
 		<dependency>
 			<groupId>org.mcstats</groupId>
 			<artifactId>metrics</artifactId>
 			<version>1.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>craftbukkit</artifactId>
-			<optional>true</optional>
-		</dependency>
+		
 		<dependency>
 			<groupId>net.milkbowl</groupId>
 			<artifactId>vault</artifactId>
 			<optional>true</optional>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.easymock</groupId>
 			<artifactId>easymock</artifactId>
@@ -175,11 +181,6 @@
 	</build>
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>org.bukkit</groupId>
-				<artifactId>craftbukkit</artifactId>
-				<version>1.6.2-R0.1-SNAPSHOT</version>
-			</dependency>
 			<dependency>
 				<groupId>net.milkbowl</groupId>
 				<artifactId>vault</artifactId>

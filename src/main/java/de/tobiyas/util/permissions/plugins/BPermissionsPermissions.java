@@ -14,6 +14,7 @@ public class BPermissionsPermissions implements PermissionPlugin{
 	
 	private boolean isActive;
 	
+	
 	public BPermissionsPermissions(){
 		isActive = false;
 	}
