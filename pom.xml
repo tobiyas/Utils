@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.tobiyas</groupId>
 	<artifactId>Utils</artifactId>
-	<version>1.0.8</version>
+	<version>1.0.9</version>
 	<name>Utils</name>
 
 	<repositories>
@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.6.2-R0.2-SNAPSHOT</version>
+			<version>1.6.2-R1.1-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 
