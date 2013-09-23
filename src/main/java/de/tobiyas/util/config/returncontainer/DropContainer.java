@@ -3,7 +3,7 @@ package de.tobiyas.util.config.returncontainer;
 import java.util.Random;
 
 import org.bukkit.inventory.ItemStack;
-//import net.minecraft.server.v1_6_R2.NBTTagCompound;
+//import net.minecraft.server.v1_6_R3.NBTTagCompound;
 
 public class DropContainer {
 

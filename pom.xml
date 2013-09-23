@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.6.2-R1.1-SNAPSHOT</version>
+			<version>1.6.4-R0.1-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 
@@ -96,7 +96,7 @@
 			<groupId>org.anjocaido</groupId>
 			<artifactId>groupmanager</artifactId>
 			<scope>system</scope>
-			<systemPath>D:\Dropbox\Workspace\Workspace-Minecraft\Libaries\Permissions\EssentialsGroupManager.jar</systemPath>
+			<systemPath>${basedir}\libs\Permissions\EssentialsGroupManager.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
 
@@ -104,7 +104,7 @@
 			<groupId>de.bananaco</groupId>
 			<artifactId>bPermissions</artifactId>
 			<scope>system</scope>
-			<systemPath>D:\Dropbox\Workspace\Workspace-Minecraft\Libaries\Permissions\bpermissions.jar</systemPath>
+			<systemPath>${basedir}\libs\Permissions\bpermissions.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
 
@@ -112,7 +112,7 @@
 			<groupId>com.platymuus</groupId>
 			<artifactId>bukkit-permissions</artifactId>
 			<scope>system</scope>
-			<systemPath>D:\Dropbox\Workspace\Workspace-Minecraft\Libaries\Permissions\PermissionsBukkit.jar</systemPath>
+			<systemPath>${basedir}\libs\Permissions\PermissionsBukkit.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
 
@@ -120,7 +120,7 @@
 			<groupId>ru.tehkode</groupId>
 			<artifactId>PermissionsEx</artifactId>
 			<scope>system</scope>
-			<systemPath>D:\Dropbox\Workspace\Workspace-Minecraft\Libaries\Permissions\PermissionsEx.jar</systemPath>
+			<systemPath>${basedir}\libs\Permissions\PermissionsEx.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
 
@@ -128,7 +128,7 @@
 			<groupId>com.iCo6</groupId>
 			<artifactId>iConomy</artifactId>
 			<scope>system</scope>
-			<systemPath>D:\Dropbox\Workspace\Workspace-Minecraft\Libaries\Money\iConomy.jar</systemPath>
+			<systemPath>${basedir}\libs\Money\iConomy.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
 
@@ -136,7 +136,7 @@
 			<groupId>com.earth2me</groupId>
 			<artifactId>essentials</artifactId>
 			<scope>system</scope>
-			<systemPath>D:\Dropbox\Workspace\Workspace-Minecraft\Libaries\Money\Essentials.jar</systemPath>
+			<systemPath>${basedir}\libs\Money\Essentials.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
 

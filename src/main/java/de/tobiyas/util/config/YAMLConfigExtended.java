@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -272,7 +273,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	}
 	
 	public DropContainer getDropContainer(String path){		
-		ItemStack item = getItemStack(path + ".item", new ItemStack(0));
+		ItemStack item = getItemStack(path + ".item", new ItemStack(Material.AIR));
 		int minAmount = getInt(path + ".min", 0);
 		int maxAmount = getInt(path + ".max", 0);
 		double probability = getDouble(path + ".probability", 0);
