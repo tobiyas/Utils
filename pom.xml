@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.tobiyas</groupId>
 	<artifactId>Utils</artifactId>
-	<version>1.0.9</version>
+	<version>1.0.10</version>
 	<name>Utils</name>
 
 	<repositories>
@@ -19,12 +19,12 @@
 			<id>Plugin Metrics</id>
 			<url>http://repo.mcstats.org/content/repositories/public</url>
 		</repository>
-	
+
 		<!-- Vault repo -->
 		<repository>
 			<id>vault-repo</id>
 			<url>http://ci.herocraftonline.com/plugin/repository/everything</url>
-		</repository>	
+		</repository>
 	</repositories>
 
 	<properties>
@@ -32,30 +32,30 @@
 	</properties>
 
 	<dependencies>
-	    <!-- MC Stats -->
-		
+		<!-- MC Stats -->
+
 		<!-- Depends from Repos -->
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.6.4-R0.1-SNAPSHOT</version>
+			<version>1.6.4-R1.1-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 
-		
+
 		<dependency>
 			<groupId>org.mcstats</groupId>
 			<artifactId>metrics</artifactId>
 			<version>1.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.milkbowl</groupId>
 			<artifactId>vault</artifactId>
 			<optional>true</optional>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.easymock</groupId>
 			<artifactId>easymock</artifactId>
@@ -155,7 +155,7 @@
 					<source>1.6</source>
 				</configuration>
 			</plugin>
-			
+
 			<!-- We want to bundle in some dependencies -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -178,7 +178,17 @@
 				</executions>
 			</plugin>
 		</plugins>
+		
+		<!-- Pushing to Maven -->
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>1.0-alpha-6</version>
+			</extension>
+		</extensions>
 	</build>
+	
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -243,5 +253,12 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<distributionManagement>
+		<repository>
+			<id>tobiyas-maven</id>
+			<url>file:///D:/Dropbox/Öffentlich/maven</url>
+		</repository>
+	</distributionManagement>
 
 </project>

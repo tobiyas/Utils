@@ -214,6 +214,8 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 * @param location
 	 */
 	public void setLocation(String path, Location location){
+		if(location == null) return;
+		
 		double locX = location.getX();
 		double locY = location.getY();
 		double locZ = location.getZ();
