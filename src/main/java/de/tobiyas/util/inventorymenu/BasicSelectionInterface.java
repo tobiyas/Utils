@@ -55,12 +55,12 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 	protected final Player player;
 	
 	/**
-	 * The Inventory to show
+	 * The Inventory to show (Top Inventory)
 	 */
 	protected final Inventory selectionInventory;
 	
 	/**
-	 * The Inventory to show the Controls
+	 * The Inventory to show the Controls (Bottom Inventory)
 	 */
 	protected final Inventory controlInventory;
 	
@@ -72,10 +72,10 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 	 * parent is the Parent object to open.
 	 * If No Parent is found (parent == null), the Interface is closed.
 	 *  
-	 * @param player
-	 * @param parent
-	 * @param controlInventoryName
-	 * @param selectionInventoryName
+	 * @param player to show
+	 * @param parent that it is linked to
+	 * @param controlInventoryName name of the control inventory
+	 * @param selectionInventoryName name of the selection inventory
 	 */
 	public BasicSelectionInterface(Player player, BasicSelectionInterface parent, 
 			String controlInventoryName, String selectionInventoryName, JavaPlugin plugin) {
@@ -238,7 +238,7 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 	/**
 	 * Opens the Parent view.
 	 */
-	private void scheduleCloseOfInventory(){
+	protected void scheduleCloseOfInventory(){
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			
 			@Override

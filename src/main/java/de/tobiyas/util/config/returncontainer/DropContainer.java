@@ -19,6 +19,7 @@ public class DropContainer {
 		this.probability = probability;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public DropContainer(int itemId, int min, int max, double probability){
 		this.item = new ItemStack(itemId);
 		this.min = min;

@@ -36,6 +36,7 @@ public class BooleanSelectionInterface extends AbstractStatSelectionInterface {
 	
 	public BooleanSelectionInterface(Player player,
 			BasicSelectionInterface parent, Map<String, Object> config, String key, JavaPlugin plugin) {
+		
 		super(player, parent, "Select a Boolean (true, false)", config, key, plugin);
 		
 		trueSelector = generateItem(Material.WOOL, (short) 13, ChatColor.GREEN + "TRUE", 

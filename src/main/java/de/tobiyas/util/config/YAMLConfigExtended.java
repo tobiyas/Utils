@@ -2,7 +2,10 @@ package de.tobiyas.util.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -199,6 +202,11 @@ public class YAMLConfigExtended extends YamlConfiguration {
 			return;
 		}
 		
+		if(object instanceof Material){
+			setMaterial(path, (Material) object);
+			return;
+		}
+		
 		if(object instanceof DropContainer){
 			setDropContainer(path, (DropContainer) object);
 			return;
@@ -266,12 +274,11 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	}
 	
 	public void setDropContainer(String path, DropContainer container){
-		String pre = path;		
-		createSection(pre);
-		set(pre + ".item", container.getItem());
-		set(pre + ".min", container.getMin());
-		set(pre + ".max", container.getMax());
-		set(pre + ".probability", container.getProbability());
+		createSection(path);
+		set(path + ".item", container.getItem());
+		set(path + ".min", container.getMin());
+		set(path + ".max", container.getMax());
+		set(path + ".probability", container.getProbability());
 	}
 	
 	public DropContainer getDropContainer(String path){		
@@ -283,6 +290,64 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		return new DropContainer(item, minAmount, maxAmount, probability);
 	}
 	
+	
+	/**
+	 * Sets the Material to a path
+	 * 
+	 * @param path
+	 * @param material
+	 */
+	public void setMaterial(String path, Material material){
+		set(path, material.name());
+	}
+	
+	/**
+	 * Gets a Material at the Path. Returns the Default Material if not found or not loadable.
+	 * 
+	 * @param path to search
+	 * @param defaultMaterial to pass when failed.
+	 * 
+	 * @return the loaded material or the DefaultMaterial.
+	 */
+	public Material getMaterial(String path, Material defaultMaterial){
+		Material mat = Material.valueOf(getString(path).toUpperCase());
+		return mat == null ? defaultMaterial : mat;
+	}
+	
+
+	/**
+	 * ItemStack To save
+	 * 
+	 * @param pre to save to
+	 * @param item to save
+	 */
+	public void setItemStack(String pre, ItemStack item){
+		createSection(pre + ".data");
+		
+		for(Entry<String, Object> entry : item.serialize().entrySet()){
+			set(pre + ".data." + entry.getKey(), entry.getValue());			
+		}
+	}
+	
+	/**
+	 * ItemStack To save
+	 * 
+	 * @param pre to save to
+	 * @param item to save
+	 */
+	public ItemStack getItemStack(String pre, ItemStack defaultStack){
+		try{
+			Map<String, Object> serialized = new HashMap<String, Object>();
+			for(String data : getChildren(pre + ".data")){
+				Object obj = get(pre + ".data." + data);
+				serialized.put(data, obj);
+			}
+			
+			return ItemStack.deserialize(serialized);
+		}catch(Exception exp){
+			return defaultStack;
+		}
+	}
 	
 	public File getFileLoadFrom(){
 		return new File(totalPath);
