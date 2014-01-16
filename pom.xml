@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.tobiyas</groupId>
 	<artifactId>Utils</artifactId>
-	<version>1.0.10</version>
+	<version>1.0.11</version>
 	<name>Utils</name>
 
 	<repositories>
@@ -29,6 +29,7 @@
 
 	<properties>
 		<powermock.version>1.4.12</powermock.version>
+		<bukkit.version>1.7.2-R0.3-SNAPSHOT</bukkit.version>
 	</properties>
 
 	<dependencies>
@@ -38,7 +39,23 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.6.4-R2.1-SNAPSHOT</version>
+			<version>${bukkit.version}</version>
+			<optional>true</optional>
+		</dependency>
+		
+		<!-- Depends from Repos -->
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit</artifactId>
+			<version>${bukkit.version}</version>
+			<optional>true</optional>
+		</dependency>
+		
+		<!-- Depends from Repos -->
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit</artifactId>
+			<version>${bukkit.version}</version>
 			<optional>true</optional>
 		</dependency>
 

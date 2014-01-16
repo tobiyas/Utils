@@ -1,7 +1,11 @@
 package de.tobiyas.util.inventorymenu.elements;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -62,6 +66,20 @@ public class ScrollableItems {
 	 */
 	private final int fromRow;
 	
+	/**
+	 * If the Items should sort for names or not
+	 */
+	private boolean sortForNames = false;
+	
+	
+	/**
+	 * Creates a fullscreen (full inventory) view.
+	 * 
+	 * @param inventory to create to.
+	 */
+	public ScrollableItems(Inventory inventory){
+		this(inventory, 0, 8, 0);
+	}
 	
 	
 	public ScrollableItems(Inventory inventory, int fromColumn, int toColumn, int fromRow) {
@@ -88,11 +106,30 @@ public class ScrollableItems {
 		redrawCurrent();
 	}
 	
+	/**
+	 * Set's the up button.
+	 * 
+	 * @param item to set to
+	 */
+	public void setUpButton(ItemStack item){
+		upButton = item.clone();
+		upButton.setAmount(1);
+		redrawCurrent();
+	}
+	
+	public void setDownButton(ItemStack item){
+		upButton = item.clone();
+		upButton.setAmount(1);
+		redrawCurrent();
+	}
+	
 	
 	/**
 	 * Redraws the current configuration of the view
 	 */
 	private void redrawCurrent(){
+		if(sortForNames) sortItems();
+		
 		int height = inventory.getSize() / 9;
 		int width = (toColumn - fromColumn + 1) - 1;
 		if(width <= 1) return;
@@ -108,20 +145,18 @@ public class ScrollableItems {
 		visibleItems.clear();
 		
 		int index = width * currentRow;
-		if(!itemsToScroll.isEmpty()){
-			for(int i_height = fromRow; i_height < height; i_height++){
-				for(int i_width = fromColumn; i_width < width; i_width++){
-					inventory.setItem((i_height * 9) + i_width,  null);
-					if(index >= itemsToScroll.size()) continue;
-					
-					ItemStack item = itemsToScroll.get(index);
-					inventory.setItem((i_height * 9) + i_width,  item);
-					visibleItems.add(item);
-					
-					index++;
-				}
+		for(int i_height = fromRow; i_height < height; i_height++){
+			for(int i_width = fromColumn; i_width < width; i_width++){
+				inventory.setItem((i_height * 9) + i_width,  null);
+				if(index >= itemsToScroll.size()) continue;
 				
+				ItemStack item = itemsToScroll.get(index);
+				inventory.setItem((i_height * 9) + i_width,  item);
+				visibleItems.add(item);
+				
+				index++;
 			}
+			
 		}
 		
 		inventory.setItem((9 * fromRow) + toColumn, null);
@@ -140,7 +175,33 @@ public class ScrollableItems {
 		}
 	}
 	
-	
+	/**
+	 * Resorts the List of items to names.
+	 * <br> WARNING EXPERIMENTAL.
+	 */
+	private void sortItems() {
+		Map<String, ItemStack> assoc = new HashMap<String, ItemStack>();
+		List<String> list = new LinkedList<String>();
+		for(ItemStack item : itemsToScroll){
+			String name = item.getType().name();
+			if(item.getItemMeta().hasDisplayName()){
+				name = item.getItemMeta().getDisplayName().replaceAll("(§([a-f0-9]))", "");
+			}
+			
+			list.add(name);
+			assoc.put(name, item);
+		}
+		Collections.sort(list);
+		
+		int i = 0;
+		for(String name : list){
+			ItemStack item = assoc.get(name);
+			itemsToScroll.set(i, item);
+			i++;
+		}
+	}
+
+
 	/**
 	 * Adds an item to the Scrollable Items
 	 * 
@@ -157,7 +218,7 @@ public class ScrollableItems {
 	 * 
 	 * @param items
 	 */
-	public void addItems(List<ItemStack> items){
+	public void addItems(Collection<ItemStack> items){
 		this.itemsToScroll.addAll(items);
 		redrawCurrent();
 	}
@@ -229,12 +290,34 @@ public class ScrollableItems {
 		redrawCurrent();
 	}
 
-
+	/**
+	 * Clears the Inventory of the Scrollable Items.
+	 * This means it also clears it's rows.
+	 */
 	public void clear() {
 		currentRow = 0;
 		itemsToScroll.clear();
 		visibleItems.clear();
 		
+		redrawCurrent();
+	}
+
+
+	public boolean isSortForNames() {
+		return sortForNames;
+	}
+
+
+	public void setSortForNames(boolean sortForNames) {
+		this.sortForNames = sortForNames;
+		redrawCurrent();
+	}
+
+
+	/**
+	 * Redraws the View.
+	 */
+	public void redraw() {
 		redrawCurrent();
 	}
 

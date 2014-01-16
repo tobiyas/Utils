@@ -156,6 +156,6 @@ public class IntegerSelectionInterface extends AbstractStatSelectionInterface {
 
 	@Override
 	protected Object unparseValue() {
-		return value;
+		return (int) value;
 	}
 }

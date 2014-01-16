@@ -2,22 +2,24 @@ package de.tobiyas.util.debug.logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bukkit.ChatColor;
-import org.bukkit.plugin.java.JavaPlugin;
 
+import org.bukkit.ChatColor;
+
+import de.tobiyas.util.UtilsUsingPlugin;
 import de.tobiyas.util.debug.erroruploader.ErrorUploader;
 
 public class DebugLogger{
 	
-	private JavaPlugin plugin;
+	private UtilsUsingPlugin plugin;
 	private Logger debugLogger;
 	private Logger errorLogger;
-	
-	private final String pluginPrefix;
 	
 	private ErrorUploader errorUploader;
 	
@@ -36,12 +38,11 @@ public class DebugLogger{
 	 * 
 	 * @param plugin
 	 */
-	public DebugLogger(JavaPlugin plugin){
+	public DebugLogger(UtilsUsingPlugin plugin){
 		this.plugin = plugin;
 		this.alsoOutputToDefaultLogger = false;
 		this.enabled = true;
 		this.enableUploads = false;
-		this.pluginPrefix = "[" + plugin.getDescription().getName() + "]";
 		
 		createStructur();
 		initLoggers();
@@ -58,31 +59,61 @@ public class DebugLogger{
 		
 		String debugFileName = "debug.log";
 		debugSaveFile = new File(pathFile, debugFileName);
+
+		DateFormat df = new SimpleDateFormat("MM_dd_yyyy");
+		Date today = Calendar.getInstance().getTime();
+		String reportDate = df.format(today);
 		
-		if(!debugSaveFile.exists())
+		File backupDir = new File(pathFile, "Backup" + File.separator + "Backup - " + reportDate);
+		if(!backupDir.exists()){
+			backupDir.mkdirs();
+		}
+		
+		if(debugSaveFile.exists()){
+			DateFormat df2 = new SimpleDateFormat("HH_mm_ss");
+			String fileName = df2.format(today);
+			File backupFile = new File(backupDir, fileName + "_debug.log");
+			debugSaveFile.renameTo(backupFile);
+			debugSaveFile.delete();
+		}
+		
+		if(!debugSaveFile.exists()){
 			try {
 				debugSaveFile.createNewFile();
 			} catch (IOException e) {
 				plugin.getLogger().log(Level.WARNING, ChatColor.YELLOW + "[" + plugin.getName() + "] Debug File could not be created!");
 			}
+		}
 		
 		
 		//Error logger
 		path = plugin.getDataFolder() + File.separator + "Debug" + File.separator;
 		pathFile = new File(path);
 		
-		if(!pathFile.exists())
+		if(!pathFile.exists()){
 			pathFile.mkdirs();
+		}
+		
+		
 		
 		String errorFileName = "error.log";
 		errorSaveFile = new File(pathFile, errorFileName);
 		
-		if(!errorSaveFile.exists())
+		if(errorSaveFile.exists()){
+			DateFormat df2 = new SimpleDateFormat("HH_mm_ss");
+			String fileName = df2.format(today);
+			File backupFile = new File(backupDir, fileName + "error.log");
+			errorSaveFile.renameTo(backupFile);
+			errorSaveFile.delete();
+		}
+		
+		if(!errorSaveFile.exists()){
 			try {
 				errorSaveFile.createNewFile();
 			} catch (IOException e) {
 				plugin.getLogger().log(Level.WARNING, ChatColor.YELLOW + "[" + plugin.getName() + "] Debug File could not be created!");
 			}
+		}
 		
 		
 	}
@@ -143,6 +174,7 @@ public class DebugLogger{
 	 * @param msg
 	 */
 	public void log(String msg){
+		String pluginPrefix = "[" + plugin.getDescription().getName() + "]";
 		debugLogger.log(Level.INFO, pluginPrefix + msg);
 	}
 	
@@ -153,8 +185,10 @@ public class DebugLogger{
 	 * @param msg
 	 */
 	public void logWarning(String msg){
-		if(enabled)
+		if(enabled){
+			String pluginPrefix = "[" + plugin.getDescription().getName() + "]";
 			debugLogger.log(Level.WARNING, pluginPrefix + msg);
+		}
 	}
 	
 	/**
@@ -168,10 +202,15 @@ public class DebugLogger{
 	}
 	
 	private void logError(String msg, boolean logToErrorlogger){
-		if(enabled)
+		String pluginPrefix = "[" + plugin.getDescription().getName() + "]";
+		if(enabled){
 			debugLogger.log(Level.SEVERE, pluginPrefix + msg);
-		if(logToErrorlogger)
+			
+		}
+		
+		if(logToErrorlogger){
 			errorLogger.log(Level.SEVERE, pluginPrefix + msg);
+		}
 	}
 	
 	public void setAlsoToPlugin(boolean value){
@@ -184,8 +223,17 @@ public class DebugLogger{
 	public void shutDown() {
 		debugLogger.removeHandler(debugFileHandler);
 		debugFileHandler.close();
+		
 		errorLogger.removeHandler(errorFileHandler);
 		errorFileHandler.close();
+	}
+	
+	/**
+	 * Restarts the Debug logger.
+	 */
+	public void restart(){
+		createStructur();
+		initLoggers();
 	}
 
 	public void disable() {

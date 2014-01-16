@@ -2,8 +2,11 @@ package de.tobiyas.util.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -22,6 +25,11 @@ import de.tobiyas.util.config.returncontainer.DropContainer;
 public class YAMLConfigExtended extends YamlConfiguration {
 
 	/**
+	 * If the Config is dirty and has to be flushed.
+	 */
+	private boolean dirty = false;
+	
+	/**
 	 * The path to the Folder of the Config
 	 */
 	private String savePath;
@@ -35,6 +43,15 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 * Tells if the loading was valid or it did not work
 	 */
 	private boolean validLoad;
+	
+	
+	/**
+	 * This is for non persistent files.
+	 */
+	public YAMLConfigExtended() {
+		super();
+	}
+	
 	
 	/**
 	 * Creates a YAML config from a File
@@ -117,18 +134,45 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	
 	/**
 	 * Saves the Config to the File passed in construction.
+	 * <br>Returns true if no path for saving is passed.
 	 * 
-	 * @return
+	 * @return true if saving worked or if nothing was to save.
 	 */
 	public boolean save(){
+		if(!dirty) return true;
+		if(totalPath == null) return true;
+		
 		File file = fileCheck();
 		try {
 			this.save(file);
+			this.dirty = false;
 		} catch (IOException e) {
 			return false;
 		}
 		
 		return true;
+	}
+
+	/**
+	 * Saves the Config to the File passed in construction.
+	 * This is an ASYNC Operation!!!
+	 */
+	public void saveAsync(){
+		Runnable runnable = new Runnable() {
+			
+			@Override
+			public void run() {
+				try{
+					save();
+					dirty = false;
+				}catch(Exception exp){
+					//Ignore all saving exceptions.
+				}
+				return;
+			}
+		};
+		
+		new Thread(null, runnable, "ConfigSavingThread").start();
 	}
 	
 	/**
@@ -162,6 +206,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		}
 		
 		validLoad = true;
+		dirty = false;
 		return this;
 	}
 	
@@ -175,6 +220,16 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 */
 	public boolean getValidLoad(){
 		return validLoad;
+	}
+	
+	
+	/**
+	 * Returns if the Config is dirty or not.
+	 * 
+	 * @return true if is dirty
+	 */
+	public boolean isDirty(){
+		return dirty;
 	}
 		
 	
@@ -197,6 +252,11 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	
 	@Override
 	public void set(String path, Object object){
+		if(object != null && object.equals(this.get(path))) return; //we already have this value here.
+		
+		//setting anything means that the config is not sync to disc.
+		dirty = true;
+		
 		if(object instanceof Location){
 			setLocation(path, (Location) object);
 			return;
@@ -212,9 +272,67 @@ public class YAMLConfigExtended extends YamlConfiguration {
 			return;
 		}
 		
+		if(object instanceof ItemStack){
+			setItemStack(path, (ItemStack) object);
+			return;
+		}
+		
 		super.set(path, object);
 	}
 	
+	
+	
+	@Override
+	public String getString(String path) {
+		String result = super.getString(path);
+		return replaceUmlauts(result);
+	}
+
+
+	@Override
+	public String getString(String path, String def) {
+		String result = super.getString(path, def);
+		return replaceUmlauts(result);
+	}
+	
+	
+	@Override
+	public List<String> getStringList(String path) {
+		List<String> stringList = super.getStringList(path);
+		List<String> newStringList = new LinkedList<String>();
+		
+		for(String string : stringList){
+			string = replaceUmlauts(string);
+			newStringList.add(string);
+		}
+		
+		return newStringList;
+	}
+
+
+	/**
+	 * Replaces all Umlauts with the correct ones.
+	 * 
+	 * @param toReplace the string to replace
+	 * 
+	 * @return the replaces String
+	 */
+	private String replaceUmlauts(String toReplace){
+		if(toReplace == null) return null;
+		
+		toReplace = toReplace.replace(new String("ö".getBytes(Charset.forName("UTF-8"))), "ö");
+		toReplace = toReplace.replace(new String("Ö".getBytes(Charset.forName("UTF-8"))), "Ö");
+
+		toReplace = toReplace.replace(new String("ä".getBytes(Charset.forName("UTF-8"))), "ä");
+		toReplace = toReplace.replace(new String("Ä".getBytes(Charset.forName("UTF-8"))), "Ä");
+		
+		toReplace = toReplace.replace(new String("ü".getBytes(Charset.forName("UTF-8"))), "ü");
+		toReplace = toReplace.replace(new String("Ü".getBytes(Charset.forName("UTF-8"))), "Ü");
+		
+		return toReplace;
+	}
+	
+
 	/**
 	 * Saves a Location to the given Path.
 	 * 
@@ -222,7 +340,10 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 * @param location
 	 */
 	public void setLocation(String path, Location location){
-		if(location == null) return;
+		if(location == null){
+			set(path, null);
+			return;
+		}
 		
 		double locX = location.getX();
 		double locY = location.getY();
@@ -274,6 +395,11 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	}
 	
 	public void setDropContainer(String path, DropContainer container){
+		if(container == null){
+			set(path, null);
+			return;
+		}
+		
 		createSection(path);
 		set(path + ".item", container.getItem());
 		set(path + ".min", container.getMin());
@@ -298,6 +424,11 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 * @param material
 	 */
 	public void setMaterial(String path, Material material){
+		if(material == null){
+			set(path, null);
+			return;
+		}
+		
 		set(path, material.name());
 	}
 	
@@ -310,8 +441,12 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 * @return the loaded material or the DefaultMaterial.
 	 */
 	public Material getMaterial(String path, Material defaultMaterial){
-		Material mat = Material.valueOf(getString(path).toUpperCase());
-		return mat == null ? defaultMaterial : mat;
+		try{
+			Material mat = Material.valueOf(getString(path).toUpperCase());
+			return mat == null ? defaultMaterial : mat;
+		}catch(IllegalArgumentException exp){
+			return null;
+		}
 	}
 	
 
@@ -322,6 +457,11 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 * @param item to save
 	 */
 	public void setItemStack(String pre, ItemStack item){
+		if(item == null){
+			set(pre, null);
+			return;
+		}
+		
 		createSection(pre + ".data");
 		
 		for(Entry<String, Object> entry : item.serialize().entrySet()){
@@ -349,10 +489,48 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		}
 	}
 	
-	public File getFileLoadFrom(){
-		return new File(totalPath);
+	/**
+	 * Loads the Content from the String passed.
+	 * 
+	 * @param contents to load
+	 * @return the Config for Chaining calls.
+	 */
+	public YAMLConfigExtended loadSafeFromString(String contents) {
+		
+		try{
+			super.loadFromString(contents);
+			dirty = false;
+		}catch(Exception exp){
+			validLoad = false;
+		}
+		
+		return this;
 	}
 
+	/**
+	 * Returns the File of the Config loaded from.
+	 * <br>Can be null if Config is inited with no File.
+	 * 
+	 * @return file of the Config or null.
+	 */
+	public File getFileLoadFrom(){
+		if(totalPath == null){
+			return null;
+		}
+		
+		return new File(totalPath);
+	}
+	
+	
+	
+	
+	/**
+	 * Warning: This removes EVERYTHING in this config!
+	 */
+	public void clearConfig(){
+		this.map.clear();
+		this.dirty = true;
+	}
 }
 
 

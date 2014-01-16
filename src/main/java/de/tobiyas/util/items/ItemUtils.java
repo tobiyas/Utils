@@ -27,6 +27,27 @@ public class ItemUtils {
 	}
 	
 	
+	public enum WeaponToolQuality{
+		None(-1),
+		Wood(0),
+		Stone(1),
+		Iron(2),
+		Gold(3),
+		Diamond(4);
+		
+		private int value;
+		
+		WeaponToolQuality(int value){
+			this.value = value;
+		}
+		
+		public int getValue(){
+			return value;
+		}
+		
+	}
+	
+	
 	/**
 	 * Gets the Item Quality of a piece of armor
 	 * 
@@ -61,6 +82,48 @@ public class ItemUtils {
 			case GOLD_BOOTS : return ItemQuality.Gold;
 		
 			default: return ItemQuality.None;
+		}
+	}
+	
+	/**
+	 * Gets the Item Quality of a piece of armor
+	 * 
+	 * @param stack to check
+	 * @return
+	 */
+	public static WeaponToolQuality getToolWeaponValue(Material mat){
+		switch(mat){
+			case WOOD_SPADE :
+			case WOOD_AXE :
+			case WOOD_HOE :
+			case WOOD_PICKAXE : 
+			case WOOD_SWORD : return WeaponToolQuality.Wood;
+			
+			case STONE_SPADE :
+			case STONE_AXE :
+			case STONE_HOE :
+			case STONE_PICKAXE : 
+			case STONE_SWORD : return WeaponToolQuality.Stone;
+			
+			case IRON_SPADE :
+			case IRON_AXE :
+			case IRON_HOE :
+			case IRON_PICKAXE : 
+			case IRON_SWORD : return WeaponToolQuality.Iron;
+			
+			case GOLD_SPADE :
+			case GOLD_AXE :
+			case GOLD_HOE :
+			case GOLD_PICKAXE : 
+			case GOLD_SWORD : return WeaponToolQuality.Gold;
+			
+			case DIAMOND_SPADE :
+			case DIAMOND_AXE :
+			case DIAMOND_HOE :
+			case DIAMOND_PICKAXE : 
+			case DIAMOND_SWORD : return WeaponToolQuality.Diamond;
+		
+			default: return WeaponToolQuality.None;
 		}
 	}
 	

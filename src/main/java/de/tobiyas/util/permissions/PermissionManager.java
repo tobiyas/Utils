@@ -11,20 +11,20 @@ import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
+import de.tobiyas.util.UtilsUsingPlugin;
 import de.tobiyas.util.permissions.plugins.BPermissionsPermissions;
-import de.tobiyas.util.permissions.plugins.PermissionsBukkitPermissions;
 import de.tobiyas.util.permissions.plugins.GroupManagerPermissions;
 import de.tobiyas.util.permissions.plugins.OpPermissions;
 import de.tobiyas.util.permissions.plugins.PEXPermissions;
 import de.tobiyas.util.permissions.plugins.PermissionPlugin;
+import de.tobiyas.util.permissions.plugins.PermissionsBukkitPermissions;
 import de.tobiyas.util.permissions.plugins.VaultPermissions;
 
 public class PermissionManager{
 
 	private PermissionPlugin permPlugin;
-	private JavaPlugin plugin;
+	private UtilsUsingPlugin plugin;
 	
 	/**
 	 * Sets up the Permission Manager for the Plugin
@@ -32,7 +32,7 @@ public class PermissionManager{
 	 * @param denialList: a string list of PermissionPlugins to be ignored while check
 	 * @param plugin: the Plugin it is using
 	 */
-	public PermissionManager(JavaPlugin plugin, ArrayList<String> denialList){
+	public PermissionManager(UtilsUsingPlugin plugin, ArrayList<String> denialList){
 		this.plugin = plugin;
 		permPlugin = checkForPermissionsPlugin(denialList);
 	}
@@ -43,7 +43,7 @@ public class PermissionManager{
 	 *
 	 * @param plugin the Plugin it is using
 	 */
-	public PermissionManager(JavaPlugin plugin){
+	public PermissionManager(UtilsUsingPlugin plugin){
 		this.plugin = plugin;
 		permPlugin = checkForPermissionsPlugin(null);
 	}
@@ -82,7 +82,7 @@ public class PermissionManager{
 		
 		if(!containsStringIgnoreCase("PermissionsBukkit", denialList))
 			try{
-				tempPlugin = new PermissionsBukkitPermissions();
+				tempPlugin = new PermissionsBukkitPermissions(plugin);
 				tempPlugin.init();
 				if(tempPlugin.isActive()){
 					return tempPlugin;
@@ -158,6 +158,18 @@ public class PermissionManager{
 	}
 	
 	/**
+	 * Returns if the PlayerName has the wanted Permission.
+	 * 
+	 * @param playerName to check
+	 * @param permissionNode to check
+	 * 
+	 * @return true if the Player has the Access, false otherwise.
+	 */
+	public boolean checkPermissionsSilent(String playerName, String permissionNode){
+		return permPlugin.getPermissions(playerName, permissionNode);
+	}
+	
+	/**
 	 * Returns all groups of the current PermissionSystem
 	 * 
 	 * @return ArrayList with all groups
@@ -227,6 +239,17 @@ public class PermissionManager{
 	 */
 	public PermissionPlugin getHandle(){
 		return permPlugin;
+	}
+
+
+	/**
+	 * Adds a permission to a player
+	 * 
+	 * @param player to add to
+	 * @param permission to add
+	 */
+	public void addPermission(Player player, String permission) {
+		permPlugin.addPermission(player, permission);
 	}
 	
 }

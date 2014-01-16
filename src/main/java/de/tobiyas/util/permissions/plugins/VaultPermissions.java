@@ -83,4 +83,17 @@ public class VaultPermissions implements PermissionPlugin {
 	public Permission getHandle(){
 		return vaultPermission;
 	}
+
+	@Override
+	public boolean getPermissions(String playerName, String permissionNode) {
+		Player player = Bukkit.getPlayer(playerName);
+		if(player == null) return false;
+		
+		return getPermissions(player, permissionNode);
+	}
+
+	@Override
+	public void addPermission(Player player, String permission) {
+		vaultPermission.playerAdd(player, permission);
+	}
 }

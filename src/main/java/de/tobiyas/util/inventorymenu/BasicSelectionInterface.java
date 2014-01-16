@@ -93,7 +93,6 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 		ACCEPT_OBJECT = generateAcceptItem();
 		
 		
-		controlInventory.setItem(0, new ItemStack(Material.WOOD));
 		controlInventory.setItem(0, ACCEPT_OBJECT);
 		controlInventory.setItem(8, BACK_OBJECT);
 		
@@ -166,21 +165,39 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 			return;
 		}
 		
-		for(ItemStack item : controlInventory.getContents()){
-			if(item != null && item.getType() != Material.AIR 
-					&& item.equals(itemClicked)){
-				
-				onControlItemPressed(item);	
-				return;
+		int slotNumber = event.getSlot();
+		
+		if(getBottomInventory() == null){
+			System.out.println("WTF?!?! bottom Inv == null classe: " + getClass());
+		}
+		
+		if(getBottomInventory().getSize() - 1 >= slotNumber
+				&& itemClicked.equals(getBottomInventory().getItem(slotNumber))){
+			
+			for(ItemStack item : getBottomInventory().getContents()){
+				if(item != null && item.getType() != Material.AIR 
+						&& item.equals(itemClicked)){
+					
+					onControlItemPressed(item);	
+					return;
+				}
 			}
 		}
 
-		for(ItemStack item : selectionInventory.getContents()){
-			if( item != null && item.getType() != Material.AIR 
-					&& item.equals(itemClicked)){
-				
-				onSelectionItemPressed(item);					
-				return;
+		if(getTopInventory() == null){
+			System.out.println("WTF?!?! Top Inv == null classe: " + getClass());
+		}
+		
+		if(getTopInventory().getSize() - 1 >= slotNumber
+				&& itemClicked.equals(getTopInventory().getItem(slotNumber))){
+			
+			for(ItemStack item : getTopInventory().getContents()){
+				if( item != null && item.getType() != Material.AIR 
+						&& item.equals(itemClicked)){
+					
+					onSelectionItemPressed(item);					
+					return;
+				}
 			}
 		}
 	}

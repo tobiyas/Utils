@@ -10,6 +10,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.tobiyas.util.inventorymenu.BasicSelectionInterface;
@@ -22,6 +23,7 @@ public class ItemSelectionInterface extends AbstractStatSelectionInterface {
 	private final String itemNameKey = "itemName";
 	private final String itemDamagevalueKey = "itemDamagevalue";
 	private final String itemAddEnchantmentKey = "itemEnchantment";
+	private final String itemPlayerHeadKey= "itemPlayerHead";
 	
 	
 	/**
@@ -50,6 +52,11 @@ public class ItemSelectionInterface extends AbstractStatSelectionInterface {
 	private ItemStack damageValueItem;
 	private short damageValue = 0;
 	
+	/**
+	 * the name of a playerhead when present.
+	 */
+	private ItemStack playerHeadItem;
+	private String playerHeadName;
 	
 	/**
 	 * The Current key for new Values.
@@ -75,14 +82,24 @@ public class ItemSelectionInterface extends AbstractStatSelectionInterface {
 
 		this.matType = matType;
 		mat = Material.WOOL;
+		damageValue = 0;
 		itemName = "";
+		playerHeadName = "";
 		
 		if(config.containsKey(key)){
 			ItemStack item = (ItemStack) config.get(key);
 			
 			if(item != null){
 				mat = item.getType();
+				damageValue = item.getDurability();
 				itemName = item.getItemMeta().getDisplayName();
+				enchantments = new HashMap<Enchantment,Integer>(item.getEnchantments());
+				if(item.getItemMeta() instanceof SkullMeta){
+					SkullMeta meta = (SkullMeta) item.getItemMeta();
+					if(meta.hasOwner()){
+						playerHeadName = meta.getOwner();
+					}
+				}
 			}
 			
 		}
@@ -107,15 +124,21 @@ public class ItemSelectionInterface extends AbstractStatSelectionInterface {
 		indicatorItem = generateItem(mat, damageValue, itemName, new LinkedList<String>());
 		indicatorItem.addUnsafeEnchantments(enchantments);
 		controlInventory.setItem(4, indicatorItem);
+		
+		playerHeadItem = generateItem(Material.SKULL_ITEM, "PlayerHead", "Head of: " + playerHeadName);
+		selectionInventory.setItem(7, "".equals(playerHeadName) ? new ItemStack(Material.AIR) : playerHeadItem);
 	}
 	
 
 	@Override
 	protected Object unparseValue() {
 		ItemStack item = new ItemStack(mat);
+		item.addUnsafeEnchantments(enchantments);
+
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(itemName);
 		item.setItemMeta(meta);
+		item.setDurability(damageValue);
 		
 		return item;
 	}
@@ -171,6 +194,17 @@ public class ItemSelectionInterface extends AbstractStatSelectionInterface {
 			return;
 		}
 		
+		if(item.equals(playerHeadItem)){
+			currentKey = itemPlayerHeadKey;
+			config.put(currentKey, playerHeadName);
+			openNewView(new StringSelectionInterface(player, this, config, currentKey, plugin));
+		}
+		
+		if(item.equals(addEnchantmentItem)){
+			currentKey = itemAddEnchantmentKey;
+			openNewView(new ItemEnchantmentSelectionInterface(player, this, config, currentKey, plugin));
+		}
+		
 	}
 
 	@Override
@@ -196,7 +230,7 @@ public class ItemSelectionInterface extends AbstractStatSelectionInterface {
 		}
 		
 		if(currentKey.equalsIgnoreCase(itemNameKey)){
-			itemName = (String) newValue;
+			itemName = ChatColor.translateAlternateColorCodes('&', ((String) newValue));
 			redraw();
 			return;
 		}
@@ -216,6 +250,12 @@ public class ItemSelectionInterface extends AbstractStatSelectionInterface {
 				redraw();
 			}
 			return;
+		}
+		
+		if(currentKey.equalsIgnoreCase(itemPlayerHeadKey)){
+			String newPlayerHeadName = (String) newValue;
+			playerHeadName = newPlayerHeadName;
+			redraw();
 		}
 	}	
 }

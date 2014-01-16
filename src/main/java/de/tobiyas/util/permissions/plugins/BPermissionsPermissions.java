@@ -9,6 +9,7 @@ import org.bukkit.plugin.Plugin;
 
 import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.CalculableType;
+import de.bananaco.bpermissions.api.util.Permission;
 
 public class BPermissionsPermissions implements PermissionPlugin{
 	
@@ -26,14 +27,12 @@ public class BPermissionsPermissions implements PermissionPlugin{
 
 	@Override
 	public boolean getPermissions(CommandSender sender, String permissionNode) {
-		boolean hasPerm = false;
 		if(sender instanceof Player){
 			Player player = (Player) sender;
-			hasPerm = ApiLayer.hasPermission(player.getWorld().getName(), CalculableType.USER, player.getName(), permissionNode);
-		}else
-			hasPerm = ApiLayer.hasPermission(null, CalculableType.USER, sender.getName(), permissionNode);
-			
-		return hasPerm;
+			return ApiLayer.hasPermission(player.getWorld().getName(), CalculableType.USER, player.getName(), permissionNode);
+		}else{
+			return ApiLayer.hasPermission(null, CalculableType.USER, sender.getName(), permissionNode);
+		}
 	}
 
 	@Override
@@ -70,6 +69,21 @@ public class BPermissionsPermissions implements PermissionPlugin{
 	@Override
 	public String getName() {
 		return "bPermissions";
+	}
+
+	
+	@Override
+	public boolean getPermissions(String playerName, String permissionNode) {
+		Player player = Bukkit.getPlayer(playerName);
+		if(player == null) return false;
+		
+		return getPermissions(player, permissionNode);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void addPermission(Player player, String permission) {
+		ApiLayer.addPermission(player.getWorld().getName(), CalculableType.USER, player.getName(), Permission.loadFromString(permission));
 	}
 
 }

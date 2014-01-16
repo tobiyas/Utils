@@ -9,12 +9,16 @@ import org.bukkit.entity.Player;
 import com.platymuus.bukkit.permissions.Group;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
+import de.tobiyas.util.UtilsUsingPlugin;
+
 public class PermissionsBukkitPermissions implements PermissionPlugin {
 
 	private PermissionsPlugin permissions;
 	private boolean isActive;
+	private final UtilsUsingPlugin plugin;
 	
-	public PermissionsBukkitPermissions(){
+	public PermissionsBukkitPermissions(UtilsUsingPlugin plugin){
+		this.plugin = plugin;
 		isActive = false;
 	}
 	
@@ -70,6 +74,19 @@ public class PermissionsBukkitPermissions implements PermissionPlugin {
 	@Override
 	public String getName() {
 		return "PermissionsBukkit";
+	}
+
+	@Override
+	public boolean getPermissions(String playerName, String permissionNode) {
+		Player player = Bukkit.getPlayer(playerName);
+		if(player == null) return false;
+		
+		return getPermissions(player, permissionNode);
+	}
+
+	@Override
+	public void addPermission(Player player, String permission) {
+		player.addAttachment(plugin, permission, true);
 	}
 
 }

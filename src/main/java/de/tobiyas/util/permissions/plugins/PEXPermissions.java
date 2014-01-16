@@ -77,4 +77,17 @@ public class PEXPermissions implements PermissionPlugin {
 		return "PermissionsEx";
 	}
 
+	@Override
+	public boolean getPermissions(String playerName, String permissionNode) {
+		Player player = Bukkit.getPlayer(playerName);
+		if(player == null) return false;
+		
+		return getPermissions(player, permissionNode);
+	}
+
+	@Override
+	public void addPermission(Player player, String permission) {
+		PermissionsEx.getPermissionManager().getUser(player).addPermission(permission);
+	}
+
 }

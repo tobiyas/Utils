@@ -17,7 +17,7 @@ public class ItemMetaUtils {
 	 * @param newDisplayName to set
 	 */
 	public static void setDisplayNameOfItem(ItemStack item, String newDisplayName){
-		if(newDisplayName.length() > 32) newDisplayName = newDisplayName.substring(0, 32);
+		if(newDisplayName.length() > 46) newDisplayName = newDisplayName.substring(0, 46);
 		
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(newDisplayName);

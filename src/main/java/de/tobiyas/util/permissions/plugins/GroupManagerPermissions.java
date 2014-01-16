@@ -36,8 +36,7 @@ public class GroupManagerPermissions implements PermissionPlugin {
 	
 	private boolean hasPermissionGroupManager(final Player base, final String node){
 		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
-		if (handler == null)
-		{
+		if (handler == null){
 			return false;
 		}
 		return handler.has(base, node);
@@ -89,6 +88,21 @@ public class GroupManagerPermissions implements PermissionPlugin {
 	@Override
 	public String getName() {
 		return "GroupManager";
+	}
+
+
+	@Override
+	public boolean getPermissions(String playerName, String permissionNode) {
+		Player player = Bukkit.getPlayer(playerName);
+		if(player == null) return false;
+		
+		return getPermissions(player, permissionNode);
+	}
+
+
+	@Override
+	public void addPermission(Player player, String permission) {
+		groupManager.getWorldsHolder().getWorldData(player).getUser(player.getName()).addPermission(permission);
 	}
 
 }

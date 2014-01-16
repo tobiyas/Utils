@@ -81,7 +81,7 @@ public class StringSelectionInterface extends AbstractStatSelectionInterface {
 		value = message;
 		
 		event.setCancelled(true);
-		player.sendMessage(ChatColor.RED + "[RAC] Saved your String: " + ChatColor.LIGHT_PURPLE + message + ChatColor.RED + ".");
+		player.sendMessage(ChatColor.RED + "Saved your String: " + ChatColor.LIGHT_PURPLE + message + ChatColor.RED + ".");
 		
 		scheduleReopen();
 	}
@@ -113,7 +113,7 @@ public class StringSelectionInterface extends AbstractStatSelectionInterface {
 			this.isOpeningNewInv = true;
 			closeAndReturnToParent(); //Note that we only are closing..
 			
-			player.sendMessage(ChatColor.RED + "[RaC] Enter a new String. Use " 
+			player.sendMessage(ChatColor.RED + "Enter a new String. Use " 
 					+ ChatColor.LIGHT_PURPLE + "/<anyString>" + ChatColor.RED);
 		}
 	}

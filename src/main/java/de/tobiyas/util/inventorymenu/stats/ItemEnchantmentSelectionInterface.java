@@ -48,10 +48,9 @@ public class ItemEnchantmentSelectionInterface extends
 	
 	
 	public ItemEnchantmentSelectionInterface(Player player,
-			BasicSelectionInterface parent, String selectionInventoryName,
-			Map<String, Object> config, String key, JavaPlugin plugin) {
+			BasicSelectionInterface parent,	Map<String, Object> config, String key, JavaPlugin plugin) {
 		
-		super(player, parent, selectionInventoryName, config, key, plugin);
+		super(player, parent, "Add Enchant", config, key, plugin);
 
 		enchantmentScrollView = new ScrollableItems(selectionInventory, 0, 8, 0);
 		
@@ -64,7 +63,7 @@ public class ItemEnchantmentSelectionInterface extends
 		
 		for(Enchantment enchantment : Enchantment.values()){
 			ItemStack item = generateItem(Material.PAPER, enchantment.getName(), new LinkedList<String>());
-			item.addEnchantment(enchantment, 1);
+			item.addUnsafeEnchantment(enchantment, 1);
 			
 			enchantmentScrollView.addItem(item);
 			enchantmentItemMap.put(item, enchantment);
@@ -103,16 +102,20 @@ public class ItemEnchantmentSelectionInterface extends
 			if(entryItem.equals(item)){
 				this.enchantment = enchantment;
 				redraw();
+				return;
 			}
 		}
 	}
 
+	
+	private final String LEVEL_KEY = "level";
+	
 	@Override
 	protected void onControlItemPressed(ItemStack item) {
 		if(item.equals(levelItem)){
-			currentKey = "level";
+			currentKey = LEVEL_KEY;
 			config.put(currentKey, level);
-			openNewView(new IntegerSelectionInterface(player, this, config, key, plugin));
+			openNewView(new IntegerSelectionInterface(player, this, config, currentKey, plugin));
 			return;
 		}
 
@@ -125,7 +128,7 @@ public class ItemEnchantmentSelectionInterface extends
 	protected void notifyReopened() {
 		super.notifyReopened();
 		
-		if(currentKey.equals("level") && config.containsKey(currentKey)){
+		if(currentKey.equals(LEVEL_KEY) && config.containsKey(currentKey)){
 			int newLevel = (Integer) config.get(currentKey);
 			if(level > 0){
 				this.level = newLevel;

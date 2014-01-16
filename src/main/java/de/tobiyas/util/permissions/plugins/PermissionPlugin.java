@@ -24,6 +24,15 @@ public interface PermissionPlugin {
 	public boolean getPermissions(CommandSender sender, String permissionNode);
 	
 	/**
+	 * Checks if the player has Permission to the Node passed.
+	 * 
+	 * @param playerName to check.
+	 * @param permissionNode  to check
+	 * @return true if has permission, false otherwise
+	 */
+	public boolean getPermissions(String playerName, String permissionNode);
+	
+	/**
 	 * Returns all Groups from the Plugin
 	 * 
 	 * @return List of all groups
@@ -47,4 +56,12 @@ public interface PermissionPlugin {
 	 * Returns a Human readable name for the Permission Plugin.
 	 */
 	public String getName();
+
+	/**
+	 * Adds a permission to the player.
+	 * 
+	 * @param player to add
+	 * @param permission to add
+	 */
+	public void addPermission(Player player, String permission);
 }
