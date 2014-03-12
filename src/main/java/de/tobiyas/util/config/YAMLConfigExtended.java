@@ -440,13 +440,26 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 * 
 	 * @return the loaded material or the DefaultMaterial.
 	 */
+	@SuppressWarnings("deprecation") //Hopefully never removed
 	public Material getMaterial(String path, Material defaultMaterial){
-		try{
-			Material mat = Material.valueOf(getString(path).toUpperCase());
-			return mat == null ? defaultMaterial : mat;
-		}catch(IllegalArgumentException exp){
-			return null;
+		if(isInt(path)){
+			try{
+				return Material.getMaterial(getInt(path));
+			}catch (IllegalArgumentException exp){
+				return defaultMaterial;
+			}
 		}
+		
+		if(isString(path)){
+			try{
+				Material mat = Material.valueOf(getString(path).toUpperCase());
+				return mat == null ? defaultMaterial : mat;	
+			}catch(IllegalArgumentException exp){			
+				return defaultMaterial;
+			}
+		}
+		
+		return defaultMaterial;
 	}
 	
 

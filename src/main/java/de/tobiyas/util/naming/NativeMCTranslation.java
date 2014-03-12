@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.lang.reflect.Method;
 import java.util.Properties;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +22,7 @@ import org.bukkit.inventory.ItemStack;
  * @author Tobiyas
  *
  */
-public class NativeMCTranslation {	
+public class NativeMCTranslation {
 	
 	/**
 	 * The language Dir name
@@ -43,7 +44,7 @@ public class NativeMCTranslation {
 	public static String getEntityTypeName(EntityType entityType, String language) {
 		try{
 			return entityType.getName();
-		}catch(Exception exp){
+		}catch(Throwable exp){
 			return entityType.name();
 		}
 	}
@@ -57,7 +58,9 @@ public class NativeMCTranslation {
 	 */
 	public static String getItemTranslation(ItemStack item, String language){		
 		try{
-			Class<?> craftItemClass = Class.forName("org.bukkit.craftbukkit." + getCBReloc() + ".inventory.CraftItemStack");
+			char splitter = '.';
+			Class<?> craftItemClass = Class.forName("org" + splitter + "bukkit" + splitter +"craftbukkit" + splitter 
+					+ getCBReloc() + splitter + "inventory" + splitter + "CraftItemStack");
 			
 			Method method = craftItemClass.getMethod("asNMSCopy", ItemStack.class);
 			Object nmsItemStack = method.invoke(null, item);
@@ -69,12 +72,9 @@ public class NativeMCTranslation {
 			String itemName = (String) getName.invoke(nmsItem, nmsItemStack);
 			
 			return getTranslation(itemName + ".name", language);
-		}catch(Exception exp){
-			exp.printStackTrace();
+		}catch(Throwable exp){
+			return item.getType().name();
 		}
-		
-		
-		return item.getType().name();
 	}
 	
 	
@@ -87,10 +87,12 @@ public class NativeMCTranslation {
  	 */
 	public static String getTranslation(String toTranslate){
 		try{
-			Class<?> locali18n = Class.forName("net.minecraft.server." + getCBReloc() + ".LocaleI18n");
+			char splitter = '.';
+			Class<?> locali18n = Class.forName("net" + splitter + "minecraft" + splitter + "server" + splitter + getCBReloc() 
+					+ splitter + "LocaleI18n");
 			Method method = locali18n.getMethod("get", String.class);
 			return (String) method.invoke(null, toTranslate);
-		}catch(Exception exp){
+		}catch(Throwable exp){
 			return toTranslate;
 		}
 	}
@@ -123,7 +125,7 @@ public class NativeMCTranslation {
 				return getTranslation(toTranslate);
 			}
 			
-		}catch(Exception exp){
+		}catch(Throwable exp){
 			return getTranslation(toTranslate);
 		}
 	}
@@ -133,22 +135,12 @@ public class NativeMCTranslation {
 	 * Returns the CB Relocation String
 	 */
 	private static String getCBReloc(){
-		
-		for(int i = 1 ; i < 10; i++){
+		try{
+			String bukkitPath = Bukkit.getServer().getClass().getPackage().getName();
 			
-			for(int j = 0; j < 10; j++){
-				
-				try{
-					String reloc = "v1_" + i + "_R" + j;					
-					Class.forName("net.minecraft.server." + reloc + ".Entity");
-					return reloc;
-				}catch(Exception exp){
-				}
-				
-			}
-		}
-		
-		return "";
+			String[] split = bukkitPath.split("\\.");
+			return split[split.length - 1];
+		}catch(Throwable exp){return "";}
 	}
 
 }

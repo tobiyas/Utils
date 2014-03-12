@@ -270,16 +270,18 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 	 * Opens the Parent view.
 	 */
 	private void scheduleOpeningOfParent() {
+		if(parent == null){
+			resyncInv(player);
+			return;
+		}
+		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			
-			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
 				if(parent != null){				
 					player.openInventory(parent);
 					parent.notifyReopened();
-				}else{
-					player.updateInventory();
 				}
 			}
 		}, 2);
@@ -360,7 +362,7 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 		ItemMeta meta = item.getItemMeta();
 		
 		if(parent == null){
-			meta.setDisplayName(ChatColor.RED + "Save");			
+			meta.setDisplayName(ChatColor.RED + "Save");
 		}else{
 			meta.setDisplayName(ChatColor.GREEN + "Accept");
 		}
@@ -368,5 +370,22 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 		item.setItemMeta(meta);
 		
 		return item;
+	}
+	
+	
+	/**
+	 * Resyncs the player inv.
+	 * 
+	 * @param player to sync
+	 */
+	private void resyncInv(final Player player){
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			
+			@SuppressWarnings("deprecation")
+			@Override
+			public void run() {
+				player.updateInventory();
+			}
+		}, 1);
 	}
 }

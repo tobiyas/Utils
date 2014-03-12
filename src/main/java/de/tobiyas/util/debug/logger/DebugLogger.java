@@ -201,6 +201,14 @@ public class DebugLogger{
 		logError(msg, true);
 	}
 	
+	
+	public void logDebug(String message){
+		if(enabled){
+			String pluginPrefix = "[" + plugin.getDescription().getName() + "]";
+			debugLogger.log(Level.INFO, pluginPrefix + message);
+		}
+	}
+	
 	private void logError(String msg, boolean logToErrorlogger){
 		String pluginPrefix = "[" + plugin.getDescription().getName() + "]";
 		if(enabled){

@@ -3,7 +3,6 @@ package de.tobiyas.util.economy.plugins;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class VaultMoney implements MoneyPlugin {
@@ -16,36 +15,38 @@ public class VaultMoney implements MoneyPlugin {
 	}
 
 	@Override
-	public double getMoneyOfPlayer(Player player) {
+	public double getMoneyOfPlayer(String playerName) {
 		if(!isActive) return 0; 
-		return vaultEconomy.getBalance(player.getName());
+		return vaultEconomy.getBalance(playerName);
 	}
 
 	@Override
-	public boolean addMoney(Player player, double amount) {
+	public boolean addMoney(String playerName, double amount) {
 		if(!isActive) return false;
-		if(!vaultEconomy.hasAccount(player.getName())) return false;
-		vaultEconomy.depositPlayer(player.getName(), amount);
+		if(!vaultEconomy.hasAccount(playerName)) return false;
+		vaultEconomy.depositPlayer(playerName, amount);
 		return true;
 	}
 
 	@Override
-	public boolean transferMoney(Player from, Player to, double amount) {
+	public boolean transferMoney(String from, String to, double amount) {
 		if(!isActive) return false; 
-		if(!vaultEconomy.hasAccount(from.getName())) return false;
-		if(!vaultEconomy.hasAccount(to.getName())) return false;
+		if(!vaultEconomy.hasAccount(from)) return false;
+		if(!vaultEconomy.hasAccount(to)) return false;
 		
-		if(!vaultEconomy.has(from.getName(), amount)) return false;
+		if(!vaultEconomy.has(from, amount)) return false;
 		
-		vaultEconomy.withdrawPlayer(from.getName(), amount);
-		vaultEconomy.depositPlayer(to.getName(), amount);
+		vaultEconomy.withdrawPlayer(from, amount);
+		vaultEconomy.depositPlayer(to, amount);
 		return true;
 	}
 
 	@Override
-	public double removeMoney(Player player, double amount) {
-		if(!isActive) return 0;
-		return vaultEconomy.withdrawPlayer(player.getName(), amount).balance;
+	public boolean removeMoney(String playerName, double amount) {
+		if(!isActive) return false;
+		
+		vaultEconomy.withdrawPlayer(playerName, amount);
+		return true;
 	}
 
 	@Override
@@ -82,13 +83,17 @@ public class VaultMoney implements MoneyPlugin {
 	}
 
 	@Override
-	public void addToBankAccount(String name, double amount) {
+	public boolean addToBankAccount(String name, double amount) {
+		if(!isActive) return false;
+		
 		vaultEconomy.bankDeposit(name, amount);
+		return true;
 	}
 
 	@Override
 	public boolean withdrawFromBankAccount(String name, double amount) {
 		if(getBankBalance(name) < amount) return false;
+		
 		vaultEconomy.bankWithdraw(name, amount);
 		return true;
 	}

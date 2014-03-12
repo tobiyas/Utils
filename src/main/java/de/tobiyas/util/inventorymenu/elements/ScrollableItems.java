@@ -320,5 +320,19 @@ public class ScrollableItems {
 	public void redraw() {
 		redrawCurrent();
 	}
+	
+	
+	/**
+	 * Sorts the items to scroll.
+	 * 
+	 * @param sorter that sorts the items.
+	 */
+	public void sortBySorter(ItemSorter sorter){
+		List<ItemStack> sorted = sorter.sortItems(itemsToScroll);
+		itemsToScroll.clear();
+		itemsToScroll.addAll(sorted);
+		
+		redraw();
+	}
 
 }

@@ -15,7 +15,7 @@ public class MCPrettyName {
 	 * 
 	 * @return pretty name.
 	 */
-	public static String getPrettyName(Material mat, short damageValue, String language){
+	public static String getPrettyName(Material mat, short damageValue, String language){		
 		try{
 			ItemStack item = new ItemStack(mat);
 			item.setDurability(damageValue);

@@ -1,7 +1,6 @@
 package de.tobiyas.util.economy.plugins;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.api.Economy;
@@ -16,18 +15,18 @@ public class EssentialsEcoMoney implements MoneyPlugin {
 	}
 	
 	@Override
-	public double getMoneyOfPlayer(Player player) {
+	public double getMoneyOfPlayer(String playerName) {
 		try {
-			return Economy.getMoney(player.getName());
+			return Economy.getMoney(playerName);
 		} catch (UserDoesNotExistException e) {
 			return Double.MIN_VALUE;
 		}
 	}
 
 	@Override
-	public boolean addMoney(Player player, double amount) {
+	public boolean addMoney(String player, double amount) {
 		try {
-			Economy.add(player.getName(), amount);
+			Economy.add(player, amount);
 		} catch (Exception e) {
 			return false;
 		}
@@ -35,11 +34,11 @@ public class EssentialsEcoMoney implements MoneyPlugin {
 	}
 
 	@Override
-	public boolean transferMoney(Player from, Player to, double amount) {
+	public boolean transferMoney(String from, String to, double amount) {
 		if(getMoneyOfPlayer(from) < amount) return false;
 		if(getMoneyOfPlayer(to) != Double.MIN_VALUE) return false;
 		try {
-			if(!Economy.hasEnough(from.getName(), amount)) return false;
+			if(!Economy.hasEnough(from, amount)) return false;
 		} catch (UserDoesNotExistException e) {
 			return false;
 		}
@@ -51,22 +50,21 @@ public class EssentialsEcoMoney implements MoneyPlugin {
 	}
 
 	@Override
-	public double removeMoney(Player player, double amount) {
-		if(!Economy.playerExists(player.getName())) return Double.MIN_VALUE;
+	public boolean removeMoney(String player, double amount) {
+		if(!Economy.playerExists(player)) return false;
 		try {
-			if(!Economy.hasEnough(player.getName(), amount)) return Double.MAX_VALUE;
+			if(!Economy.hasEnough(player, amount)) return false;
 		} catch (UserDoesNotExistException e) {
-			return Double.MIN_VALUE;
+			return false;
 		}
 		
-		double retValue;
 		try {
-			Economy.subtract(player.getName(), amount);
-			retValue = Economy.getMoney(player.getName());
+			Economy.subtract(player, amount);
 		} catch (Exception e) {
-			return Double.MIN_VALUE;
+			return false;
 		}
-		return retValue;		
+		
+		return true;		
 	}
 
 	@Override
@@ -103,9 +101,9 @@ public class EssentialsEcoMoney implements MoneyPlugin {
 	}
 
 	@Override
-	public void addToBankAccount(String name, double amount) {
+	public boolean addToBankAccount(String name, double amount) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	@Override

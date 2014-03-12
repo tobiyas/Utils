@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 import de.tobiyas.util.debug.logger.DebugLogger;
+import de.tobiyas.util.economy.MoneyManager;
 import de.tobiyas.util.permissions.PermissionManager;
 
 public abstract class UtilsUsingPlugin extends JavaPlugin {
@@ -20,10 +21,16 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 	
 	/**
 	 * The debug logger for the Plugin
-	 * <br>Private to have easy Lazy init.
+	 * 
 	 */
 	private DebugLogger debugLogger;
 	
+	
+	/**
+	 * Returns the Money manager of the Plugin.
+	 * <br>Private to have easy Lazy init.
+	 */
+	private MoneyManager moneyManager;
 	
 	
 	/**
@@ -80,6 +87,19 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 		
 		return debugLogger;
 	}
+
+	/**
+	 * Returns the {@link MoneyManager} for the Plugin.
+	 * 
+	 * @return the {@link MoneyManager}.
+	 */
+	public MoneyManager getMoneyManager(){
+		if(moneyManager == null){
+			moneyManager = new MoneyManager(this);
+		}
+		
+		return moneyManager;
+	}
 	
 	
 	/**
@@ -99,6 +119,26 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 	public void logWarning(String message){
 		getDebugLogger().logWarning(message);
 	}
+	
+	/**
+	 * Logs a Message to the Error Channel.
+	 * 
+	 * @param message to log
+	 */
+	public void logError(String message){
+		getDebugLogger().logError(message);
+	}
+	
+	
+	/**
+	 * Logs a Message to the Debug Channel
+	 * 
+	 * @param message to log.
+	 */
+	public void logDebug(String message){
+		getDebugLogger().logDebug(message);
+	}
+
 	
 	
 	/**
