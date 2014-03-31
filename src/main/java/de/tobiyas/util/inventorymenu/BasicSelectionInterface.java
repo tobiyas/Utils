@@ -1,4 +1,23 @@
+/*******************************************************************************
+ * Copyright 2014 Tobias Welther
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package de.tobiyas.util.inventorymenu;
+
+
+import java.util.LinkedList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,6 +39,11 @@ import org.bukkit.material.Wool;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class BasicSelectionInterface extends ItemGeneratorInterface implements Listener{	
+	
+	/**
+	 * The list of open invs.
+	 */
+	protected final static List<BasicSelectionInterface> openInterfaces = new LinkedList<BasicSelectionInterface>();
 	
 	/**
 	 * Indicates that a new InventoryOpening is going on.
@@ -97,6 +121,7 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 		controlInventory.setItem(8, BACK_OBJECT);
 		
 		Bukkit.getPluginManager().registerEvents(this, plugin);
+		openInterfaces.add(this);
 	}
 	
 	
@@ -206,6 +231,8 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event){
 		if(event.getView() != this) return;
+		
+		openInterfaces.remove(this);
 		if(isOpeningNewInv){
 			//We get a close from the new Window opening.
 			isOpeningNewInv = false;
@@ -281,6 +308,8 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 			public void run() {
 				if(parent != null){				
 					player.openInventory(parent);
+					
+					openInterfaces.add(BasicSelectionInterface.this);
 					parent.notifyReopened();
 				}
 			}
@@ -387,5 +416,22 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 				player.updateInventory();
 			}
 		}, 1);
+	}
+	
+	
+	/**
+	 * This closes all open invs.
+	 */
+	@SuppressWarnings("deprecation")
+	public static void closeAllInvs(){
+		if(openInterfaces.isEmpty()) return;
+		
+		for(BasicSelectionInterface gui : openInterfaces){
+			Player player = (Player) gui.getPlayer();
+			if(player != null && player.isOnline()){
+				player.closeInventory();
+				player.updateInventory();
+			}
+		}
 	}
 }

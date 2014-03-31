@@ -1,8 +1,27 @@
+/*******************************************************************************
+ * Copyright 2014 Tobias Welther
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package de.tobiyas.util.config;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -12,13 +31,16 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import de.tobiyas.util.UtilsUsingPlugin;
 import de.tobiyas.util.config.returncontainer.DropContainer;
 
 
@@ -43,6 +65,11 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 * Tells if the loading was valid or it did not work
 	 */
 	private boolean validLoad;
+	
+	/**
+	 * If the file may be auto 
+	 */
+	private int autoReloadableSchedulerID = -1;
 	
 	
 	/**
@@ -146,6 +173,8 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		try {
 			this.save(file);
 			this.dirty = false;
+			
+			this.lastChangeDate = new Date(file.lastModified());
 		} catch (IOException e) {
 			return false;
 		}
@@ -199,6 +228,10 @@ public class YAMLConfigExtended extends YamlConfiguration {
 				
 		try {
 			load(saveFile);
+			if(isBoolean("utf8") && getBoolean("utf8")) return loadCharset(saveFile, "UTF-8");
+			if(isBoolean("ansi") && getBoolean("ansi")) return loadCharset(saveFile, "US-ASCII");
+			
+			this.lastChangeDate = new Date(savePathFile.lastModified());
 		} catch (Exception e) {
 			validLoad = false;
 			System.out.println("Error on loading YamlConfig: " + savePath);
@@ -207,6 +240,45 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		
 		validLoad = true;
 		dirty = false;
+		return this;
+	}
+	
+	
+	/**
+	 * Loads with a specific Charset.
+	 * 
+	 * @param file to load from.
+	 * @param charset to load.
+	 * 
+	 * @return the loaded file.
+	 */
+	private YAMLConfigExtended loadCharset(File file, String charset){
+		try {
+			InputStreamReader reader = new InputStreamReader(new FileInputStream(file), Charset.forName(charset));
+			StringBuilder builder = new StringBuilder();
+			BufferedReader input = new BufferedReader(reader);
+			
+			
+			try {
+				String line;
+				
+				while ((line = input.readLine()) != null) {
+					builder.append(line);
+					builder.append('\n');
+				}
+			} finally {
+				input.close();
+			}
+			
+			loadFromString(builder.toString());
+			this.validLoad = true;
+		} catch (Throwable e) {
+			try {
+				load(file);
+			} catch (Throwable exp) {}
+			return this;
+		}
+		
 		return this;
 	}
 	
@@ -493,10 +565,34 @@ public class YAMLConfigExtended extends YamlConfiguration {
 			Map<String, Object> serialized = new HashMap<String, Object>();
 			for(String data : getChildren(pre + ".data")){
 				Object obj = get(pre + ".data." + data);
+				
+				//replace color codes.
+				if(obj instanceof String){
+					obj = ChatColor.translateAlternateColorCodes('&', (String)obj );
+				}
+				
 				serialized.put(data, obj);
 			}
 			
-			return ItemStack.deserialize(serialized);
+			ItemStack item = ItemStack.deserialize(serialized);
+			if(item.hasItemMeta()){
+				ItemMeta meta = item.getItemMeta();
+				if(meta.hasDisplayName()){
+					meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', meta.getDisplayName()));
+				}
+				
+				if(meta.hasLore()){
+					List<String> lore = meta.getLore();
+					for(int i = 0; i < lore.size(); i++){
+						lore.set(i, ChatColor.translateAlternateColorCodes('&', lore.get(i)));
+					}
+					meta.setLore(lore);
+				}
+				
+				item.setItemMeta(meta);
+			}
+			
+			return item;
 		}catch(Exception exp){
 			return defaultStack;
 		}
@@ -534,6 +630,47 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		return new File(totalPath);
 	}
 	
+	
+	/**
+	 * The last changeDate.
+	 */
+	private Date lastChangeDate = null;
+	
+	
+	/**
+	 * Sets if the File should be auto-reloaded on change.
+	 * 
+	 * @param autoReloadable true if relaod on change, false otherwise.
+	 */
+	@SuppressWarnings("deprecation")
+	public void setAutoReloadable(boolean autoReloadable, UtilsUsingPlugin plugin){
+		if(this.autoReloadableSchedulerID != -1){
+			Bukkit.getScheduler().cancelTask(autoReloadableSchedulerID);
+			this.autoReloadableSchedulerID = -1;
+		}
+		
+		if(autoReloadable){
+			this.autoReloadableSchedulerID = Bukkit.getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {
+				
+				@Override
+				public void run() {
+					File savePathFile = new File(totalPath);
+					if(savePathFile.exists()){
+						Date lastChangeDate = new Date(savePathFile.lastModified());
+						if(lastChangeDate.after(YAMLConfigExtended.this.lastChangeDate)){
+							load();
+						}
+					}
+				}
+			}, 20, 20);
+		}
+		
+	}
+	
+	
+	public boolean isAutoReloadable(){
+		return this.autoReloadableSchedulerID != -1;
+	}
 	
 	
 	

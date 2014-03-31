@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2014 Tobias Welther
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package de.tobiyas.util.persistence.file;
 
 import java.io.File;
@@ -19,12 +34,6 @@ public class YAMLPersistenceProvider {
 	 */
 	protected static Map<String, YAMLConfigExtended> playerYamls = new HashMap<String, YAMLConfigExtended>();
 	
-	
-	/**
-	 * The YAMLs for the Channels
-	 */
-	protected YAMLConfigExtended channelsYaml;
-	
 	/**
 	 * The knownPlayers.
 	 */
@@ -44,16 +53,28 @@ public class YAMLPersistenceProvider {
 	 * Creates a new Provider
 	 * 
 	 * @param plugin to init to
+	 * @param folder the folder to init to.
 	 */
-	public YAMLPersistenceProvider(JavaPlugin plugin) {
+	public YAMLPersistenceProvider(JavaPlugin plugin, String folder) {
 		this.plugin = plugin;
-		this.root = new File(plugin.getDataFolder(), "PlayerData");
+		this.root = new File(plugin.getDataFolder(), folder);
 		
 		if(!root.exists()){
 			root.mkdirs();
 		}
 	}
 	
+	/**
+	 * Creates a new Provider
+	 * 
+	 * @param plugin to use
+	 */
+	public YAMLPersistenceProvider(JavaPlugin plugin) {
+		this(plugin, "PlayerData");
+	}
+	
+	
+
 
 	/**
 	 * Returns the already loaded Player YAML File.
@@ -94,6 +115,20 @@ public class YAMLPersistenceProvider {
 		rescanKnownPlayers();
 		cacheMiss++;
 		return playerConfig;
+	}
+	
+	/**
+	 * Removes the YML with the passed name.
+	 * 
+	 * @param name to delete.
+	 */
+	public void remove(String name) {
+		if(!playerYamls.containsKey(name)) return;
+		
+		YAMLConfigExtended config = getLoadedPlayerFile(name);
+		config.getFileLoadFrom().delete();
+		
+		playerYamls.remove(name);
 	}
 
 	/**

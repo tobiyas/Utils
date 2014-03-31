@@ -13,32 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package de.tobiyas.util.debug.lag;
+package de.tobiyas.util.vollotile.specific;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import java.lang.reflect.Method;
 
-public class LagDebugger {
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+
+import de.tobiyas.util.vollotile.VollotileCode;
+
+public class MC_1_7_R2_VollotileCode extends VollotileCode {
+
 	
-	private JavaPlugin plugin;
-	private LagDebugger lagDebugger = null;
 	
-	public LagDebugger(JavaPlugin plugin){
-		this.plugin = plugin;
-		enable();
+	public MC_1_7_R2_VollotileCode() {
+		super("v1_7_R2");
 	}
 	
-	public void disable(){
-		lagDebugger.disable();
-		lagDebugger = null;
-	}
-	
-	public void enable(){
-		if(lagDebugger == null)
-			lagDebugger = new LagDebugger(plugin);
-		else{
-			disable();
-			enable();
+
+	@Override
+	public void playCriticalHitEffect(Player toSendTo, Entity toPlayEffect) {
+		try{
+			Object mcEntity = getMCEntityFromBukkitEntity(toPlayEffect);
+			Object mcPlayer = getMCEntityFromBukkitEntity(toSendTo);
+			
+			Method playOutAnnimation= mcPlayer.getClass().getDeclaredMethod("b", Class.forName("net.minecraft.server." + CB_RELOCATION + ".Entity"));
+			playOutAnnimation.invoke(mcPlayer, mcEntity);
+		}catch(Exception exp){
 		}
 	}
-	
+
 }
