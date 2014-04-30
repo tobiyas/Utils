@@ -15,6 +15,8 @@
  ******************************************************************************/
 package de.tobiyas.util.chat.resolver;
 
+import com.google.gson.JsonObject;
+
 public class URLJSONResolver {
 
 	
@@ -29,14 +31,36 @@ public class URLJSONResolver {
 	public static String resolveURL(String url, String label) {
 		String rawData = ""
 				+ "{"
-					+ "text:\"" + label + "\","
-					+ "hoverEvent:{"
-						+ "action:open_url,"
-						+ "value:\"" + url + "\""
+					+ "\"text\"" + ":" + "\"" + label + "\","
+					+ "\"clickEvent\":{"
+						+ "\"action\":\"open_url\","
+						+ "\"value\":\"" + url + "\""
 					+"}"
 				+ "}";
 		
 		return rawData;
+	}
+	
+
+	
+	/**
+	 * Creates an Label for an URL
+	 * 
+	 * @param toParse to parse
+	 * @param label to show
+	 * 
+	 * @return the parsed JSON Object
+	 */
+	public static JsonObject resolveURLJSON(String url, String label) {
+		JsonObject object = new JsonObject();
+		object.addProperty("text", label);
+		
+		JsonObject hover = new JsonObject();
+		hover.addProperty("action", "open_url");
+		hover.addProperty("value", url);
+		
+		object.add("clickEvent", hover);
+		return object;
 	}
 
 }

@@ -20,6 +20,7 @@ import de.tobiyas.util.vollotile.specific.MC_1_6_R2_VollotileCode;
 import de.tobiyas.util.vollotile.specific.MC_1_6_R3_VollotileCode;
 import de.tobiyas.util.vollotile.specific.MC_1_7_R1_VollotileCode;
 import de.tobiyas.util.vollotile.specific.MC_1_7_R2_VollotileCode;
+import de.tobiyas.util.vollotile.specific.MC_1_7_R3_VollotileCode;
 import de.tobiyas.util.vollotile.specific.UNKNOWN_VollotileCode;
 
 public class VollotileCodeManager {
@@ -47,6 +48,12 @@ public class VollotileCodeManager {
 	 */
 	private static void initCode() {
 		VollotileCode toCheck = null;
+		
+		toCheck = new MC_1_7_R3_VollotileCode();
+		if(toCheck.isCorrectVersion()){
+			code = toCheck;
+			return;
+		}
 		
 		toCheck = new MC_1_7_R2_VollotileCode();
 		if(toCheck.isCorrectVersion()){

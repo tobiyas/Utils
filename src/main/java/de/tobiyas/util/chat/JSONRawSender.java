@@ -22,6 +22,10 @@ import java.util.Queue;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import de.tobiyas.util.chat.resolver.AchievementJSONResolver;
 import de.tobiyas.util.chat.resolver.CommandJSONResolver;
 import de.tobiyas.util.chat.resolver.ItemJSONResolver;
@@ -225,6 +229,46 @@ public class JSONRawSender {
 		rawMessage += "]}";
 		return rawMessage;
 	}
+	
+	/**
+	 * Constructs the Raw Message.
+	 * 
+	 * @return the constructed Message.
+	 */
+	public JsonObject buildRawMessageFromJSON(){
+		JsonObject object = new JsonObject();
+		object.addProperty("text", "");
+		JsonArray extra = new JsonArray();				
+		
+		Queue<ChatResolve> copy = new LinkedList<ChatResolve>(messageQueue);
+		while(!copy.isEmpty()){
+			ChatResolve resolver = copy.poll();
+			switch(resolver.getType()){
+			case UNFORMATED_TEXT : extra.add(PlainTextJSONResolver.getRawFromPlainTextJSON((String)resolver.getToParse())); break;
+			case ITEM : extra.add(ItemJSONResolver.getItemRawHoverTextJSON((ItemStack) resolver.getToParse(), resolver.getLabel())); break;
+			case ACHIEVEMENT: extra.add(AchievementJSONResolver.resolveAchievementJSON((String)resolver.getToParse(), resolver.getLabel())); break;
+			case URL : extra.add(URLJSONResolver.resolveURLJSON((String)resolver.getToParse(), resolver.getLabel())); break;
+			case COMMAND : extra.add(CommandJSONResolver.resolveCommandJSON((String) resolver.getToParse(), resolver.getLabel())); break;
+			case POPUP : extra.add(PopupJSONResolver.resolveJSON((String) resolver.getToParse(), resolver.getLabel())); break;
+			
+			
+			case RAW : extra.add(new JsonParser().parse((String)resolver.getToParse())); break;
+			}
+		}
+		
+		object.add("extra", extra);
+		
+		return object;
+	}
+	
+	/**
+	 * Return the String representation of the JSON object
+	 * 
+	 * @return the String representation.
+	 */
+	public String buildRawMessageFromJSONAsString(){
+		return buildRawMessageFromJSON().toString();
+	}
 
 	/**
 	 * Sends the message to the Player/Players passed
@@ -247,6 +291,32 @@ public class JSONRawSender {
 	public void sendToPlayers(Collection<Player> players){
 		String message = buildRawMessage();
 
+		for(Player player : players){
+			SendRaw.sendPlayerRawMessage(player, message);
+		}
+	}
+	
+	/**
+	 * Sends the message to the Player/Players passed
+	 * 
+	 * @param player to send to
+	 */
+	public void sendJSONToPlayers(Player... players){
+		String message = buildRawMessageFromJSONAsString();
+		
+		for(Player player : players){
+			SendRaw.sendPlayerRawMessage(player, message);
+		}
+	}
+	
+	/**
+	 * Sends the message to the Players passed
+	 * 
+	 * @param player to send to
+	 */
+	public void sendJSONToPlayers(Collection<Player> players){
+		String message = buildRawMessageFromJSONAsString();
+		
 		for(Player player : players){
 			SendRaw.sendPlayerRawMessage(player, message);
 		}

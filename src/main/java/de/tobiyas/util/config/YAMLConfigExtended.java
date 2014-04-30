@@ -228,13 +228,18 @@ public class YAMLConfigExtended extends YamlConfiguration {
 				
 		try {
 			load(saveFile);
-			if(isBoolean("utf8") && getBoolean("utf8")) return loadCharset(saveFile, "UTF-8");
-			if(isBoolean("ansi") && getBoolean("ansi")) return loadCharset(saveFile, "US-ASCII");
+			
+			if(isBoolean("utf8") && getBoolean("utf8")) {
+				return loadCharset(saveFile, "UTF-8");
+			}
+			if(isBoolean("ansi") && getBoolean("ansi")) {
+				return loadCharset(saveFile, "windows-1252");
+			}
 			
 			this.lastChangeDate = new Date(savePathFile.lastModified());
 		} catch (Exception e) {
 			validLoad = false;
-			System.out.println("Error on loading YamlConfig: " + savePath);
+			System.out.println("Error on loading YamlConfig: " + saveFile.getAbsolutePath());
 			return this;
 		}
 		

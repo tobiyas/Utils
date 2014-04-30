@@ -23,10 +23,13 @@ import java.util.Map.Entry;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
+
+import com.google.gson.JsonObject;
 
 import de.tobiyas.util.naming.MCPrettyName;
 
@@ -149,9 +152,13 @@ public class ItemJSONResolver {
 			skullAdd = ",SkullOwner:\\\"" + ((SkullMeta)itemToParse.getItemMeta()).getOwner() + "\\\"";
 		}
 		
+		String bookAdd = "";
 		//Book infos
 		if(itemToParse.getType() == Material.WRITTEN_BOOK && itemToParse.hasItemMeta()){
-			
+			BookMeta meta = (BookMeta) itemToParse.getItemMeta();
+			if( meta.hasAuthor() ) bookAdd += "author:\\\"" + meta.getAuthor() + "\\\"";
+			if( meta.hasTitle() ) bookAdd += "title:\\\"" + meta.getTitle() + "\\\"";
+			//TODO add pages.
 		}
 		
 		
@@ -169,6 +176,7 @@ public class ItemJSONResolver {
 							+ storedEnchants
 							+ potionEffects
 							+ skullAdd
+							+ bookAdd
 						+ "}"
 					+ "}\""
 				+ "}";
@@ -180,6 +188,14 @@ public class ItemJSONResolver {
 				+ "\"hoverEvent\":" + hoverFormat + "}";
 		
 		return itemFormat;
+	}
+
+
+
+	public static JsonObject getItemRawHoverTextJSON(ItemStack toParse,
+			String label) {
+		// TODO fill it.
+		return new JsonObject();
 	}
 
 }

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package de.tobiyas.util.chat.resolver;
 
+import com.google.gson.JsonObject;
+
 public class PlainTextJSONResolver {
 
 	/**
@@ -29,5 +31,22 @@ public class PlainTextJSONResolver {
 		plainText = plainText.replace("\"", "\\\"");
 		
 		return "{\"text\":\"" + plainText + "\"}";
+	}
+	
+
+	/**
+	 * Returns the Raw JSON String from the Plain Text.
+	 * 
+	 * @param plainText to translate
+	 * 
+	 * @return the JSOn Object
+	 */
+	public static JsonObject getRawFromPlainTextJSON(String plainText){
+		plainText = plainText.replace("\\", "\\\\");
+		plainText = plainText.replace("\"", "\\\"");
+		
+		JsonObject object = new JsonObject();
+		object.addProperty("text", plainText);
+		return object;
 	}
 }

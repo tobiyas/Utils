@@ -40,11 +40,11 @@ public class BuildPackage extends Thread{
 	private String utilsVersion;
 	private String utilsState;
 	
-	private Exception error;
+	private Throwable error;
 	private Logger logger;
 	
 	
-	public BuildPackage(String pluginVersion, String pluginName, Exception error, Logger logger){
+	public BuildPackage(String pluginVersion, String pluginName, Throwable error, Logger logger){
 		this.pluginVersion = pluginVersion;
 		this.pluginName = pluginName;
 		this.utilsVersion = UtilConsts.utilsBuildVersion;

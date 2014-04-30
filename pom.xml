@@ -44,8 +44,8 @@
 
 	<properties>
 		<powermock.version>1.4.12</powermock.version>
-		<bukkit.version>1.7.5-R0.1-SNAPSHOT</bukkit.version>
-		<minecraft_version>1_7_R1</minecraft_version>
+		<bukkit.version>1.7.9-R0.1-SNAPSHOT</bukkit.version>
+		<minecraft_version>1_7_R3</minecraft_version>
 	</properties>
 
 	<dependencies>
@@ -58,14 +58,7 @@
 			<version>${bukkit.version}</version>
 			<optional>true</optional>
 		</dependency>
-		
-		<!-- Depends from Repos -->
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>owncraftbukkit</artifactId>
-			<version>${bukkit.version}</version>
-			<optional>true</optional>
-		</dependency>
+
 
 		<!-- We use GSON from CB -->
 	    <dependency>
@@ -191,7 +184,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>1.4</version>
+				<version>2.2</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -206,6 +199,12 @@
 							</artifactSet>
 							
 							<relocations>
+   				                <!-- Relocate GSON This has to be done BEFORE!!! CB reloc.-->
+				                <relocation>
+				                  <pattern>com.google.gson</pattern>
+				                  <shadedPattern>org.bukkit.craftbukkit.libs.com.google.gson</shadedPattern>
+				                </relocation>
+				                
 							    <!-- Relocate CraftBukkit -->
 								<relocation>
 				                    <pattern>org.bukkit.craftbukkit</pattern>
@@ -214,15 +213,11 @@
 				                        <exclude>org.bukkit.craftbukkit.Main*</exclude>
 				                    </excludes>
 				                </relocation>
+				                
 				                <!-- Relocate NMS -->
 				                <relocation>
 				                    <pattern>net.minecraft.server</pattern>
 				                    <shadedPattern>net.minecraft.server.v${minecraft_version}</shadedPattern>
-				                </relocation>
-				                <!-- Relocate GSON -->
-                                <relocation>
-				                  <pattern>com.google.gson</pattern>
-				                  <shadedPattern>org.bukkit.craftbukkit.libs.com.google.gson</shadedPattern>
 				                </relocation>
 				            </relocations>
 						</configuration>

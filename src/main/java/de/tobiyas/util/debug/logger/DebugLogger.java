@@ -172,7 +172,7 @@ public class DebugLogger{
 			errorFileHandler.setFormatter(new ConsoleLogFormatter(true));
 
 			// the following statement is the initiation of the logger displaying version + plugin 
-			errorLogger.log(Level.INFO, "Debugger for Plugin:" + plugin.getName() + " Version: " + plugin.getDescription().getVersion() +   
+			errorLogger.log(Level.INFO, "Debugger for Plugin: " + plugin.getName() + " Version: " + plugin.getDescription().getVersion() +   
 						" Started! System-Time: " + Calendar.getInstance().getTime().toString());
 
 		 } catch (SecurityException e) {
@@ -271,7 +271,7 @@ public class DebugLogger{
 		this.enableUploads = enable;
 	}
 
-	public void logStackTrace(Exception error) {
+	public void logStackTrace(Throwable error) {
 		logError("Stacktrace in error.log!", false);
 		errorLogger.log(Level.SEVERE, "Error: " + error.getClass().getName() + " message: '" + error.getLocalizedMessage() + "'");
 		for(StackTraceElement element : error.getStackTrace()){

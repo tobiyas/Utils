@@ -13,27 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package de.tobiyas.util.debug.erroruploader;
+package de.tobiyas.util.vollotile.specific;
 
-import java.util.logging.Logger;
+import java.lang.reflect.Method;
 
-import org.bukkit.plugin.Plugin;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
-public class ErrorUploader {
+import de.tobiyas.util.vollotile.VollotileCode;
 
-	private Plugin plugin;
-	private Logger logger;
+public class MC_1_7_R3_VollotileCode extends VollotileCode {
+
 	
-	public ErrorUploader(Plugin plugin, Logger errorLogger){
-		this.plugin = plugin;
-		this.logger = errorLogger;
+	
+	public MC_1_7_R3_VollotileCode() {
+		super("v1_7_R3");
 	}
 	
-	public void uploadStacktrace(Throwable error){
-		String pluginVersion = plugin.getDescription().getVersion();
-		String pluginName = plugin.getName();
-		
-		BuildPackage buildPackage = new BuildPackage(pluginVersion, pluginName, error, logger);
-		buildPackage.start();
+
+	@Override
+	public void playCriticalHitEffect(Player toSendTo, Entity toPlayEffect) {
+		try{
+			Object mcEntity = getMCEntityFromBukkitEntity(toPlayEffect);
+			Object mcPlayer = getMCEntityFromBukkitEntity(toSendTo);
+			
+			Method playOutAnnimation= mcPlayer.getClass().getDeclaredMethod("b", Class.forName("net.minecraft.server." + CB_RELOCATION + ".Entity"));
+			playOutAnnimation.invoke(mcPlayer, mcEntity);
+		}catch(Exception exp){
+		}
 	}
+
 }

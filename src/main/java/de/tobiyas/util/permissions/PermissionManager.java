@@ -21,7 +21,7 @@ import de.tobiyas.util.permissions.plugins.PermissionPlugin;
 import de.tobiyas.util.permissions.plugins.PermissionsBukkitPermissions;
 import de.tobiyas.util.permissions.plugins.VaultPermissions;
 
-public class PermissionManager{
+public class PermissionManager implements PermissionPlugin{
 
 	private PermissionPlugin permPlugin;
 	private UtilsUsingPlugin plugin;
@@ -242,6 +242,7 @@ public class PermissionManager{
 	}
 
 
+	
 	/**
 	 * Adds a permission to a player
 	 * 
@@ -250,6 +251,42 @@ public class PermissionManager{
 	 */
 	public void addPermission(Player player, String permission) {
 		permPlugin.addPermission(player, permission);
+	}
+
+
+	@Override
+	public boolean isActive() {
+		return permPlugin.isActive();
+	}
+
+
+	@Override
+	public boolean getPermissions(CommandSender sender, String permissionNode) {
+		return permPlugin.getPermissions(sender, permissionNode);
+	}
+
+
+	@Override
+	public boolean getPermissions(String playerName, String permissionNode) {
+		return permPlugin.getPermissions(playerName, permissionNode);
+	}
+
+
+	@Override
+	public ArrayList<String> getGroups() {
+		return permPlugin.getGroups();
+	}
+
+
+	@Override
+	public void init() {
+		permPlugin = checkForPermissionsPlugin(null);
+	}
+
+
+	@Override
+	public String getName() {
+		return permPlugin.getName();
 	}
 	
 }

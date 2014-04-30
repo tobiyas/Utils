@@ -15,6 +15,8 @@
  ******************************************************************************/
 package de.tobiyas.util.chat.resolver;
 
+import com.google.gson.JsonObject;
+
 public class PopupJSONResolver {
 
 	
@@ -39,5 +41,28 @@ public class PopupJSONResolver {
 				+ "}";
 		
 		return rawData;
+	}
+	
+
+	
+	/**
+	 * Resolves the Text to an Popup.
+	 * 
+	 * @param message to show
+	 * 
+	 * @param label to hover on
+	 * 
+	 * @return the JSON object.
+	 */
+	public static JsonObject resolveJSON(String message, String label){
+		JsonObject object = new JsonObject();
+		
+		JsonObject hoverEvent = new JsonObject();
+		hoverEvent.addProperty("action", "show_text");
+		hoverEvent.addProperty("value", message);
+		
+		object.addProperty("text", label);
+		object.add("hoverEvent", hoverEvent);
+		return object;
 	}
 }

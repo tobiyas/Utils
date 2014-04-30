@@ -88,6 +88,11 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 	 */
 	protected final Inventory controlInventory;
 	
+	/**
+	 * if also left click is used for selection
+	 */
+	protected boolean alsoUseLeftClick = false;
+	
 	
 	/**
 	 * Creates a Selection Interface.

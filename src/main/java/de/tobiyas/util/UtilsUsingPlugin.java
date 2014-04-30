@@ -162,12 +162,12 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 	 * @param message to post
 	 * @param exp to save
 	 */
-	public void logStackTrace(String message, Exception exp){
+	public void logStackTrace(String message, Throwable exp){
 		if(message == null || "".equals(message)){
 			message = exp.getLocalizedMessage();
 		}
 		
-		getDebugLogger().logError(message);
+		logError(message);
 		getDebugLogger().logStackTrace(exp);
 	}
 }

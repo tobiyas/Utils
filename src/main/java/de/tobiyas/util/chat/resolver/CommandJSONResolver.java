@@ -15,6 +15,8 @@
  ******************************************************************************/
 package de.tobiyas.util.chat.resolver;
 
+import com.google.gson.JsonObject;
+
 public class CommandJSONResolver {
 
 	/**
@@ -37,5 +39,28 @@ public class CommandJSONResolver {
 				+ "}";
 		
 		return rawData;
+	}
+	
+	
+
+	/**
+	 * Resolves the Command to an Command to click.
+	 * 
+	 * @param command to click
+	 * 
+	 * @param label to click on
+	 * 
+	 * @return
+	 */
+	public static JsonObject resolveCommandJSON(String command, String label){
+		JsonObject object = new JsonObject();
+		object.addProperty("text", label);
+		
+		JsonObject clickEvent = new JsonObject();
+		clickEvent.addProperty("action", "run_command");
+		clickEvent.addProperty("value", command);
+		
+		object.add("clickEvent", clickEvent);
+		return object;
 	}
 }
