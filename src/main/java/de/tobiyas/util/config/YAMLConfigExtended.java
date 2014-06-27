@@ -432,28 +432,17 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	private String replaceUmlauts(String toReplace){
 		if(toReplace == null) return null;
 		
-		toReplace = toReplace.replace(new String("ö".getBytes(Charset.forName("UTF-8"))), "ö");
-		toReplace = toReplace.replace(new String("Ö".getBytes(Charset.forName("UTF-8"))), "Ö");
-
-		toReplace = toReplace.replace(new String("ä".getBytes(Charset.forName("UTF-8"))), "ä");
-		toReplace = toReplace.replace(new String("Ä".getBytes(Charset.forName("UTF-8"))), "Ä");
-		
-		toReplace = toReplace.replace(new String("ü".getBytes(Charset.forName("UTF-8"))), "ü");
-		toReplace = toReplace.replace(new String("Ü".getBytes(Charset.forName("UTF-8"))), "Ü");
-
-		
 		//HTML stuff
-		toReplace = toReplace.replace("<o>", "ö");
-		toReplace = toReplace.replace("<O>", "Ö");
+		toReplace = toReplace.replace("<o>", '\u00f6' + "");
+		toReplace = toReplace.replace("<O>", '\u00D6' + "");
 		
-		toReplace = toReplace.replace("<a>", "ä");
-		toReplace = toReplace.replace("<A>", "Ä");
+		toReplace = toReplace.replace("<a>", '\u00e4' + "");
+		toReplace = toReplace.replace("<A>", '\u00c4' + "");
 		
-		toReplace = toReplace.replace("<u>", "ü");
-		toReplace = toReplace.replace("<U>", "Ü");
+		toReplace = toReplace.replace("<u>", '\u00fc' + "");
+		toReplace = toReplace.replace("<U>", '\u00dc' + "");
 
-		toReplace = toReplace.replace("<ss>", "ß");
-		toReplace = toReplace.replace("<copy>", "©");
+		toReplace = toReplace.replace("<ss>", '\u00df' + "");
 		
 		
 		return toReplace;
@@ -471,28 +460,17 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	private String replaceUmlautsBack(String toReplace){
 		if(toReplace == null) return null;
 		
-		toReplace = toReplace.replace("ö", new String("ö".getBytes(Charset.forName("UTF-8"))));
-		toReplace = toReplace.replace("Ö", new String("Ö".getBytes(Charset.forName("UTF-8"))));
-
-		toReplace = toReplace.replace("ä", new String("ä".getBytes(Charset.forName("UTF-8"))));
-		toReplace = toReplace.replace("Ä", new String("Ä".getBytes(Charset.forName("UTF-8"))));
-		
-		toReplace = toReplace.replace("ü", new String("ü".getBytes(Charset.forName("UTF-8"))));
-		toReplace = toReplace.replace("Ü", new String("Ü".getBytes(Charset.forName("UTF-8"))));
-
-		
 		//HTML stuff
-		toReplace = toReplace.replace("ö", "<&ouml;>");
-		toReplace = toReplace.replace("Ö", "<&Ouml;>");
+		toReplace = toReplace.replace('\u00f6' + "", "<o>");
+		toReplace = toReplace.replace('\u00D6' + "", "<O>");
 		
-		toReplace = toReplace.replace("ä", "<&auml;>");
-		toReplace = toReplace.replace("Ä", "<&Auml;>");
+		toReplace = toReplace.replace('\u00e4' + "", "<a>");
+		toReplace = toReplace.replace('\u00c4' + "", "<A>");
 		
-		toReplace = toReplace.replace("ü", "<&uuml;>");
-		toReplace = toReplace.replace("Ü", "<&Uuml;>");
+		toReplace = toReplace.replace('\u00fc' + "", "<u>");
+		toReplace = toReplace.replace('\u00dc' + "", "<U>");
 
-		toReplace = toReplace.replace("ß", "<&szlig;>");
-		toReplace = toReplace.replace("©", "<&copy;>");
+		toReplace = toReplace.replace('\u00df' + "", "<ss>");
 		
 		
 		return toReplace;

@@ -200,7 +200,7 @@ public class ScrollableItems {
 		for(ItemStack item : itemsToScroll){
 			String name = item.getType().name();
 			if(item.getItemMeta().hasDisplayName()){
-				name = item.getItemMeta().getDisplayName().replaceAll("(§([a-f0-9]))", "");
+				name = ChatColor.stripColor(item.getItemMeta().getDisplayName());
 			}
 			
 			list.add(name);
