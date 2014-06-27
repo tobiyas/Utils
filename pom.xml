@@ -119,7 +119,7 @@
 			<groupId>org.anjocaido</groupId>
 			<artifactId>groupmanager</artifactId>
 			<scope>system</scope>
-			<systemPath>${basedir}\libs\Permissions\EssentialsGroupManager.jar</systemPath>
+			<systemPath>${basedir}/libs/Permissions/EssentialsGroupManager.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
 
@@ -127,7 +127,7 @@
 			<groupId>de.bananaco</groupId>
 			<artifactId>bPermissions</artifactId>
 			<scope>system</scope>
-			<systemPath>${basedir}\libs\Permissions\bpermissions.jar</systemPath>
+			<systemPath>${basedir}/libs/Permissions/bpermissions.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
 
@@ -135,7 +135,7 @@
 			<groupId>com.platymuus</groupId>
 			<artifactId>bukkit-permissions</artifactId>
 			<scope>system</scope>
-			<systemPath>${basedir}\libs\Permissions\PermissionsBukkit.jar</systemPath>
+			<systemPath>${basedir}/libs/Permissions/PermissionsBukkit.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
 
@@ -143,7 +143,7 @@
 			<groupId>ru.tehkode</groupId>
 			<artifactId>PermissionsEx</artifactId>
 			<scope>system</scope>
-			<systemPath>${basedir}\libs\Permissions\PermissionsEx.jar</systemPath>
+			<systemPath>${basedir}/libs/Permissions/PermissionsEx.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
 
@@ -151,7 +151,7 @@
 			<groupId>com.iCo6</groupId>
 			<artifactId>iConomy</artifactId>
 			<scope>system</scope>
-			<systemPath>${basedir}\libs\Money\iConomy.jar</systemPath>
+			<systemPath>${basedir}/libs/Money/iConomy.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
 
@@ -159,7 +159,7 @@
 			<groupId>com.earth2me</groupId>
 			<artifactId>essentials</artifactId>
 			<scope>system</scope>
-			<systemPath>${basedir}\libs\Money\Essentials.jar</systemPath>
+			<systemPath>${basedir}/libs/Money/Essentials.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
 		
@@ -167,7 +167,7 @@
    			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit-1</artifactId>
 			<scope>system</scope>
-			<systemPath>${basedir}\libs\cb\cb-1.7.2.jar</systemPath>
+			<systemPath>${basedir}/libs/cb/cb-1.7.2.jar</systemPath>
 			<version>1.7.2</version>
 			<optional>true</optional>
 		</dependency>
@@ -176,7 +176,7 @@
    			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit-2</artifactId>
 			<scope>system</scope>
-			<systemPath>${basedir}\libs\cb\cb-1.7.5.jar</systemPath>
+			<systemPath>${basedir}/libs/cb/cb-1.7.5.jar</systemPath>
 			<version>1.7.5</version>
 			<optional>true</optional>
 		</dependency>
@@ -185,7 +185,7 @@
    			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit-3</artifactId>
 			<scope>system</scope>
-			<systemPath>${basedir}\libs\cb\cb-1.7.8.jar</systemPath>
+			<systemPath>${basedir}/libs/cb/cb-1.7.8.jar</systemPath>
 			<version>1.7.8</version>
 			<optional>true</optional>
 		</dependency>
