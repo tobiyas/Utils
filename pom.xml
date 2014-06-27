@@ -38,14 +38,13 @@
 		<!-- Vault repo -->
 		<repository>
 			<id>vault-repo</id>
-			<url>http://ci.herocraftonline.com/plugin/repository/everything</url>
+			<url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
 		</repository>
 	</repositories>
 
 	<properties>
 		<powermock.version>1.4.12</powermock.version>
-		<bukkit.version>1.7.9-R0.1-SNAPSHOT</bukkit.version>
-		<minecraft_version>1_7_R3</minecraft_version>
+		<bukkit.version>1.7.9-R0.3-SNAPSHOT</bukkit.version>
 	</properties>
 
 	<dependencies>
@@ -75,8 +74,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>net.milkbowl</groupId>
-			<artifactId>vault</artifactId>
+			<groupId>net.milkbowl.vault</groupId>
+			<artifactId>VaultAPI</artifactId>
 			<optional>true</optional>
 		</dependency>
 
@@ -163,6 +162,33 @@
 			<systemPath>${basedir}\libs\Money\Essentials.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
+		
+		<dependency>
+   			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit-1</artifactId>
+			<scope>system</scope>
+			<systemPath>${basedir}\libs\cb\cb-1.7.2.jar</systemPath>
+			<version>1.7.2</version>
+			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+   			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit-2</artifactId>
+			<scope>system</scope>
+			<systemPath>${basedir}\libs\cb\cb-1.7.5.jar</systemPath>
+			<version>1.7.5</version>
+			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+   			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit-3</artifactId>
+			<scope>system</scope>
+			<systemPath>${basedir}\libs\cb\cb-1.7.8.jar</systemPath>
+			<version>1.7.8</version>
+			<optional>true</optional>
+		</dependency>
 
 	</dependencies>
 
@@ -205,20 +231,22 @@
 				                  <shadedPattern>org.bukkit.craftbukkit.libs.com.google.gson</shadedPattern>
 				                </relocation>
 				                
-							    <!-- Relocate CraftBukkit -->
-								<relocation>
+				                <!--
+							    <relocation>
 				                    <pattern>org.bukkit.craftbukkit</pattern>
 				                    <shadedPattern>org.bukkit.craftbukkit.v${minecraft_version}</shadedPattern>
 				                    <excludes>
 				                        <exclude>org.bukkit.craftbukkit.Main*</exclude>
+				                        <exclude>org.bukkit.craftbukkit.libs.*</exclude>
 				                    </excludes>
 				                </relocation>
 				                
-				                <!-- Relocate NMS -->
+				                
 				                <relocation>
 				                    <pattern>net.minecraft.server</pattern>
 				                    <shadedPattern>net.minecraft.server.v${minecraft_version}</shadedPattern>
 				                </relocation>
+				                -->
 				            </relocations>
 						</configuration>
 					</execution>
@@ -240,9 +268,9 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>net.milkbowl</groupId>
-				<artifactId>vault</artifactId>
-				<version>1.2.27</version>
+				<groupId>net.milkbowl.vault</groupId>
+				<artifactId>VaultAPI</artifactId>
+				<version>1.4</version>
 			</dependency>
 			<dependency>
 				<groupId>org.easymock</groupId>

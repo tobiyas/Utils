@@ -17,9 +17,13 @@ package de.tobiyas.util.vollotile.specific;
 
 import java.lang.reflect.Method;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
+import de.tobiyas.util.vollotile.ParticleEffects;
+import de.tobiyas.util.vollotile.ReflectionsHelper;
 import de.tobiyas.util.vollotile.VollotileCode;
 
 public class MC_1_6_R1_VollotileCode extends VollotileCode {
@@ -32,12 +36,17 @@ public class MC_1_6_R1_VollotileCode extends VollotileCode {
 	@Override
 	public void playCriticalHitEffect(Player player, Entity toPlayEffect) {
 		try{
-			Object mcEntity = getMCEntityFromBukkitEntity(toPlayEffect);
-			Object mcPlayer = getMCEntityFromBukkitEntity(player);
+			Object mcEntity = ReflectionsHelper.getMCEntityFromBukkitEntity(toPlayEffect);
+			Object mcPlayer = ReflectionsHelper.getMCEntityFromBukkitEntity(player);
 			
 			Method playOutAnnimation= mcPlayer.getClass().getDeclaredMethod("b", Class.forName("net.minecraft.server." + CB_RELOCATION + ".Entity"));
 			playOutAnnimation.invoke(mcPlayer, mcEntity);
 		}catch(Exception exp){
 		}
+	}
+	
+	
+	@Override
+	public void sendParticleEffect(ParticleEffects effect, Location loc, Vector width, float speed, int amount, Player player) {
 	}
 }

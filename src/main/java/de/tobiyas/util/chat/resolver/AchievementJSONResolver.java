@@ -42,6 +42,18 @@ public class AchievementJSONResolver {
 		return rawData;
 	}
 	
+	
+	
+	public static JsonObject addAchievemntHover(JsonObject toAddTo, String achievmentName){
+		JsonObject hoverEvent = new JsonObject();
+		hoverEvent.addProperty("action", "show_achievement");
+		hoverEvent.addProperty("value", achievmentName);
+		
+		toAddTo.add("hoverEvent", hoverEvent);
+		return toAddTo;
+	}
+	
+	
 	/**
 	 * Resolves an Achievement.
 	 * 
@@ -52,14 +64,7 @@ public class AchievementJSONResolver {
 	 * @return the resolved RAW data
 	 */
 	public static JsonObject resolveAchievementJSON(String achievmentName, String label){
-		JsonObject hoverEvent = new JsonObject();
-		hoverEvent.addProperty("action", "show_achievement");
-		hoverEvent.addProperty("value", achievmentName);
-		
-		JsonObject object = new JsonObject();
-		object.addProperty("text", label);
-		object.add("hoverEvent", hoverEvent);		
-
-		return object;
+		JsonObject object = PlainTextJSONResolver.getRawFromPlainTextJSON(label);
+		return addAchievemntHover(object, achievmentName);
 	}
 }

@@ -15,10 +15,13 @@
  ******************************************************************************/
 package de.tobiyas.util.vollotile.specific;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
+import de.tobiyas.util.vollotile.ParticleEffects;
 import de.tobiyas.util.vollotile.VollotileCode;
 
 /**
@@ -40,4 +43,8 @@ public class UNKNOWN_VollotileCode extends VollotileCode {
 	public void removeParticleEffect(LivingEntity entity) {
 	}
 	
+	
+	@Override
+	public void sendParticleEffect(ParticleEffects effect, Location loc, Vector width, float speed, int amount, Player player) {
+	}
 }

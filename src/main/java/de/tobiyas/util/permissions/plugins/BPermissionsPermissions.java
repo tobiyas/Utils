@@ -24,7 +24,8 @@ import org.bukkit.plugin.Plugin;
 
 import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.CalculableType;
-import de.bananaco.bpermissions.api.util.Permission;
+import de.bananaco.bpermissions.api.Permission;
+import de.tobiyas.util.player.PlayerUtils;
 
 public class BPermissionsPermissions implements PermissionPlugin{
 	
@@ -89,16 +90,41 @@ public class BPermissionsPermissions implements PermissionPlugin{
 	
 	@Override
 	public boolean getPermissions(String playerName, String permissionNode) {
-		Player player = Bukkit.getPlayer(playerName);
+		Player player = PlayerUtils.getPlayer(playerName);
 		if(player == null) return false;
 		
 		return getPermissions(player, permissionNode);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void addPermission(Player player, String permission) {
 		ApiLayer.addPermission(player.getWorld().getName(), CalculableType.USER, player.getName(), Permission.loadFromString(permission));
+	}
+	
+
+	@Override
+	public void removePermission(Player player, String permission) {
+		ApiLayer.removePermission(player.getWorld().getName(), CalculableType.USER, player.getName(), permission);
+	}
+
+	@Override
+	public boolean hasGroupSupport() {
+		return true;
+	}
+
+	@Override
+	public boolean hasSubgroupSupport() {
+		return true;
+	}
+
+	@Override
+	public void addSubgroup(Player player, String subgroup) {
+		ApiLayer.addGroup(player.getWorld().getName(), CalculableType.USER, player.getName(), subgroup);
+	}
+
+	@Override
+	public void removeSubgroup(Player player, String subgroup) {
+		ApiLayer.removeGroup(player.getWorld().getName(), CalculableType.USER, player.getName(), subgroup);
 	}
 
 }

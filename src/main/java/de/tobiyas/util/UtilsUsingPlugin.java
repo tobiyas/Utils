@@ -22,6 +22,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
+import de.tobiyas.util.chat.commands.ClickCommandManager;
 import de.tobiyas.util.debug.logger.DebugLogger;
 import de.tobiyas.util.economy.MoneyManager;
 import de.tobiyas.util.permissions.PermissionManager;
@@ -46,6 +47,12 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 	 * <br>Private to have easy Lazy init.
 	 */
 	private MoneyManager moneyManager;
+	
+	
+	/**
+	 * The ClickCommandManager to use.
+	 */
+	private ClickCommandManager clickCommandManager;
 	
 	
 	/**
@@ -118,6 +125,19 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 	
 	
 	/**
+	 * Returns the {@link ClickCommandManager} for the plugin.
+	 * <br>This is a lazy init.
+	 * 
+	 * @return the {@link ClickCommandManager}
+	 */
+	public ClickCommandManager getClickCommandManager(){
+		if(clickCommandManager == null) clickCommandManager = new ClickCommandManager(this);
+		return clickCommandManager;
+	}
+	
+	
+	
+	/**
 	 * Logs a Message to the Info channel
 	 * 
 	 * @param message to log
@@ -170,4 +190,5 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 		logError(message);
 		getDebugLogger().logStackTrace(exp);
 	}
+	
 }

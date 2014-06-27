@@ -181,6 +181,22 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		
 		return true;
 	}
+	
+
+	/**
+	 * forces a sync save.
+	 */
+	public void forceSave() {
+		if(totalPath == null) return;
+		
+		File file = fileCheck();
+		try {
+			this.save(file);
+			this.dirty = false;
+			
+			this.lastChangeDate = new Date(file.lastModified());
+		} catch (IOException e) {}
+	}
 
 	/**
 	 * Saves the Config to the File passed in construction.
@@ -354,6 +370,24 @@ public class YAMLConfigExtended extends YamlConfiguration {
 			return;
 		}
 		
+		if(object instanceof String){
+			super.set(path, replaceUmlauts((String) object));
+			return;
+		}
+
+		if(object instanceof List){
+			List<?> list = (List<?>) object;
+			if(!list.isEmpty() && list.get(0) instanceof String) {
+				List<String> copy = new LinkedList<String>();
+				for(Object value : list){
+					if(value instanceof String) copy.add(replaceUmlautsBack((String) value));
+				}
+				
+				super.set(path, copy);
+				return;
+			}
+		}
+		
 		super.set(path, object);
 	}
 	
@@ -385,6 +419,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		
 		return newStringList;
 	}
+	
 
 
 	/**
@@ -405,6 +440,60 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		
 		toReplace = toReplace.replace(new String("ü".getBytes(Charset.forName("UTF-8"))), "ü");
 		toReplace = toReplace.replace(new String("Ü".getBytes(Charset.forName("UTF-8"))), "Ü");
+
+		
+		//HTML stuff
+		toReplace = toReplace.replace("<o>", "ö");
+		toReplace = toReplace.replace("<O>", "Ö");
+		
+		toReplace = toReplace.replace("<a>", "ä");
+		toReplace = toReplace.replace("<A>", "Ä");
+		
+		toReplace = toReplace.replace("<u>", "ü");
+		toReplace = toReplace.replace("<U>", "Ü");
+
+		toReplace = toReplace.replace("<ss>", "ß");
+		toReplace = toReplace.replace("<copy>", "©");
+		
+		
+		return toReplace;
+	}
+	
+
+
+	/**
+	 * Replaces all Umlauts with the correct ones..
+	 * 
+	 * @param toReplace the string to replace
+	 * 
+	 * @return the replaces String
+	 */
+	private String replaceUmlautsBack(String toReplace){
+		if(toReplace == null) return null;
+		
+		toReplace = toReplace.replace("ö", new String("ö".getBytes(Charset.forName("UTF-8"))));
+		toReplace = toReplace.replace("Ö", new String("Ö".getBytes(Charset.forName("UTF-8"))));
+
+		toReplace = toReplace.replace("ä", new String("ä".getBytes(Charset.forName("UTF-8"))));
+		toReplace = toReplace.replace("Ä", new String("Ä".getBytes(Charset.forName("UTF-8"))));
+		
+		toReplace = toReplace.replace("ü", new String("ü".getBytes(Charset.forName("UTF-8"))));
+		toReplace = toReplace.replace("Ü", new String("Ü".getBytes(Charset.forName("UTF-8"))));
+
+		
+		//HTML stuff
+		toReplace = toReplace.replace("ö", "<&ouml;>");
+		toReplace = toReplace.replace("Ö", "<&Ouml;>");
+		
+		toReplace = toReplace.replace("ä", "<&auml;>");
+		toReplace = toReplace.replace("Ä", "<&Auml;>");
+		
+		toReplace = toReplace.replace("ü", "<&uuml;>");
+		toReplace = toReplace.replace("Ü", "<&Uuml;>");
+
+		toReplace = toReplace.replace("ß", "<&szlig;>");
+		toReplace = toReplace.replace("©", "<&copy;>");
+		
 		
 		return toReplace;
 	}
@@ -521,7 +610,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	public Material getMaterial(String path, Material defaultMaterial){
 		if(isInt(path)){
 			try{
-				return Material.getMaterial(getInt(path));
+				return Material.getMaterial(getInt(path, -1));
 			}catch (IllegalArgumentException exp){
 				return defaultMaterial;
 			}
@@ -529,7 +618,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		
 		if(isString(path)){
 			try{
-				Material mat = Material.valueOf(getString(path).toUpperCase());
+				Material mat = Material.matchMaterial(getString(path, ""));
 				return mat == null ? defaultMaterial : mat;	
 			}catch(IllegalArgumentException exp){			
 				return defaultMaterial;
@@ -686,6 +775,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		this.map.clear();
 		this.dirty = true;
 	}
+
 }
 
 

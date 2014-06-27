@@ -24,6 +24,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+import de.tobiyas.util.player.PlayerUtils;
+
 public class VaultPermissions implements PermissionPlugin {
 	
 	private Permission vaultPermission;
@@ -101,7 +103,7 @@ public class VaultPermissions implements PermissionPlugin {
 
 	@Override
 	public boolean getPermissions(String playerName, String permissionNode) {
-		Player player = Bukkit.getPlayer(playerName);
+		Player player = PlayerUtils.getPlayer(playerName);
 		if(player == null) return false;
 		
 		return getPermissions(player, permissionNode);
@@ -110,5 +112,28 @@ public class VaultPermissions implements PermissionPlugin {
 	@Override
 	public void addPermission(Player player, String permission) {
 		vaultPermission.playerAdd(player, permission);
+	}
+	
+	@Override
+	public void removePermission(Player player, String permission) {
+		vaultPermission.playerRemove(player, permission);
+	}
+
+	@Override
+	public boolean hasGroupSupport() {
+		return true;
+	}
+
+	@Override
+	public boolean hasSubgroupSupport() {
+		return false;
+	}
+
+	@Override
+	public void addSubgroup(Player player, String subgroup) {
+	}
+
+	@Override
+	public void removeSubgroup(Player player, String subgroup) {
 	}
 }

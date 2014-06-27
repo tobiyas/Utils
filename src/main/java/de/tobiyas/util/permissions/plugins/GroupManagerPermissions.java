@@ -25,6 +25,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import de.tobiyas.util.player.PlayerUtils;
+
 public class GroupManagerPermissions implements PermissionPlugin {
 
 	private GroupManager groupManager;
@@ -108,7 +110,7 @@ public class GroupManagerPermissions implements PermissionPlugin {
 
 	@Override
 	public boolean getPermissions(String playerName, String permissionNode) {
-		Player player = Bukkit.getPlayer(playerName);
+		Player player = PlayerUtils.getPlayer(playerName);
 		if(player == null) return false;
 		
 		return getPermissions(player, permissionNode);
@@ -118,6 +120,42 @@ public class GroupManagerPermissions implements PermissionPlugin {
 	@Override
 	public void addPermission(Player player, String permission) {
 		groupManager.getWorldsHolder().getWorldData(player).getUser(player.getName()).addPermission(permission);
+	}
+
+
+	@Override
+	public void removePermission(Player player, String permission) {
+		groupManager.getWorldsHolder().getWorldData(player).getUser(player.getName()).removePermission(permission);
+	}
+
+
+	@Override
+	public boolean hasGroupSupport() {
+		return true;
+	}
+
+
+	@Override
+	public boolean hasSubgroupSupport() {
+		return true;
+	}
+
+
+	@Override
+	public void addSubgroup(Player player, String subgroup) {
+		Group subgroupObj = groupManager.getWorldsHolder().getDefaultWorld().getGroup(subgroup);
+		if(subgroupObj == null) return;
+		
+		groupManager.getWorldsHolder().getDefaultWorld().getUser(player.getName()).addSubGroup(subgroupObj);
+	}
+
+
+	@Override
+	public void removeSubgroup(Player player, String subgroup) {
+		Group subgroupObj = groupManager.getWorldsHolder().getDefaultWorld().getGroup(subgroup);
+		if(subgroupObj == null) return;
+		
+		groupManager.getWorldsHolder().getDefaultWorld().getUser(player.getName()).removeSubGroup(subgroupObj);
 	}
 
 }

@@ -18,9 +18,10 @@ package de.tobiyas.util.economy.plugins;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-public class VaultMoney implements MoneyPlugin {
+public class VaultMoney extends AbstractMoneyPlugin {
 	
 	private boolean isActive;
 	private Economy vaultEconomy;
@@ -30,21 +31,21 @@ public class VaultMoney implements MoneyPlugin {
 	}
 
 	@Override
-	public double getMoneyOfPlayer(String playerName) {
+	public double getMoneyOfPlayer(OfflinePlayer player) {
 		if(!isActive) return 0; 
-		return vaultEconomy.getBalance(playerName);
+		return vaultEconomy.getBalance(player);
 	}
 
 	@Override
-	public boolean addMoney(String playerName, double amount) {
+	public boolean addMoney(OfflinePlayer player, double amount) {
 		if(!isActive) return false;
-		if(!vaultEconomy.hasAccount(playerName)) return false;
-		vaultEconomy.depositPlayer(playerName, amount);
+		if(!vaultEconomy.hasAccount(player)) return false;
+		vaultEconomy.depositPlayer(player, amount);
 		return true;
 	}
 
 	@Override
-	public boolean transferMoney(String from, String to, double amount) {
+	public boolean transferMoney(OfflinePlayer from, OfflinePlayer to, double amount) {
 		if(!isActive) return false; 
 		if(!vaultEconomy.hasAccount(from)) return false;
 		if(!vaultEconomy.hasAccount(to)) return false;
@@ -57,10 +58,10 @@ public class VaultMoney implements MoneyPlugin {
 	}
 
 	@Override
-	public boolean removeMoney(String playerName, double amount) {
+	public boolean removeMoney(OfflinePlayer player, double amount) {
 		if(!isActive) return false;
 		
-		vaultEconomy.withdrawPlayer(playerName, amount);
+		vaultEconomy.withdrawPlayer(player, amount);
 		return true;
 	}
 
@@ -88,8 +89,8 @@ public class VaultMoney implements MoneyPlugin {
 	}
 
 	@Override
-	public void createBankAccount(String name) {
-		vaultEconomy.createBank(name, null);
+	public void createBankAccount(String name, OfflinePlayer owner) {
+		vaultEconomy.createBank(name, owner);
 	}
 
 	@Override

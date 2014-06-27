@@ -17,7 +17,7 @@ package de.tobiyas.util.chat.resolver;
 
 import com.google.gson.JsonObject;
 
-public class CommandJSONResolver {
+public class CommandSuggestionJSONResolver {
 
 	/**
 	 * Resolves the Command to an Command to click.
@@ -28,12 +28,12 @@ public class CommandJSONResolver {
 	 * 
 	 * @return
 	 */
-	public static String resolveCommand(String command, String label){
+	public static String resolveCommandSuggestion(String command, String label){
 		String rawData = ""
 				+ "{"
 					+ "text:\"" + label + "\","
 					+ "clickEvent:{"
-						+ "action:run_command,"
+						+ "action:suggest_command,"
 						+ "value:\"" + command + "\""
 					+"}"
 				+ "}";
@@ -50,9 +50,9 @@ public class CommandJSONResolver {
 	 * 
 	 * @return
 	 */
-	public static JsonObject addCommandClickable(JsonObject toAddto, String command){
+	public static JsonObject addCommandSuggestionClickable(JsonObject toAddto, String command){
 		JsonObject clickEvent = new JsonObject();
-		clickEvent.addProperty("action", "run_command");
+		clickEvent.addProperty("action", "suggest_command");
 		clickEvent.addProperty("value", command);
 		
 		toAddto.add("clickEvent", clickEvent);
@@ -70,8 +70,8 @@ public class CommandJSONResolver {
 	 * 
 	 * @return
 	 */
-	public static JsonObject resolveCommandJSON(String command, String label){
+	public static JsonObject resolveCommandSuggestionJSON(String command, String label){
 		JsonObject object = PlainTextJSONResolver.getRawFromPlainTextJSON(label);
-		return addCommandClickable(object, command);
+		return addCommandSuggestionClickable(object, command);
 	}
 }

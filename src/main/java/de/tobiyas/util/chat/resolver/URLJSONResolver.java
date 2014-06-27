@@ -41,6 +41,15 @@ public class URLJSONResolver {
 		return rawData;
 	}
 	
+	
+	public static JsonObject addURLClickable(JsonObject toAddTo, String url){
+		JsonObject hover = new JsonObject();
+		hover.addProperty("action", "open_url");
+		hover.addProperty("value", url);
+		
+		toAddTo.add("clickEvent", hover);
+		return toAddTo;
+	}
 
 	
 	/**
@@ -52,15 +61,8 @@ public class URLJSONResolver {
 	 * @return the parsed JSON Object
 	 */
 	public static JsonObject resolveURLJSON(String url, String label) {
-		JsonObject object = new JsonObject();
-		object.addProperty("text", label);
-		
-		JsonObject hover = new JsonObject();
-		hover.addProperty("action", "open_url");
-		hover.addProperty("value", url);
-		
-		object.add("clickEvent", hover);
-		return object;
+		JsonObject object = PlainTextJSONResolver.getRawFromPlainTextJSON(label);
+		return addURLClickable(object, url);
 	}
 
 }

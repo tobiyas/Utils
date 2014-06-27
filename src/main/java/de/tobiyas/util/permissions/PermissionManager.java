@@ -288,5 +288,37 @@ public class PermissionManager implements PermissionPlugin{
 	public String getName() {
 		return permPlugin.getName();
 	}
+
+
+	@Override
+	public void removePermission(Player player, String permission) {
+		permPlugin.removePermission(player, permission);
+	}
+
+
+	@Override
+	public boolean hasGroupSupport() {
+		return permPlugin.hasGroupSupport();
+	}
+
+
+	@Override
+	public boolean hasSubgroupSupport() {
+		return permPlugin.hasSubgroupSupport();
+	}
+
+
+	@Override
+	public void addSubgroup(Player player, String subgroup) {
+		if(!hasSubgroupSupport()) return;
+		permPlugin.addSubgroup(player, subgroup);
+	}
+
+
+	@Override
+	public void removeSubgroup(Player player, String subgroup) {
+		if(!hasSubgroupSupport()) return;
+		permPlugin.removeSubgroup(player, subgroup);
+	}
 	
 }

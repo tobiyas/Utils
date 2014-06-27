@@ -30,6 +30,20 @@ public interface PermissionPlugin {
 	public boolean isActive();
 	
 	/**
+	 * Returns if the Plugin has Suppoer for groups.
+	 * 
+	 * @return true if active, false otherwise
+	 */
+	public boolean hasGroupSupport();
+	
+	/**
+	 * Returns if the Plugin is has Support for subgroups.
+	 * 
+	 * @return true if active, false otherwise
+	 */
+	public boolean hasSubgroupSupport();
+	
+	/**
 	 * Checks if the sender has Permission to the Node passed.
 	 * 
 	 * @param sender to check.
@@ -79,4 +93,31 @@ public interface PermissionPlugin {
 	 * @param permission to add
 	 */
 	public void addPermission(Player player, String permission);
+
+	/**
+	 * Removes a Permission from a player.
+	 * 
+	 * @param player to remove from
+	 * @param permisson to remove
+	 */
+	public void removePermission(Player player, String permission);
+	
+	
+	//SUBGROUP PART
+	
+	/**
+	 * Adds a Subgroup to the player.
+	 * 
+	 * @param player to add to
+	 * @param subgroup to add
+	 */
+	public void addSubgroup(Player player, String subgroup);
+	
+	/**
+	 * removes a Subgroup to the player.
+	 * 
+	 * @param player to remove from
+	 * @param subgroup to remove
+	 */
+	public void removeSubgroup(Player player, String subgroup);
 }

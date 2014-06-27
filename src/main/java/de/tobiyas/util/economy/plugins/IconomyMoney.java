@@ -16,11 +16,12 @@
 package de.tobiyas.util.economy.plugins;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
 import com.iCo6.iConomy;
 import com.iCo6.system.Accounts;
 
-public class IconomyMoney implements MoneyPlugin {
+public class IconomyMoney extends AbstractMoneyPlugin {
 	
 	private boolean isActive;
 	private Accounts accounts;
@@ -30,45 +31,45 @@ public class IconomyMoney implements MoneyPlugin {
 	}
 
 	@Override
-	public double getMoneyOfPlayer(String player) {
+	public double getMoneyOfPlayer(OfflinePlayer player) {
 		if(!isActive) return 0;
 		
-		if(!accounts.exists(player)) return 0;
-		return accounts.get(player).getHoldings().getBalance();
+		if(!accounts.exists(player.getName())) return 0;
+		return accounts.get(player.getName()).getHoldings().getBalance();
 		
 	}
 
 	@Override
-	public boolean addMoney(String player, double amount) {
+	public boolean addMoney(OfflinePlayer player, double amount) {
 		if(!isActive) return false;
 
-		if(!accounts.exists(player)) return false;
+		if(!accounts.exists(player.getName())) return false;
 		
-		accounts.get(player).getHoldings().add(amount);
+		accounts.get(player.getName()).getHoldings().add(amount);
 		return true;
 	}
 
 	@Override
-	public boolean transferMoney(String from, String to, double amount) {
+	public boolean transferMoney(OfflinePlayer from, OfflinePlayer to, double amount) {
 		if(!isActive) return false;
 		
-		if(!accounts.exists(from)) return false;
-		if(!accounts.exists(to)) return false;
+		if(!accounts.exists(from.getName())) return false;
+		if(!accounts.exists(to.getName())) return false;
 		
-		if(!accounts.get(from).getHoldings().hasEnough(amount)) return false;
+		if(!accounts.get(from.getName()).getHoldings().hasEnough(amount)) return false;
 		
-		accounts.get(from).getHoldings().subtract(amount);
-		accounts.get(to).getHoldings().add(amount);
+		accounts.get(from.getName()).getHoldings().subtract(amount);
+		accounts.get(to.getName()).getHoldings().add(amount);
 		
 		return true;
 	}
 
 	@Override
-	public boolean removeMoney(String player, double amount) {
+	public boolean removeMoney(OfflinePlayer player, double amount) {
 		if(!isActive) return false;
 		if(getMoneyOfPlayer(player) < amount) return false;
 		
-		accounts.get(player).getHoldings().subtract(amount);
+		accounts.get(player.getName()).getHoldings().subtract(amount);
 		return false;
 	}
 
@@ -97,7 +98,7 @@ public class IconomyMoney implements MoneyPlugin {
 	}
 
 	@Override
-	public void createBankAccount(String name) {
+	public void createBankAccount(String name, OfflinePlayer owner) {
 		// TODO Auto-generated method stub
 		
 	}

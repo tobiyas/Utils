@@ -17,9 +17,10 @@ package de.tobiyas.util.permissions.plugins;
 
 import java.util.ArrayList;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import de.tobiyas.util.player.PlayerUtils;
 
 public class OpPermissions implements PermissionPlugin {
 
@@ -62,7 +63,7 @@ public class OpPermissions implements PermissionPlugin {
 
 	@Override
 	public boolean getPermissions(String playerName, String permissionNode) {
-		Player player = Bukkit.getPlayer(playerName);
+		Player player = PlayerUtils.getPlayer(playerName);
 		if(player == null) return false;
 		
 		return player.isOp();
@@ -70,6 +71,28 @@ public class OpPermissions implements PermissionPlugin {
 
 	@Override
 	public void addPermission(Player player, String permission) {
+	}
+
+	@Override
+	public void removePermission(Player player, String permission) {
+	}
+
+	@Override
+	public boolean hasGroupSupport() {
+		return false;
+	}
+
+	@Override
+	public boolean hasSubgroupSupport() {
+		return false;
+	}
+
+	@Override
+	public void addSubgroup(Player player, String subgroup) {
+	}
+
+	@Override
+	public void removeSubgroup(Player player, String subgroup) {
 	}
 
 }

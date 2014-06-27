@@ -17,9 +17,16 @@ package de.tobiyas.util.vollotile.specific;
 
 import java.lang.reflect.Method;
 
+import net.minecraft.server.v1_7_R2.PacketPlayOutWorldParticles;
+
+import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_7_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
+import de.tobiyas.util.vollotile.ParticleEffects;
+import de.tobiyas.util.vollotile.ReflectionsHelper;
 import de.tobiyas.util.vollotile.VollotileCode;
 
 public class MC_1_7_R2_VollotileCode extends VollotileCode {
@@ -34,12 +41,27 @@ public class MC_1_7_R2_VollotileCode extends VollotileCode {
 	@Override
 	public void playCriticalHitEffect(Player toSendTo, Entity toPlayEffect) {
 		try{
-			Object mcEntity = getMCEntityFromBukkitEntity(toPlayEffect);
-			Object mcPlayer = getMCEntityFromBukkitEntity(toSendTo);
+			Object mcEntity = ReflectionsHelper.getMCEntityFromBukkitEntity(toPlayEffect);
+			Object mcPlayer = ReflectionsHelper.getMCEntityFromBukkitEntity(toSendTo);
 			
 			Method playOutAnnimation= mcPlayer.getClass().getDeclaredMethod("b", Class.forName("net.minecraft.server." + CB_RELOCATION + ".Entity"));
 			playOutAnnimation.invoke(mcPlayer, mcEntity);
 		}catch(Exception exp){
+		}
+	}
+	
+	@Override
+	public void sendParticleEffect(ParticleEffects effect, Location loc, Vector width, float speed, int amount, Player player) {
+		if(width == null) width = new Vector();
+		
+		try{
+			PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(
+					effect.getPacketArg(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), 
+					width.getBlockX(), width.getBlockY(), width.getBlockZ(), speed, amount);
+			
+			((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+		}catch(Throwable exp){
+			exp.printStackTrace();
 		}
 	}
 

@@ -18,9 +18,11 @@ package de.tobiyas.util.vollotile;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 public abstract class VollotileCode {
 	
@@ -43,6 +45,21 @@ public abstract class VollotileCode {
 	
 	
 	/**
+	 * Plays a Critical hit effect on the Entity.
+	 * Sent to all Players.
+	 * 
+	 * @param toPlayEffect the entity to show on.
+	 */
+	public void playCriticalHitEffect(Entity toPlayEffect){
+		for(Player player : toPlayEffect.getWorld().getPlayers()){
+			if(player.getLocation().distanceSquared(toPlayEffect.getLocation()) < 50 * 50){
+				playCriticalHitEffect(player, toPlayEffect);
+			}
+		}
+	}
+	
+	
+	/**
 	 * Sends a Raw Message to the player passed.
 	 * 
 	 * @param player to send
@@ -51,7 +68,7 @@ public abstract class VollotileCode {
 		try{
 			String seperator = ".";
 
-			Object mcPlayer = getMCEntityFromBukkitEntity(player);
+			Object mcPlayer = ReflectionsHelper.getMCEntityFromBukkitEntity(player);
 			Class<? extends Object> iChatBaseComponent = Class.forName("net" + seperator + "minecraft" + seperator + "server" + seperator 
 					+ CB_RELOCATION + seperator + "IChatBaseComponent");
 			
@@ -77,7 +94,7 @@ public abstract class VollotileCode {
 	 * @param entity to remove the effect.
 	 */
 	public void removeParticleEffect(LivingEntity entity){
-		Object mcPlayer = getMCEntityFromBukkitEntity(entity);
+		Object mcPlayer = ReflectionsHelper.getMCEntityFromBukkitEntity(entity);
 		try{
 			Field dataWatcher = mcPlayer.getClass().getField("datawatcher");
 			Method method = dataWatcher.getClass().getMethod("watch", Integer.class, Object.class);
@@ -91,6 +108,31 @@ public abstract class VollotileCode {
 		}catch(Exception exp){
 			//exp.printStackTrace();
 			//didn't work.... but well who cares. :D
+		}
+	}
+	
+	
+	
+	/**
+	 * Sends a packet to the player that contains a Particle effect
+	 * 
+	 * @param effect to send
+	 * @param loc to send to
+	 * @param player to send to
+	 */
+	public abstract void sendParticleEffect(ParticleEffects effect, Location loc, Vector width, float data, int amount, Player player);
+	
+	
+	/**
+	 * Sends a packet to the player that contains a Particle effect
+	 * 
+	 * @param effect to send
+	 * @param loc to send to
+	 * @param player to send to
+	 */
+	public void sendParticleEffectToAll(ParticleEffects effect, Location loc, float data, int amount){
+		for(Player player : loc.getWorld().getPlayers()){
+			sendParticleEffect(effect, loc, new Vector(1,1,1), data, amount, player);
 		}
 	}
 	
@@ -117,27 +159,5 @@ public abstract class VollotileCode {
 	}
 
 	
-	////////////////////////
-	//Helper Methods Below//
-	////////////////////////
 	
-	
-	/**
-	 * Gets the MC entity from the Bukkit entity.
-	 * 
-	 * @param entity to get from
-	 * 
-	 * @return the MC entity.
-	 */
-	protected Object getMCEntityFromBukkitEntity(Entity entity){
-		try{
-			Method getHandle = entity.getClass().getDeclaredMethod("getHandle");
-			Object mcEntity = getHandle.invoke(entity);
-			
-			return mcEntity;
-		}catch(Exception exp){
-			exp.printStackTrace();
-			return null;
-		}
-	}
 }

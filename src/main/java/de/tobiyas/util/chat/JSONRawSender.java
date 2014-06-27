@@ -238,7 +238,7 @@ public class JSONRawSender {
 	public JsonObject buildRawMessageFromJSON(){
 		JsonObject object = new JsonObject();
 		object.addProperty("text", "");
-		JsonArray extra = new JsonArray();				
+		JsonArray extra = new JsonArray();
 		
 		Queue<ChatResolve> copy = new LinkedList<ChatResolve>(messageQueue);
 		while(!copy.isEmpty()){

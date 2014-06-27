@@ -16,6 +16,7 @@
 package de.tobiyas.util.permissions.plugins;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -23,6 +24,7 @@ import org.bukkit.entity.Player;
 
 import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
+import de.tobiyas.util.player.PlayerUtils;
 
 public class PEXPermissions implements PermissionPlugin {
 	
@@ -53,7 +55,7 @@ public class PEXPermissions implements PermissionPlugin {
 		ArrayList<String> groups = new ArrayList<String>();
 		if(!isActive()) return groups;
 		
-		PermissionGroup[] pexGroups = PermissionsEx.getPermissionManager().getGroups();
+		List<PermissionGroup> pexGroups = PermissionsEx.getPermissionManager().getGroupList();
 		for(PermissionGroup pexGroup : pexGroups){
 			groups.add(pexGroup.getName());
 		}
@@ -94,7 +96,7 @@ public class PEXPermissions implements PermissionPlugin {
 
 	@Override
 	public boolean getPermissions(String playerName, String permissionNode) {
-		Player player = Bukkit.getPlayer(playerName);
+		Player player = PlayerUtils.getPlayer(playerName);
 		if(player == null) return false;
 		
 		return getPermissions(player, permissionNode);
@@ -103,6 +105,31 @@ public class PEXPermissions implements PermissionPlugin {
 	@Override
 	public void addPermission(Player player, String permission) {
 		PermissionsEx.getPermissionManager().getUser(player).addPermission(permission);
+	}
+	
+	@Override
+	public void removePermission(Player player, String permission) {
+		PermissionsEx.getPermissionManager().getUser(player).removePermission(permission);
+	}
+
+	@Override
+	public boolean hasGroupSupport() {
+		return true;
+	}
+
+	@Override
+	public boolean hasSubgroupSupport() {
+		return true;
+	}
+
+	@Override
+	public void addSubgroup(Player player, String subgroup) {
+		PermissionsEx.getPermissionManager().getUser(player).addGroup(subgroup);
+	}
+
+	@Override
+	public void removeSubgroup(Player player, String subgroup) {
+		PermissionsEx.getPermissionManager().getUser(player).removeGroup(subgroup);
 	}
 
 }

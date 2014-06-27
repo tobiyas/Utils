@@ -49,6 +49,7 @@ public class YAMLPersistenceProvider {
 	 */
 	protected final JavaPlugin plugin;
 	
+	
 	/**
 	 * Creates a new Provider
 	 * 
@@ -85,6 +86,18 @@ public class YAMLPersistenceProvider {
 	 * @return the loaded file. NEVER!!! SAVE IT!!! This will be done Async to NOT stop the Bukkit thread!
 	 */
 	public YAMLConfigExtended getLoadedPlayerFile(String playerName) {
+		return getLoadedPlayerFile(playerName, playerName);
+	}
+	
+	/** Returns the already loaded Player YAML File.
+	 * This is a lazy load.
+	 * 
+	 * @param playerName to load
+	 * @param fileNameIfNotPresent the file name if nothing was found.
+	 * 
+	 * @return the loaded file. NEVER!!! SAVE IT!!! This will be done Async to NOT stop the Bukkit thread!
+	 */
+	public YAMLConfigExtended getLoadedPlayerFile(String playerName, String fileNameIfNotPresent) {
 		if(knownPlayers == null){
 			rescanKnownPlayers();
 		}
@@ -101,7 +114,7 @@ public class YAMLPersistenceProvider {
 		}
 		
 		if(knownPlayers.contains(playerName)){
-			YAMLConfigExtended playerConfig = new YAMLConfigExtended(new File(root, playerName + ".yml")).load();
+			YAMLConfigExtended playerConfig = new YAMLConfigExtended(new File(root, fileNameIfNotPresent + ".yml")).load();
 			playerYamls.put(playerName, playerConfig);
 			
 			cacheMiss++;
@@ -109,7 +122,7 @@ public class YAMLPersistenceProvider {
 		}
 		
 		//Whether in cache, nor known.
-		YAMLConfigExtended playerConfig = new YAMLConfigExtended(new File(root, playerName + ".yml")).load();
+		YAMLConfigExtended playerConfig = new YAMLConfigExtended(new File(root, fileNameIfNotPresent + ".yml")).load();
 		playerYamls.put(playerName, playerConfig);
 		
 		rescanKnownPlayers();
@@ -142,6 +155,15 @@ public class YAMLPersistenceProvider {
 		}
 		
 		return knownPlayers;
+	}
+	
+	/**
+	 * Returns a List of all Players known.
+	 * 
+	 * @return the known Players.
+	 */
+	public Set<String> getAllPlayersLoaded(){
+		return new HashSet<String>(playerYamls.keySet());
 	}
 	
 	/**
@@ -199,9 +221,9 @@ public class YAMLPersistenceProvider {
 	 */
 	public void startSyncSaving(){
 		for(YAMLConfigExtended config : playerYamls.values()){
-			if(config.isDirty()){
-				config.save();
-			}
+			try{
+				if(config.isDirty()) config.save();
+			}catch(Throwable exp){ exp.printStackTrace(); }
 		}
 	}
 	

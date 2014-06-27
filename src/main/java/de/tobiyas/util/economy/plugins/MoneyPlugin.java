@@ -15,6 +15,8 @@
  ******************************************************************************/
 package de.tobiyas.util.economy.plugins;
 
+import org.bukkit.OfflinePlayer;
+
 
 public interface MoneyPlugin {
 	
@@ -29,8 +31,19 @@ public interface MoneyPlugin {
 	
 	public boolean removeMoney(String playerName, double amount);
 	
+
+	//Player Stuff
+	public double getMoneyOfPlayer(OfflinePlayer player);
+	
+	public boolean addMoney(OfflinePlayer playerName, double amount);
+	
+	public boolean transferMoney(OfflinePlayer from, OfflinePlayer to, double amount);
+	
+	public boolean removeMoney(OfflinePlayer playerName, double amount);
+	
+	
 	//Bank stuff
-	public void createBankAccount(String name);
+	public void createBankAccount(String name, String owner);
 	
 	public void removeBankAccount(String name);
 	
@@ -43,4 +56,8 @@ public interface MoneyPlugin {
 	public boolean hasBankSupport();
 	
 	public String getName();
+	
+	//Bank stuff / Player
+	public void createBankAccount(String name, OfflinePlayer owner);
+	
 }

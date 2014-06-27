@@ -25,6 +25,7 @@ import com.platymuus.bukkit.permissions.Group;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
 import de.tobiyas.util.UtilsUsingPlugin;
+import de.tobiyas.util.player.PlayerUtils;
 
 public class PermissionsBukkitPermissions implements PermissionPlugin {
 
@@ -48,7 +49,7 @@ public class PermissionsBukkitPermissions implements PermissionPlugin {
 		if(sender == null) return false;
 		if(!(sender instanceof Player)) return true;
 		
-		Player player = Bukkit.getPlayer(sender.getName());
+		Player player = (Player) sender;
 		return player.hasPermission(permissionNode);
 	}
 
@@ -93,7 +94,7 @@ public class PermissionsBukkitPermissions implements PermissionPlugin {
 
 	@Override
 	public boolean getPermissions(String playerName, String permissionNode) {
-		Player player = Bukkit.getPlayer(playerName);
+		Player player = PlayerUtils.getPlayer(playerName);
 		if(player == null) return false;
 		
 		return getPermissions(player, permissionNode);
@@ -102,6 +103,31 @@ public class PermissionsBukkitPermissions implements PermissionPlugin {
 	@Override
 	public void addPermission(Player player, String permission) {
 		player.addAttachment(plugin, permission, true);
+	}
+	
+	@Override
+	public void removePermission(Player player, String permission) {
+		player.addAttachment(plugin, permission, false);
+	}
+
+	@Override
+	public boolean hasGroupSupport() {
+		return true;
+	}
+
+	@Override
+	public boolean hasSubgroupSupport() {
+		return true;
+	}
+
+	@Override
+	public void addSubgroup(Player player, String subgroup) {
+		 plugin.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "permissions player addgroup " + player + " " + subgroup);
+	}
+
+	@Override
+	public void removeSubgroup(Player player, String subgroup) {
+		plugin.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "permissions player removegroup " + player + " " + subgroup);
 	}
 
 }

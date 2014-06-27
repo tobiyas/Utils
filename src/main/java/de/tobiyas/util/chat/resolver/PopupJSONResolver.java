@@ -46,6 +46,23 @@ public class PopupJSONResolver {
 
 	
 	/**
+	 * Adds a Hover to the JSON object.
+	 * 
+	 * @param toAddTo to add to
+	 * @param message to add
+	 * 
+	 * @return the passed toAddTo for chaining.
+	 */
+	public static JsonObject addPopupHover(JsonObject toAddTo, String message){
+		JsonObject hoverEvent = new JsonObject();
+		hoverEvent.addProperty("action", "show_text");
+		hoverEvent.addProperty("value", message);
+		
+		toAddTo.add("hoverEvent", hoverEvent);
+		return toAddTo;
+	}
+	
+	/**
 	 * Resolves the Text to an Popup.
 	 * 
 	 * @param message to show
@@ -55,14 +72,7 @@ public class PopupJSONResolver {
 	 * @return the JSON object.
 	 */
 	public static JsonObject resolveJSON(String message, String label){
-		JsonObject object = new JsonObject();
-		
-		JsonObject hoverEvent = new JsonObject();
-		hoverEvent.addProperty("action", "show_text");
-		hoverEvent.addProperty("value", message);
-		
-		object.addProperty("text", label);
-		object.add("hoverEvent", hoverEvent);
-		return object;
+		JsonObject object = PlainTextJSONResolver.getRawFromPlainTextJSON(label);
+		return addPopupHover(object, message);
 	}
 }

@@ -17,14 +17,16 @@ package de.tobiyas.util.economy;
 
 import java.util.logging.Level;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.tobiyas.util.economy.plugins.AbstractMoneyPlugin;
 import de.tobiyas.util.economy.plugins.EssentialsEcoMoney;
 import de.tobiyas.util.economy.plugins.IconomyMoney;
 import de.tobiyas.util.economy.plugins.MoneyPlugin;
 import de.tobiyas.util.economy.plugins.VaultMoney;
 
-public class MoneyManager implements MoneyPlugin{
+public class MoneyManager extends AbstractMoneyPlugin{
 	
 	@SuppressWarnings("unused")
 	private JavaPlugin plugin;
@@ -69,7 +71,7 @@ public class MoneyManager implements MoneyPlugin{
 	}
 	
 	
-	public boolean transferPlayerToBank(String player, String bankName, double amount){
+	public boolean transferPlayerToBank(OfflinePlayer player, String bankName, double amount){
 		if(!isActive) return false;
 		
 		double playerAmount = moneyPlugin.getMoneyOfPlayer(player);
@@ -81,7 +83,7 @@ public class MoneyManager implements MoneyPlugin{
 	}
 	
 	
-	public boolean transferBankToPlayer(String player, String bankName, double amount){
+	public boolean transferBankToPlayer(OfflinePlayer player, String bankName, double amount){
 		if(!isActive) return false;
 		
 		double bankAmount = moneyPlugin.getBankBalance(bankName);
@@ -100,9 +102,9 @@ public class MoneyManager implements MoneyPlugin{
 
 
 	@Override
-	public void createBankAccount(String clanName){
+	public void createBankAccount(String clanName, OfflinePlayer owner){
 		if(!isActive) return;
-		moneyPlugin.createBankAccount(clanName);
+		moneyPlugin.createBankAccount(clanName, owner);
 	}
 
 	@Override
@@ -141,7 +143,7 @@ public class MoneyManager implements MoneyPlugin{
 	 * @return true if worked, false if not
 	 */
 	@Override
-	public boolean addMoney(String player, double amount) {
+	public boolean addMoney(OfflinePlayer player, double amount) {
 		if(!isActive) return false;
 		
 		
@@ -158,7 +160,7 @@ public class MoneyManager implements MoneyPlugin{
 	 * @return true if worked, false if not
 	 */
 	@Override
-	public boolean removeMoney(String player, double amount) {
+	public boolean removeMoney(OfflinePlayer player, double amount) {
 		if(!isActive) return false;
 		
 		if(moneyPlugin.getMoneyOfPlayer(player) < amount) return false;
@@ -176,7 +178,7 @@ public class MoneyManager implements MoneyPlugin{
 	 * @return the money of the player.
 	 */
 	@Override
-	public double getMoneyOfPlayer(String player) {
+	public double getMoneyOfPlayer(OfflinePlayer player) {
 		if(!isActive) return 0;
 		
 		return moneyPlugin.getMoneyOfPlayer(player);
@@ -188,7 +190,7 @@ public class MoneyManager implements MoneyPlugin{
 	}
 
 	@Override
-	public boolean transferMoney(String from, String to, double amount) {
+	public boolean transferMoney(OfflinePlayer from, OfflinePlayer to, double amount) {
 		if(!isActive) return false;
 		
 		return moneyPlugin.transferMoney(from, to, amount);

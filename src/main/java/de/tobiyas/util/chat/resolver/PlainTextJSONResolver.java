@@ -42,8 +42,9 @@ public class PlainTextJSONResolver {
 	 * @return the JSOn Object
 	 */
 	public static JsonObject getRawFromPlainTextJSON(String plainText){
-		plainText = plainText.replace("\\", "\\\\");
-		plainText = plainText.replace("\"", "\\\"");
+		//plainText = plainText.replace("\\", "\\\\");
+		//plainText = plainText.replace("\"", "\\\"");
+		//TODO check if this is needed.
 		
 		JsonObject object = new JsonObject();
 		object.addProperty("text", plainText);

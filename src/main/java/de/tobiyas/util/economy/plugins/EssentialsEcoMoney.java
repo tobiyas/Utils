@@ -15,13 +15,16 @@
  ******************************************************************************/
 package de.tobiyas.util.economy.plugins;
 
+import java.math.BigDecimal;
+
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 
-public class EssentialsEcoMoney implements MoneyPlugin {
+public class EssentialsEcoMoney extends AbstractMoneyPlugin {
 
 	boolean isActive;
 	
@@ -30,18 +33,19 @@ public class EssentialsEcoMoney implements MoneyPlugin {
 	}
 	
 	@Override
-	public double getMoneyOfPlayer(String playerName) {
+	public double getMoneyOfPlayer(OfflinePlayer player) {
 		try {
-			return Economy.getMoney(playerName);
+			return Economy.getMoneyExact(player.getName()).doubleValue();
 		} catch (UserDoesNotExistException e) {
 			return Double.MIN_VALUE;
 		}
 	}
 
 	@Override
-	public boolean addMoney(String player, double amount) {
+	public boolean addMoney(OfflinePlayer player, double amount) {
+		if(!Economy.playerExists(player.getName())) return false;
 		try {
-			Economy.add(player, amount);
+			Economy.add(player.getName(), new BigDecimal(amount));
 		} catch (Exception e) {
 			return false;
 		}
@@ -49,11 +53,11 @@ public class EssentialsEcoMoney implements MoneyPlugin {
 	}
 
 	@Override
-	public boolean transferMoney(String from, String to, double amount) {
+	public boolean transferMoney(OfflinePlayer from, OfflinePlayer to, double amount) {
 		if(getMoneyOfPlayer(from) < amount) return false;
 		if(getMoneyOfPlayer(to) != Double.MIN_VALUE) return false;
 		try {
-			if(!Economy.hasEnough(from, amount)) return false;
+			if(!Economy.hasEnough(from.getName(), new BigDecimal(amount))) return false;
 		} catch (UserDoesNotExistException e) {
 			return false;
 		}
@@ -65,16 +69,16 @@ public class EssentialsEcoMoney implements MoneyPlugin {
 	}
 
 	@Override
-	public boolean removeMoney(String player, double amount) {
-		if(!Economy.playerExists(player)) return false;
+	public boolean removeMoney(OfflinePlayer player, double amount) {
+		if(!Economy.playerExists(player.getName())) return false;
 		try {
-			if(!Economy.hasEnough(player, amount)) return false;
+			if(!Economy.hasEnough(player.getName(), new BigDecimal(amount))) return false;
 		} catch (UserDoesNotExistException e) {
 			return false;
 		}
 		
 		try {
-			Economy.subtract(player, amount);
+			Economy.substract(player.getName(), new BigDecimal(amount));
 		} catch (Exception e) {
 			return false;
 		}
@@ -104,38 +108,30 @@ public class EssentialsEcoMoney implements MoneyPlugin {
 	}
 
 	@Override
-	public void createBankAccount(String name) {
-		// TODO Auto-generated method stub
-		
+	public void createBankAccount(String name, OfflinePlayer owner) {
 	}
 
 	@Override
 	public void removeBankAccount(String name) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public boolean addToBankAccount(String name, double amount) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean withdrawFromBankAccount(String name, double amount) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public double getBankBalance(String bankName) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public boolean hasBankSupport() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
