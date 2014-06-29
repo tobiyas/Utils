@@ -48,7 +48,7 @@ public class ItemJSONResolver {
 			List<String> lore = itemToParse.getItemMeta().hasLore() ? itemToParse.getItemMeta().getLore() : new LinkedList<String>();
 			flatLore = ",Lore:["; 
 			Iterator<String> loreIt = lore.iterator();
-			while(loreIt.hasNext()){flatLore += "\\\"" + loreIt.next().replace(":", "¦").replace("\"", "\\\"") + "\\\""; if(loreIt.hasNext()) flatLore += ",";}
+			while(loreIt.hasNext()){flatLore += "\\\"" + loreIt.next().replace(":", '\u00a6'+"").replace("\"", "\\\"") + "\\\""; if(loreIt.hasNext()) flatLore += ",";}
 			flatLore += "]";
 		}
 		
