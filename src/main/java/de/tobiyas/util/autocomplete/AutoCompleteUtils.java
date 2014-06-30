@@ -15,7 +15,6 @@
  ******************************************************************************/
 package de.tobiyas.util.autocomplete;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -162,14 +161,15 @@ public class AutoCompleteUtils {
 	 */
 	public static List<String> getAllPlayersWith(String pre) {
 		pre = pre.toLowerCase();
-		List<Player> players = Arrays.asList(Bukkit.getOnlinePlayers());
 		List<String> names = new LinkedList<String>();
 		
-		for(Player player : players){
-			if(player.getName().toLowerCase().startsWith(pre)){
-				names.add(player.getName());
+		try{
+			for(Player player : Bukkit.getOnlinePlayers()){
+				if(player.getName().toLowerCase().startsWith(pre)){
+					names.add(player.getName());
+				}
 			}
-		}
+		}catch(Throwable exp) {}
 		
 		return names;
 	}

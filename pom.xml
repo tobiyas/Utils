@@ -184,7 +184,9 @@
 		<dependency>
    			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
-			<version>1.7.9-R0.3-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/cb/cb-1.7.9.jar</systemPath>
+			<version>1.7.9</version>
 			<optional>true</optional>
 		</dependency>
 
