@@ -42,7 +42,7 @@ public class PlayerUtils {
 	 * @return the player wanted or null
 	 */
 	public static Player getPlayer(String playerName){
-		for(Player player : Bukkit.getOnlinePlayers()){
+		for(Player player : getOnlinePlayers()){
 			if(player.getName().equalsIgnoreCase(playerName)) return player;
 		}
 		
