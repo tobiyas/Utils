@@ -44,7 +44,7 @@
 
 	<properties>
 		<powermock.version>1.4.12</powermock.version>
-		<bukkit.version>1.7.9-R0.3-SNAPSHOT</bukkit.version>
+		<bukkit.version>1.7.10-R0.1-SNAPSHOT</bukkit.version>
 	</properties>
 
 	<dependencies>
@@ -183,10 +183,19 @@
 		
 		<dependency>
    			<groupId>org.bukkit</groupId>
-			<artifactId>craftbukkit</artifactId>
+			<artifactId>craftbukkit-3</artifactId>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/libs/cb/cb-1.7.9.jar</systemPath>
 			<version>1.7.9</version>
+			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+   			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit-4</artifactId>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/cb/cb-1.7.10.jar</systemPath>
+			<version>1.7.10</version>
 			<optional>true</optional>
 		</dependency>
 
