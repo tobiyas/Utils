@@ -19,10 +19,11 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+
+import de.tobiyas.util.player.PlayerUtils;
 
 
 public class AutoCompleteUtils {
@@ -164,7 +165,7 @@ public class AutoCompleteUtils {
 		List<String> names = new LinkedList<String>();
 		
 		try{
-			for(Player player : Bukkit.getOnlinePlayers()){
+			for(Player player : PlayerUtils.getOnlinePlayers()){
 				if(player.getName().toLowerCase().startsWith(pre)){
 					names.add(player.getName());
 				}

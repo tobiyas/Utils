@@ -22,6 +22,7 @@ import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -92,10 +93,10 @@ public class GroupManagerPermissions implements PermissionPlugin {
 
 
 	@Override
-	public String getGroupOfPlayer(Player player) {
+	public String getGroupOfPlayer(OfflinePlayer player) {
 		if(!isActive()) return "";
 		
-		Group group = groupManager.getWorldsHolder().getWorldData(player).getDefaultGroup();
+		Group group = groupManager.getWorldsHolder().getDefaultWorld().getDefaultGroup();
 		if(group == null) return "";
 		
 		return group.getName();
@@ -118,14 +119,14 @@ public class GroupManagerPermissions implements PermissionPlugin {
 
 
 	@Override
-	public void addPermission(Player player, String permission) {
-		groupManager.getWorldsHolder().getWorldData(player).getUser(player.getName()).addPermission(permission);
+	public void addPermission(OfflinePlayer player, String permission) {
+		groupManager.getWorldsHolder().getDefaultWorld().getUser(player.getName()).addPermission(permission);
 	}
 
 
 	@Override
-	public void removePermission(Player player, String permission) {
-		groupManager.getWorldsHolder().getWorldData(player).getUser(player.getName()).removePermission(permission);
+	public void removePermission(OfflinePlayer player, String permission) {
+		groupManager.getWorldsHolder().getDefaultWorld().getUser(player.getName()).removePermission(permission);
 	}
 
 
@@ -142,7 +143,7 @@ public class GroupManagerPermissions implements PermissionPlugin {
 
 
 	@Override
-	public void addSubgroup(Player player, String subgroup) {
+	public void addSubgroup(OfflinePlayer player, String subgroup) {
 		Group subgroupObj = groupManager.getWorldsHolder().getDefaultWorld().getGroup(subgroup);
 		if(subgroupObj == null) return;
 		
@@ -151,7 +152,7 @@ public class GroupManagerPermissions implements PermissionPlugin {
 
 
 	@Override
-	public void removeSubgroup(Player player, String subgroup) {
+	public void removeSubgroup(OfflinePlayer player, String subgroup) {
 		Group subgroupObj = groupManager.getWorldsHolder().getDefaultWorld().getGroup(subgroup);
 		if(subgroupObj == null) return;
 		

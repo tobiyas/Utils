@@ -234,7 +234,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 				savePathFile.createNewFile();
 			} catch (IOException e) {}
 		}
-			
+		
 		File saveFile = fileCheck();
 		if(saveFile == null) {
 			System.out.println("saveFile == null: " + savePath);
@@ -371,7 +371,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		}
 		
 		if(object instanceof String){
-			super.set(path, replaceUmlauts((String) object));
+			super.set(path, replaceUmlautsBack((String) object));
 			return;
 		}
 
@@ -429,7 +429,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 * 
 	 * @return the replaces String
 	 */
-	private String replaceUmlauts(String toReplace){
+	public static String replaceUmlauts(String toReplace){
 		if(toReplace == null) return null;
 		
 		//HTML stuff
@@ -457,7 +457,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 * 
 	 * @return the replaces String
 	 */
-	private String replaceUmlautsBack(String toReplace){
+	public static String replaceUmlautsBack(String toReplace){
 		if(toReplace == null) return null;
 		
 		//HTML stuff
@@ -736,7 +736,18 @@ public class YAMLConfigExtended extends YamlConfiguration {
 				}
 			}, 20, 20);
 		}
-		
+	}
+	
+	
+	@Override
+	public Object get(String path) {
+		return super.get(replaceUmlauts(path));
+	}
+	
+	
+	@Override
+	public Object get(String path, Object def) {
+		return super.get(replaceUmlauts(path), def);
 	}
 	
 	

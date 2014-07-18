@@ -350,4 +350,12 @@ public class ScrollableItems {
 		redraw();
 	}
 
+
+	/**
+	 * Starts a sort by name sort.
+	 */
+	public void sortByNameNow() {
+		sortItems();
+	}
+
 }

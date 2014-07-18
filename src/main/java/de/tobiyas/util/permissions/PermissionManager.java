@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import de.tobiyas.util.UtilsUsingPlugin;
 import de.tobiyas.util.permissions.plugins.BPermissionsPermissions;
@@ -184,7 +184,8 @@ public class PermissionManager implements PermissionPlugin{
 	 * @param player
 	 * @return the group of this Player
 	 */
-	public String getGroupOfPlayer(Player player){
+	@Override
+	public String getGroupOfPlayer(OfflinePlayer player){
 		return permPlugin.getGroupOfPlayer(player);
 	}
 	
@@ -249,7 +250,8 @@ public class PermissionManager implements PermissionPlugin{
 	 * @param player to add to
 	 * @param permission to add
 	 */
-	public void addPermission(Player player, String permission) {
+	@Override
+	public void addPermission(OfflinePlayer player, String permission) {
 		permPlugin.addPermission(player, permission);
 	}
 
@@ -291,7 +293,7 @@ public class PermissionManager implements PermissionPlugin{
 
 
 	@Override
-	public void removePermission(Player player, String permission) {
+	public void removePermission(OfflinePlayer player, String permission) {
 		permPlugin.removePermission(player, permission);
 	}
 
@@ -309,16 +311,17 @@ public class PermissionManager implements PermissionPlugin{
 
 
 	@Override
-	public void addSubgroup(Player player, String subgroup) {
+	public void addSubgroup(OfflinePlayer player, String subgroup) {
 		if(!hasSubgroupSupport()) return;
 		permPlugin.addSubgroup(player, subgroup);
 	}
 
 
 	@Override
-	public void removeSubgroup(Player player, String subgroup) {
+	public void removeSubgroup(OfflinePlayer player, String subgroup) {
 		if(!hasSubgroupSupport()) return;
 		permPlugin.removeSubgroup(player, subgroup);
 	}
+
 	
 }

@@ -18,6 +18,7 @@ package de.tobiyas.util.permissions.plugins;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -64,7 +65,7 @@ public class PermissionsBukkitPermissions implements PermissionPlugin {
 	}
 
 	@Override
-	public String getGroupOfPlayer(Player player) {
+	public String getGroupOfPlayer(OfflinePlayer player) {
 		if(!isActive()) return "";
 		if(player == null) return "";
 		if(permissions.getPlayerInfo(player.getName()).getGroups().size() == 0) return "";
@@ -101,13 +102,17 @@ public class PermissionsBukkitPermissions implements PermissionPlugin {
 	}
 
 	@Override
-	public void addPermission(Player player, String permission) {
-		player.addAttachment(plugin, permission, true);
+	public void addPermission(OfflinePlayer player, String permission) {
+		if(player.isOnline()){
+			player.getPlayer().addAttachment(plugin, permission, true);
+		}
 	}
 	
 	@Override
-	public void removePermission(Player player, String permission) {
-		player.addAttachment(plugin, permission, false);
+	public void removePermission(OfflinePlayer player, String permission) {
+		if(player.isOnline()){
+			player.getPlayer().addAttachment(plugin, permission, false);
+		}
 	}
 
 	@Override
@@ -121,13 +126,13 @@ public class PermissionsBukkitPermissions implements PermissionPlugin {
 	}
 
 	@Override
-	public void addSubgroup(Player player, String subgroup) {
-		 plugin.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "permissions player addgroup " + player + " " + subgroup);
+	public void addSubgroup(OfflinePlayer player, String subgroup) {
+		 plugin.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "permissions player addgroup " + player.getName() + " " + subgroup);
 	}
 
 	@Override
-	public void removeSubgroup(Player player, String subgroup) {
-		plugin.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "permissions player removegroup " + player + " " + subgroup);
+	public void removeSubgroup(OfflinePlayer player, String subgroup) {
+		plugin.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "permissions player removegroup " + player.getName() + " " + subgroup);
 	}
 
 }

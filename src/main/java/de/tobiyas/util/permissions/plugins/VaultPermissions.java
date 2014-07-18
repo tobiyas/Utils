@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -81,9 +82,9 @@ public class VaultPermissions implements PermissionPlugin {
 	}
 
 	@Override
-	public String getGroupOfPlayer(Player player) {
+	public String getGroupOfPlayer(OfflinePlayer player) {
 		if(!isActive()) return "";
-		return vaultPermission.getPrimaryGroup(player);		
+		return vaultPermission.getPrimaryGroup(null, player);		
 	}
 
 	@Override
@@ -110,13 +111,13 @@ public class VaultPermissions implements PermissionPlugin {
 	}
 
 	@Override
-	public void addPermission(Player player, String permission) {
-		vaultPermission.playerAdd(player, permission);
+	public void addPermission(OfflinePlayer player, String permission) {
+		vaultPermission.playerAdd(null, player, permission);
 	}
 	
 	@Override
-	public void removePermission(Player player, String permission) {
-		vaultPermission.playerRemove(player, permission);
+	public void removePermission(OfflinePlayer player, String permission) {
+		vaultPermission.playerRemove(null, player, permission);
 	}
 
 	@Override
@@ -130,10 +131,10 @@ public class VaultPermissions implements PermissionPlugin {
 	}
 
 	@Override
-	public void addSubgroup(Player player, String subgroup) {
+	public void addSubgroup(OfflinePlayer player, String subgroup) {
 	}
 
 	@Override
-	public void removeSubgroup(Player player, String subgroup) {
+	public void removeSubgroup(OfflinePlayer player, String subgroup) {
 	}
 }

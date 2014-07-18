@@ -18,6 +18,8 @@ package de.tobiyas.util.permissions.plugins;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -59,8 +61,12 @@ public class BPermissionsPermissions implements PermissionPlugin{
 	}
 
 	@Override
-	public String getGroupOfPlayer(Player player) {
-		String[] groups = ApiLayer.getGroups(player.getWorld().getName(), CalculableType.GROUP, player.getName());
+	public String getGroupOfPlayer(OfflinePlayer player) {
+		World world = player.isOnline() ? player.getPlayer().getWorld() : Bukkit.getWorlds().get(0);
+		String worldName = world.getName();
+		
+		String[] groups = ApiLayer.getGroups(worldName, CalculableType.GROUP, player.getName());
+		
 		if(groups.length == 0) return "";
 		return groups[0];
 	}
@@ -97,14 +103,20 @@ public class BPermissionsPermissions implements PermissionPlugin{
 	}
 
 	@Override
-	public void addPermission(Player player, String permission) {
-		ApiLayer.addPermission(player.getWorld().getName(), CalculableType.USER, player.getName(), Permission.loadFromString(permission));
+	public void addPermission(OfflinePlayer player, String permission) {
+		World world = player.isOnline() ? player.getPlayer().getWorld() : Bukkit.getWorlds().get(0);
+		String worldName = world.getName();
+		
+		ApiLayer.addPermission(worldName, CalculableType.USER, player.getName(), Permission.loadFromString(permission));
 	}
 	
 
 	@Override
-	public void removePermission(Player player, String permission) {
-		ApiLayer.removePermission(player.getWorld().getName(), CalculableType.USER, player.getName(), permission);
+	public void removePermission(OfflinePlayer player, String permission) {
+		World world = player.isOnline() ? player.getPlayer().getWorld() : Bukkit.getWorlds().get(0);
+		String worldName = world.getName();
+		
+		ApiLayer.removePermission(worldName, CalculableType.USER, player.getName(), permission);
 	}
 
 	@Override
@@ -118,13 +130,19 @@ public class BPermissionsPermissions implements PermissionPlugin{
 	}
 
 	@Override
-	public void addSubgroup(Player player, String subgroup) {
-		ApiLayer.addGroup(player.getWorld().getName(), CalculableType.USER, player.getName(), subgroup);
+	public void addSubgroup(OfflinePlayer player, String subgroup) {
+		World world = player.isOnline() ? player.getPlayer().getWorld() : Bukkit.getWorlds().get(0);
+		String worldName = world.getName();
+		
+		ApiLayer.addGroup(worldName, CalculableType.USER, player.getName(), subgroup);
 	}
 
 	@Override
-	public void removeSubgroup(Player player, String subgroup) {
-		ApiLayer.removeGroup(player.getWorld().getName(), CalculableType.USER, player.getName(), subgroup);
+	public void removeSubgroup(OfflinePlayer player, String subgroup) {
+		World world = player.isOnline() ? player.getPlayer().getWorld() : Bukkit.getWorlds().get(0);
+		String worldName = world.getName();
+		
+		ApiLayer.removeGroup(worldName, CalculableType.USER, player.getName(), subgroup);
 	}
 
 }

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -81,10 +82,10 @@ public class PEXPermissions implements PermissionPlugin {
 	}
 
 	@Override
-	public String getGroupOfPlayer(Player player) {
+	public String getGroupOfPlayer(OfflinePlayer player) {
 		if(!isActive()) return "";
-		if (PermissionsEx.getPermissionManager().getUser(player).getGroupsNames().length > 0)
-            return PermissionsEx.getPermissionManager().getUser(player).getGroupsNames()[0];
+		if (PermissionsEx.getPermissionManager().getUser(player.getName()).getGroupsNames().length > 0)
+            return PermissionsEx.getPermissionManager().getUser(player.getName()).getGroupsNames()[0];
         else
             return "";
 	}
@@ -103,13 +104,13 @@ public class PEXPermissions implements PermissionPlugin {
 	}
 
 	@Override
-	public void addPermission(Player player, String permission) {
-		PermissionsEx.getPermissionManager().getUser(player).addPermission(permission);
+	public void addPermission(OfflinePlayer player, String permission) {
+		PermissionsEx.getPermissionManager().getUser(player.getName()).addPermission(permission);
 	}
 	
 	@Override
-	public void removePermission(Player player, String permission) {
-		PermissionsEx.getPermissionManager().getUser(player).removePermission(permission);
+	public void removePermission(OfflinePlayer player, String permission) {
+		PermissionsEx.getPermissionManager().getUser(player.getName()).removePermission(permission);
 	}
 
 	@Override
@@ -123,13 +124,13 @@ public class PEXPermissions implements PermissionPlugin {
 	}
 
 	@Override
-	public void addSubgroup(Player player, String subgroup) {
-		PermissionsEx.getPermissionManager().getUser(player).addGroup(subgroup);
+	public void addSubgroup(OfflinePlayer player, String subgroup) {
+		PermissionsEx.getPermissionManager().getUser(player.getName()).addGroup(subgroup);
 	}
 
 	@Override
-	public void removeSubgroup(Player player, String subgroup) {
-		PermissionsEx.getPermissionManager().getUser(player).removeGroup(subgroup);
+	public void removeSubgroup(OfflinePlayer player, String subgroup) {
+		PermissionsEx.getPermissionManager().getUser(player.getName()).removeGroup(subgroup);
 	}
 
 }

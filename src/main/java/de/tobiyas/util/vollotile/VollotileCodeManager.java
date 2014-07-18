@@ -39,6 +39,7 @@ public class VollotileCodeManager {
 	public static VollotileCode getVollotileCode(){
 		if(code == null){
 			initCode();
+			System.out.println("Loaded Vollotile Code for: " + code.CB_RELOCATION);
 		}
 		
 		return code;
@@ -48,56 +49,82 @@ public class VollotileCodeManager {
 	 * Inits the Vollotile Code entry.
 	 */
 	private static void initCode() {
-		VollotileCode toCheck = null;
+		String ver = getRelocationAddition();
 		
-		toCheck = new MC_1_7_R4_VollotileCode();
-		if(toCheck.isCorrectVersion()){
-			code = toCheck;
-			return;
-		}
-
-		toCheck = new MC_1_7_R3_VollotileCode();
-		if(toCheck.isCorrectVersion()){
-			code = toCheck;
-			return;
+		if(ver == null) {
+			code = new UNKNOWN_VollotileCode();
+			System.out.println("Could not find a Vollotile for the Current MC Version. Using Fallback.");
 		}
 		
-		toCheck = new MC_1_7_R2_VollotileCode();
-		if(toCheck.isCorrectVersion()){
-			code = toCheck;
+		
+		if(ver.equalsIgnoreCase("v1_7_R4")){
+			code = new MC_1_7_R4_VollotileCode();
 			return;
 		}
 		
-		toCheck = new MC_1_7_R1_VollotileCode();
-		if(toCheck.isCorrectVersion()){
-			code = toCheck;
-			return;
-		}
-
-		toCheck = new MC_1_6_R3_VollotileCode();
-		if(toCheck.isCorrectVersion()){
-			code = toCheck;
+		if(ver.equalsIgnoreCase("v1_7_R3")){
+			code = new MC_1_7_R3_VollotileCode();
 			return;
 		}
 		
-		toCheck = new MC_1_6_R2_VollotileCode();
-		if(toCheck.isCorrectVersion()){
-			code = toCheck;
+		if(ver.equalsIgnoreCase("v1_7_R2")){
+			code = new MC_1_7_R2_VollotileCode();
 			return;
 		}
 		
-		toCheck = new MC_1_6_R1_VollotileCode();
-		if(toCheck.isCorrectVersion()){
-			code = toCheck;
+		if(ver.equalsIgnoreCase("v1_7_R1")){
+			code = new MC_1_7_R1_VollotileCode();
 			return;
 		}
-
+		
+		if(ver.equalsIgnoreCase("v1_6_R3")){
+			code = new MC_1_6_R3_VollotileCode();
+			return;
+		}
+		
+		if(ver.equalsIgnoreCase("v1_6_R2")){
+			code = new MC_1_6_R2_VollotileCode();
+			return;
+		}
+		
+		if(ver.equalsIgnoreCase("v1_6_R1")){
+			code = new MC_1_6_R1_VollotileCode();
+			return;
+		}
+		
 		if(code == null) {
 			code = new UNKNOWN_VollotileCode();
 			System.out.println("Could not find a Vollotile for the Current MC Version. Using Fallback.");
 		}
 	}
 	
+	/**
+	 * The relocation addition for the classes.
+	 */
+	private static String relocationAddition;
+	
+	/**
+	 * Gets the rev used.
+	 * @return
+	 */
+	public static String getRelocationAddition(){
+		if(relocationAddition != null) return relocationAddition;
+		
+		for(int main = 0; main < 10; main++){
+			for(int sub = 0; sub < 20; sub++){
+				for(int rev = 0; rev < 20; rev++){
+					try{
+						String addition = "v" + main + "_" + sub + "_R" + rev;
+						Class.forName("net.minecraft.server." + addition +  ".Entity");
+						relocationAddition = addition;
+						return relocationAddition;
+					}catch(Throwable exp){}
+				}
+			}
+		}
+		
+		return null;
+	}
 	
 	
 }
