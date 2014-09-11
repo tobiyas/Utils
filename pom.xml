@@ -182,6 +182,33 @@
    			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit-1</artifactId>
 			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/cb/cb-1.6.1.jar</systemPath>
+			<version>1.6.1</version>
+			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+   			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit-1</artifactId>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/cb/cb-1.6.2.jar</systemPath>
+			<version>1.6.2</version>
+			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+   			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit-1</artifactId>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/cb/cb-1.6.4.jar</systemPath>
+			<version>1.6.4</version>
+			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+   			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit-1</artifactId>
+			<scope>system</scope>
 			<systemPath>${project.basedir}/libs/cb/cb-1.7.2.jar</systemPath>
 			<version>1.7.2</version>
 			<optional>true</optional>
