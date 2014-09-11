@@ -15,6 +15,7 @@
  ******************************************************************************/
 package de.tobiyas.util.inventorymenu;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,6 +68,20 @@ public abstract class ItemGeneratorInterface extends InventoryView {
 		
 		return item;
 	}
+	
+	
+	/**
+	 * Simply generates an Item with the passed args.
+	 * 
+	 * @param material
+	 * @param name
+	 * @param lore
+	 * @return
+	 */
+	protected ItemStack generateItem(Material material, short damageValue, String name, String... lore){
+		return generateItem(material, damageValue, name, Arrays.asList(lore));
+	}
+	
 	
 	/**
 	 * Simply generates an Item with the passed args.

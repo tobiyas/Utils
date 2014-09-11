@@ -301,7 +301,7 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 	/**
 	 * Opens the Parent view.
 	 */
-	private void scheduleOpeningOfParent() {
+	protected void scheduleOpeningOfParent() {
 		if(parent == null){
 			resyncInv(player);
 			return;
@@ -315,6 +315,9 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 					player.openInventory(parent);
 					
 					openInterfaces.add(BasicSelectionInterface.this);
+					
+					//register parent Events.
+					//Bukkit.getPluginManager().registerEvents(parent, plugin);
 					parent.notifyReopened();
 				}
 			}

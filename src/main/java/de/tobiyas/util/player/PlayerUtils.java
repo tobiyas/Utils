@@ -56,7 +56,7 @@ public class PlayerUtils {
 	 * @return the players that are online
 	 */
 	@SuppressWarnings("unchecked")
-	public static Collection<? extends Player> getOnlinePlayers(){
+	public static Collection<Player> getOnlinePlayers(){
 		Collection<Player> collection = new HashSet<Player>();
 		
 		try {

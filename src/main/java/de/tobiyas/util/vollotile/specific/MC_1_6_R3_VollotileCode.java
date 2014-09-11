@@ -16,8 +16,12 @@
 package de.tobiyas.util.vollotile.specific;
 
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
+
+import net.minecraft.server.v1_6_R3.Packet250CustomPayload;
 
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -47,5 +51,11 @@ public class MC_1_6_R3_VollotileCode extends VollotileCode {
 	
 	@Override
 	public void sendParticleEffect(ParticleEffects effect, Location loc, Vector width, float speed, int amount, Player player) {
+	}
+	
+	@Override
+	public void sendCustomPayload(Player player, String channel, String message) {
+		Packet250CustomPayload packet = new Packet250CustomPayload(channel, message.getBytes(Charset.forName("UTF-8")));
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 	}
 }

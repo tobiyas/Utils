@@ -16,8 +16,10 @@
 package de.tobiyas.util.vollotile.specific;
 
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 
 import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_7_R3.PacketPlayOutCustomPayload;
 
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
@@ -25,9 +27,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import de.tobiyas.util.UtilsUsingPlugin;
 import de.tobiyas.util.vollotile.ParticleEffects;
 import de.tobiyas.util.vollotile.ReflectionsHelper;
 import de.tobiyas.util.vollotile.VollotileCode;
+import de.tobiyas.util.vollotile.helper.PlayerDisplayModifier;
 
 public class MC_1_7_R3_VollotileCode extends VollotileCode {
 
@@ -55,7 +59,7 @@ public class MC_1_7_R3_VollotileCode extends VollotileCode {
 		
 		try{
 			PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(
-					effect.getPacketArg(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), 
+					effect.getPacketArg(), (float) loc.getX(), (float) loc.getY(), (float) loc.getZ(), 
 					width.getBlockX(), width.getBlockY(), width.getBlockZ(), speed, amount);
 			
 			((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
@@ -64,4 +68,15 @@ public class MC_1_7_R3_VollotileCode extends VollotileCode {
 		}
 	}
 
+	@Override
+	public void setSkinOfPlayer(UtilsUsingPlugin plugin, Player player, String skin, String name) {
+		new PlayerDisplayModifier(plugin).changeDisplay(player, skin, name);
+	}
+	
+	@Override
+	public void sendCustomPayload(Player player, String channel, String message) {
+		PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(channel, message.getBytes(Charset.forName("UTF-8")));
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+	}
+	
 }

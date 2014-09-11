@@ -47,4 +47,8 @@ public class UNKNOWN_VollotileCode extends VollotileCode {
 	@Override
 	public void sendParticleEffect(ParticleEffects effect, Location loc, Vector width, float speed, int amount, Player player) {
 	}
+	
+	@Override
+	public void sendCustomPayload(Player player, String channel, String message) {
+	}
 }

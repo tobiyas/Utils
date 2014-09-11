@@ -49,15 +49,6 @@ public class SQL {
 	 * @throws SQLException on no connection can be established
 	 */
 	public static Connection getSQLConnection(SQLProperties sqlProperties) throws SQLException{
-		/*
-		String serverName = plugin.interactConfig().getHostAddress();
-		String serverPort = plugin.interactConfig().getHostPort();
-		String serverDB = plugin.interactConfig().getHostDB();
-		
-		String userName = plugin.interactConfig().getHostUsername();
-		String password = plugin.interactConfig().getHostPassword();
-		*/
-		
 		Properties connectionProperties = new Properties();
 		connectionProperties.put("user", sqlProperties.userName);
 		connectionProperties.put("password", sqlProperties.password);
@@ -80,7 +71,7 @@ public class SQL {
 	 * @param dbTable the Table to check
 	 * @param sqlCommandIfNotExist the SQL command to execute if not existent.
 	 */
-	public static void tryCreateDBIfNotExist(SQLProperties sqlProperties, String dbTable, String sqlCommandIfNotExist){
+	public static void tryCreateDBIfNotExist(SQLProperties sqlProperties, String dbTable, String sqlCommand){
 		
 		Connection connection = null;
 		Statement statement = null;
@@ -88,17 +79,8 @@ public class SQL {
 			connection = getSQLConnection(sqlProperties);
 			statement = connection.createStatement();
 			
-			/*String sqlCommand = "CREATE TABLE " 
-							+ "IF NOT EXISTS "
-							+ dbTable
-							+"(" 
-							+   "id INT (255) auto_increment, "
-							+	"playerName VARCHAR (64) NOT NULL, "
-							+	"PRIMARY KEY (id)"
-							+")";
-			
-			statement.execute(sqlCommandIfNotExist);
-			*/
+			statement.execute(sqlCommand);
+			statement.close();
 			
 		}catch(Exception exp){
 			plugin.getLogger().log(Level.WARNING, 

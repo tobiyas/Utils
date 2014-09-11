@@ -17,12 +17,17 @@ package de.tobiyas.util.vollotile;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
+import de.tobiyas.util.UtilsUsingPlugin;
+import de.tobiyas.util.player.PlayerUtils;
 
 public abstract class VollotileCode {
 	
@@ -111,6 +116,15 @@ public abstract class VollotileCode {
 		}
 	}
 	
+	/**
+	 * Sends a custom payload to the player.
+	 * 
+	 * @param player to send to
+	 * @param channel to send to
+	 * @param message to send.
+	 */
+	public abstract void sendCustomPayload(Player player, String channel, String message);
+	
 	
 	
 	/**
@@ -131,8 +145,52 @@ public abstract class VollotileCode {
 	 * @param player to send to
 	 */
 	public void sendParticleEffectToAll(ParticleEffects effect, Location loc, float data, int amount){
-		for(Player player : loc.getWorld().getPlayers()){
-			sendParticleEffect(effect, loc, new Vector(1,1,1), data, amount, player);
+		sendParticleEffectToAll(effect, loc, new Vector(1,1,1), data, amount);
+	}
+	
+	
+	/**
+	 * The Max particle Display range
+	 */
+	private final int maxRange = 64 * 64;
+	
+	/**
+	 * Sends a packet to the player that contains a Particle effect
+	 * 
+	 * @param effect to send
+	 * @param loc to send to
+	 * @param player to send to
+	 */
+	public void sendParticleEffectToAll(ParticleEffects effect, Location loc, Vector width, float data, int amount){
+		sendParticleEffectToPlayers(effect, loc, width, data, amount, PlayerUtils.getOnlinePlayers());
+	}
+	
+	
+	/**
+	 * Sends a packet to the player that contains a Particle effect
+	 * 
+	 * @param effect to send
+	 * @param loc to send to
+	 * @param player to send to
+	 */
+	public void sendParticleEffectToPlayers(ParticleEffects effect, Location loc, Vector width, float data, int amount, Player... players){
+		sendParticleEffectToPlayers(effect, loc, width, data, amount, Arrays.asList(players));
+	}
+	
+	
+	/**
+	 * Sends a packet to the player that contains a Particle effect
+	 * 
+	 * @param effect to send
+	 * @param loc to send to
+	 * @param player to send to
+	 */
+	public void sendParticleEffectToPlayers(ParticleEffects effect, Location loc, Vector width, float data, int amount, Collection<Player> players){
+		for(Player player : players){
+			if(player.getLocation().getWorld() != loc.getWorld()
+					|| player.getLocation().distanceSquared(loc) > maxRange) continue; 
+			
+			sendParticleEffect(effect, loc, width, data, amount, player);
 		}
 	}
 	
@@ -151,6 +209,15 @@ public abstract class VollotileCode {
 			return false;
 		}
 	}
+	
+
+	/**
+	 * Sets the Skin of a Player.
+	 * 
+	 * @param player to set
+	 * @param skin to set
+	 */
+	public void setSkinOfPlayer(UtilsUsingPlugin plugin, Player player, String skin, String name){}
 	
 	
 	@Override

@@ -16,8 +16,10 @@
 package de.tobiyas.util.vollotile.specific;
 
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 
 import net.minecraft.server.v1_7_R1.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_7_R1.PacketPlayOutCustomPayload;
 
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
@@ -54,12 +56,18 @@ public class MC_1_7_R1_VollotileCode extends VollotileCode {
 		
 		try{
 			PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(
-					effect.getPacketArg(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), 
+					effect.getPacketArg(), (float) loc.getX(), (float) loc.getY(), (float) loc.getZ(), 
 					width.getBlockX(), width.getBlockY(), width.getBlockZ(), speed, amount);
 			
 			((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 		}catch(Throwable exp){
 			exp.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void sendCustomPayload(Player player, String channel, String message) {
+		PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(channel, message.getBytes(Charset.forName("UTF-8")));
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 	}
 }

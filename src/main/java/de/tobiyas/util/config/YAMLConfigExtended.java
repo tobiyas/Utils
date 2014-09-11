@@ -39,6 +39,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import de.tobiyas.util.UtilsUsingPlugin;
 import de.tobiyas.util.config.returncontainer.DropContainer;
@@ -677,7 +678,6 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 * @return the Config for Chaining calls.
 	 */
 	public YAMLConfigExtended loadSafeFromString(String contents) {
-		
 		try{
 			super.loadFromString(contents);
 			dirty = false;
@@ -714,7 +714,6 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 * 
 	 * @param autoReloadable true if relaod on change, false otherwise.
 	 */
-	@SuppressWarnings("deprecation")
 	public void setAutoReloadable(boolean autoReloadable, UtilsUsingPlugin plugin){
 		if(this.autoReloadableSchedulerID != -1){
 			Bukkit.getScheduler().cancelTask(autoReloadableSchedulerID);
@@ -722,8 +721,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		}
 		
 		if(autoReloadable){
-			this.autoReloadableSchedulerID = Bukkit.getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {
-				
+			new BukkitRunnable(){
 				@Override
 				public void run() {
 					File savePathFile = new File(totalPath);
@@ -734,7 +732,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 						}
 					}
 				}
-			}, 20, 20);
+			}.runTaskTimerAsynchronously(plugin, 20 * 5, 20 * 5);
 		}
 	}
 	
