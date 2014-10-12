@@ -32,5 +32,8 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="libs/cb/cb-1.6.4.jar"/>
+	<classpathentry kind="lib" path="libs/cb/cb-1.6.1.jar"/>
+	<classpathentry kind="lib" path="libs/cb/cb-1.6.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -32,6 +32,8 @@ import de.tobiyas.util.debug.erroruploader.ErrorUploader;
 
 public class DebugLogger{
 	
+	private final int MAX_DAYS_KEEP_BACKUP = 10;
+	
 	private UtilsUsingPlugin plugin;
 	private Logger debugLogger;
 	private Logger errorLogger;
@@ -79,10 +81,39 @@ public class DebugLogger{
 		Date today = Calendar.getInstance().getTime();
 		String reportDate = df.format(today);
 		
-		File backupDir = new File(pathFile, "Backup" + File.separator + "Backup - " + reportDate);
+		File baseBackupDir = new File(pathFile, "Backup");
+		File backupDir = new File(baseBackupDir, "Backup - " + reportDate);
 		if(!backupDir.exists()){
 			backupDir.mkdirs();
 		}
+		
+		//Remove old files.
+		//We do 10 Days+ will be removed.
+		if(baseBackupDir.listFiles() != null){
+			SimpleDateFormat format = new SimpleDateFormat("MM_dd_yyyy");
+			long now = System.currentTimeMillis();
+			
+			for(File backupDateDir : baseBackupDir.listFiles()){
+				String fileName = backupDateDir.getName();
+				fileName = fileName.substring(9);
+				
+				try{
+					Date date = format.parse(fileName);
+					long diff = now - date.getTime();
+					
+					
+					int days = (int) (diff / (1000 * 60 * 60 * 24));
+					if(days > MAX_DAYS_KEEP_BACKUP){
+						deleteFolder(backupDateDir);
+					}
+					
+				}catch(Throwable exp){
+					exp.printStackTrace();
+					continue;
+				}
+			}
+		}
+		
 		
 		if(debugSaveFile.exists()){
 			DateFormat df2 = new SimpleDateFormat("HH_mm_ss");
@@ -91,6 +122,7 @@ public class DebugLogger{
 			debugSaveFile.renameTo(backupFile);
 			debugSaveFile.delete();
 		}
+		
 		
 		if(!debugSaveFile.exists()){
 			try {
@@ -131,6 +163,22 @@ public class DebugLogger{
 		}
 		
 		
+	}
+	
+	private void deleteFolder(File folder) {
+	    File[] files = folder.listFiles();
+	    
+	    if(files!=null) { //some JVMs return null for empty dirs
+	        for(File f: files) {
+	            if(f.isDirectory()) {
+	                deleteFolder(f);
+	            } else {
+	                f.delete();
+	            }
+	        }
+	    }
+	    
+	    folder.delete();
 	}
 	
 	private void initLoggers(){
