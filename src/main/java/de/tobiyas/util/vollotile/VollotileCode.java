@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -193,6 +194,14 @@ public abstract class VollotileCode {
 			sendParticleEffect(effect, loc, width, data, amount, player);
 		}
 	}
+	
+	/**
+	 * Makes an arrow pickupable or not.
+	 * 
+	 * @param arrow to modify
+	 * @param mayBePickedUp true if may be picked up. False if not.
+	 */
+	public abstract void makeArrowPickupable(Arrow arrow, boolean mayBePickedUp);
 	
 	
 	/**

@@ -22,6 +22,8 @@ import net.minecraft.server.v1_6_R3.Packet250CustomPayload;
 
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_6_R3.entity.CraftArrow;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -57,5 +59,13 @@ public class MC_1_6_R3_VollotileCode extends VollotileCode {
 	public void sendCustomPayload(Player player, String channel, String message) {
 		Packet250CustomPayload packet = new Packet250CustomPayload(channel, message.getBytes(Charset.forName("UTF-8")));
 		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+	}
+	
+	@Override
+	public void makeArrowPickupable(Arrow arrow, boolean mayBePickedUp) {
+		if(arrow == null) return;
+		
+		CraftArrow craftArrow = (CraftArrow) arrow;
+		craftArrow.getHandle().fromPlayer =  mayBePickedUp ? 1 : 0;
 	}
 }

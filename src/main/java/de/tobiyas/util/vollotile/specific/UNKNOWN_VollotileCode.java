@@ -16,6 +16,7 @@
 package de.tobiyas.util.vollotile.specific;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -50,5 +51,9 @@ public class UNKNOWN_VollotileCode extends VollotileCode {
 	
 	@Override
 	public void sendCustomPayload(Player player, String channel, String message) {
+	}
+
+	@Override
+	public void makeArrowPickupable(Arrow arrow, boolean mayBePickedUp) {
 	}
 }
