@@ -20,6 +20,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 public class MCPrettyName {
+	
+	
+	public static final String GE = "de_DE";
+	public static final String EN = "en_US";
+	
 
 	
 	/**
