@@ -6,9 +6,14 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
+// For ProtocolLib 3.4.0
+//import com.comphenix.protocol.wrappers.WrappedSignedProperty;
+import org.bukkit.Bukkit;
+// For ProtocolLib 3.3.1 and lower
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONArray;
@@ -32,10 +37,6 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
 import com.google.common.io.InputSupplier;
-// For ProtocolLib 3.4.0
-//import com.comphenix.protocol.wrappers.WrappedSignedProperty;
-import org.bukkit.Bukkit;
-// For ProtocolLib 3.3.1 and lower
  
 public class PlayerDisplayModifier {
     private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
@@ -125,9 +126,15 @@ public class PlayerDisplayModifier {
         }
     }
  
-    private void updateSkin(WrappedGameProfile profile, String skinOwner) {
+    private void updateSkin(WrappedGameProfile profile, final String skinOwner) {
         try {
-        	String toParse = profileCache.get(skinOwner);
+        	String toParse = profileCache.get(skinOwner, new Callable<String>() {
+				@Override
+				public String call() throws Exception {
+					return skinOwner;
+				}
+			});
+        	
         	if(toParse == null || toParse.isEmpty()) return;
         	
             JSONObject json = (JSONObject) new JSONParser().parse(toParse);

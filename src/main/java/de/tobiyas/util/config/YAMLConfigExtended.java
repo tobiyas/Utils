@@ -238,7 +238,6 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		
 		File saveFile = fileCheck();
 		if(saveFile == null) {
-			System.out.println("saveFile == null: " + savePath);
 			validLoad = false;
 			return this;
 		}

@@ -54,7 +54,7 @@ public class TellRawChatMessage {
 	 * 
 	 * @return the String message.
 	 */
-	private String buildMessage() {
+	public String buildMessage() {
 		JsonObject message = new JsonObject();
 		message.addProperty("text", "");
 		
@@ -64,6 +64,23 @@ public class TellRawChatMessage {
 		}
 		
 		message.add("extra", array);
+		return message.toString();
+	}
+	
+	/**
+	 * Builds the message present in this Builder.
+	 * 
+	 * @return the String message.
+	 */
+	public String buildBook() {
+		JsonObject message = new JsonObject();
+		
+		JsonArray array = new JsonArray();
+		for(int i = 0; i < this.message.size(); i++){
+			array.add(this.message.get(i).getObject());
+		}
+		
+		message.add("text", array);
 		return message.toString();
 	}
 
@@ -190,5 +207,11 @@ public class TellRawChatMessage {
 		for(ChatMessageObject obj : buildTellRawMessage.message){
 			message.add(obj);
 		}
+	}
+	
+	
+	@Override
+	public String toString() {
+		return buildMessage();
 	}
 }

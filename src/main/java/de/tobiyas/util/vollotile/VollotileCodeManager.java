@@ -22,6 +22,7 @@ import de.tobiyas.util.vollotile.specific.MC_1_7_R1_VollotileCode;
 import de.tobiyas.util.vollotile.specific.MC_1_7_R2_VollotileCode;
 import de.tobiyas.util.vollotile.specific.MC_1_7_R3_VollotileCode;
 import de.tobiyas.util.vollotile.specific.MC_1_7_R4_VollotileCode;
+import de.tobiyas.util.vollotile.specific.MC_1_8_R1_VollotileCode;
 import de.tobiyas.util.vollotile.specific.UNKNOWN_VollotileCode;
 
 public class VollotileCodeManager {
@@ -56,6 +57,11 @@ public class VollotileCodeManager {
 			System.out.println("Could not find a Vollotile for the Current MC Version. Using Fallback.");
 		}
 		
+		
+		if(ver.equalsIgnoreCase("v1_8_R1")){
+			code = new MC_1_8_R1_VollotileCode();
+			return;
+		}
 		
 		if(ver.equalsIgnoreCase("v1_7_R4")){
 			code = new MC_1_7_R4_VollotileCode();
