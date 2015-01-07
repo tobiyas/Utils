@@ -321,10 +321,17 @@ public class DebugLogger{
 
 	public void logStackTrace(Throwable error) {
 		logError("Stacktrace in error.log!", false);
-		errorLogger.log(Level.SEVERE, "Error: " + error.getClass().getName() + " message: '" + error.getLocalizedMessage() + "'");
-		for(StackTraceElement element : error.getStackTrace()){
-			errorLogger.log(Level.SEVERE, element.toString());
+		errorLogger.log(Level.SEVERE, "Critical Error", error);
+		
+		if(enableUploads){
+			errorUploader.uploadStacktrace(error);
 		}
+	}
+	
+
+	public void logStackTrace(String message, Throwable error) {
+		logError("Stacktrace in error.log!", false);
+		errorLogger.log(Level.SEVERE, message, error);
 		
 		if(enableUploads){
 			errorUploader.uploadStacktrace(error);

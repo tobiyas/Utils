@@ -118,7 +118,7 @@ public class ClickCommandManager implements Listener{
 			long time = entry.getValue();
 			
 			if(currentTime - time > MAX_LENGTH) {
-				player.sendMessage(ChatColor.RED + "This has already been used.");
+				//player.sendMessage(ChatColor.RED + "This has already been used.");
 				oldCommandIt.remove();
 				continue;
 			}
