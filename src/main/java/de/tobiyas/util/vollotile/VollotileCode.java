@@ -135,7 +135,7 @@ public abstract class VollotileCode {
 	 * @param loc to send to
 	 * @param player to send to
 	 */
-	public abstract void sendParticleEffect(ParticleEffects effect, Location loc, Vector width, float data, int amount, Player player);
+	public abstract void sendParticleEffect(ParticleEffects effect, Location loc, Vector width, float speed, int amount, Player player);
 	
 	
 	/**

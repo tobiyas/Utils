@@ -56,9 +56,9 @@ public class MC_1_8_R1_VollotileCode extends VollotileCode {
 					(float)loc.getY(), 
 					(float)loc.getZ(),
 					
-					(float)width.getBlockX(),
-					(float)width.getBlockY(),
-					(float)width.getBlockZ(),
+					(float)width.getX(),
+					(float)width.getY(),
+					(float)width.getZ(),
 					
 					speed,
 					amount
