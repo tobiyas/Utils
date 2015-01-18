@@ -27,7 +27,7 @@
 			<url>http://maven.sk89q.com/repo/</url>
 		</repository>
 		<repository>
-			<id>bukkit-repo</id>
+			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
 		</repository>
 		<repository>
@@ -51,7 +51,6 @@
 
 	<properties>
 		<powermock.version>1.4.12</powermock.version>
-		<bukkit.version>1.8-R0.1-SNAPSHOT</bukkit.version>
 	</properties>
 
 	<dependencies>
@@ -61,7 +60,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>${bukkit.version}</version>
+			<version>1.8-R0.1-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 
