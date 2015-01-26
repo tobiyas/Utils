@@ -16,6 +16,7 @@
 package de.tobiyas.util.inventorymenu;
 
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -434,7 +435,7 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 	public static void closeAllInvs(){
 		if(openInterfaces.isEmpty()) return;
 		
-		for(BasicSelectionInterface gui : openInterfaces){
+		for(BasicSelectionInterface gui : new HashSet<BasicSelectionInterface>(openInterfaces)){
 			Player player = (Player) gui.getPlayer();
 			if(player != null && player.isOnline()){
 				player.closeInventory();
