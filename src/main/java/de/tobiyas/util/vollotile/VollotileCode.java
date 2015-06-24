@@ -19,15 +19,18 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import de.tobiyas.util.UtilsUsingPlugin;
+import de.tobiyas.util.chat.components.TellRawChatMessage;
 import de.tobiyas.util.player.PlayerUtils;
 
 public abstract class VollotileCode {
@@ -229,11 +232,113 @@ public abstract class VollotileCode {
 	public void setSkinOfPlayer(UtilsUsingPlugin plugin, Player player, String skin, String name){}
 	
 	
+	/**
+	 * Overrides the Entity AI to do nothing except for standing there and look.
+	 * 
+	 * @param entity to set.
+	 */
+	public abstract void overwriteAIToDoNothing(LivingEntity entity);
+	
+	
+	/**
+	 * Returns the Version Enum for this Vollotile Code.
+	 * 
+	 * @return the Version.
+	 */
+	public abstract MCVersion getVersion();
+	
+	
+	/**
+	 * Sets the Pages of a book to the TellRaw.
+	 * 
+	 * @param book to set
+	 * @param pages to set.
+	 */
+	public void editBookToPages(ItemStack book, List<TellRawChatMessage> pages){
+		//Not possible.
+	}
+	
+	
+	/**
+	 * Sends a Message to the Action bar.
+	 * 
+	 * @param player to send to.
+	 * @param message to send.
+	 */
+	public void sendActionBarMessage(Player player, String message){
+		//To be overriden.
+	}
+	
 	@Override
 	public String toString(){
 		return "Vollotile: " + CB_RELOCATION;
 	}
 
 	
+	
+	public static enum MCVersion{
+		unknown,
+		
+		v1_6_R1,
+		v1_6_R2,
+		v1_6_R3,
+		
+		v1_7_R1,
+		v1_7_R2,
+		v1_7_R3,
+		v1_7_R4,
+		
+		v1_8_R1,
+		v1_8_R2,
+		v1_8_R3;
+		
+		
+		
+		/**
+		 * If the Version CALLED on is GREATER or EQUAL
+		 * to the Version passed.
+		 * <br>
+		 * <br>Examples:
+		 * <br>v1_8_R1.isVersionGreaterOrEqual(v1_7_R4) == true.
+		 * <br>v1_8_R1.isVersionGreaterOrEqual(v1_8_R1) == true.
+		 * <br>v1_7_R4.isVersionGreaterOrEqual(v1_8_R1) == false.
+		 * 
+		 * @param version to check.
+		 * 
+		 * @return
+		 */
+		public boolean isVersionGreaterOrEqual(MCVersion version){
+			return ordinal() >= version.ordinal();
+		}
+		
+		
+		/**
+		 * If the Version has Armorstands.
+		 * 
+		 * @return true if has armorstands.
+		 */
+		public boolean hasArmorstands(){
+			return isVersionGreaterOrEqual(v1_8_R1);
+		}
+		
+		/**
+		 * If the Version has the Action bar.
+		 * 
+		 * @return true if present.
+		 */
+		public boolean hasActionBar(){
+			return isVersionGreaterOrEqual(v1_8_R1);
+		}
+		
+		/**
+		 * If the Version has Title + Subtitle.
+		 * 
+		 * @return true if present.
+		 */
+		public boolean hasTitle(){
+			return isVersionGreaterOrEqual(v1_8_R1);
+		}
+		
+	}
 	
 }

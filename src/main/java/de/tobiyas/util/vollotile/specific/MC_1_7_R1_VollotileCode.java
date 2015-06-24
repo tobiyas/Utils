@@ -18,14 +18,15 @@ package de.tobiyas.util.vollotile.specific;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 
-import net.minecraft.server.v1_7_R1.PacketPlayOutWorldParticles;
 import net.minecraft.server.v1_7_R1.PacketPlayOutCustomPayload;
+import net.minecraft.server.v1_7_R1.PacketPlayOutWorldParticles;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftArrow;
+import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -79,5 +80,16 @@ public class MC_1_7_R1_VollotileCode extends VollotileCode {
 		
 		CraftArrow craftArrow = (CraftArrow) arrow;
 		craftArrow.getHandle().fromPlayer =  mayBePickedUp ? 1 : 0;
+	}
+
+
+	@Override
+	public void overwriteAIToDoNothing(LivingEntity entity) {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public MCVersion getVersion() {
+		return MCVersion.v1_7_R1;
 	}
 }

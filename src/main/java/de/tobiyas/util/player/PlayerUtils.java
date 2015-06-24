@@ -3,10 +3,13 @@ package de.tobiyas.util.player;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerUtils {
 
@@ -74,5 +77,23 @@ public class PlayerUtils {
 		catch (IllegalAccessException ex){} // can still never happen
 		
 		return collection;
+	}
+	
+	
+	/**
+	 * Updates the Player-Inventory the next Tick.
+	 * 
+	 * @param player to update
+	 * @param plugin to call on.
+	 */
+	public static void updateInvNextTick(final UUID player, Plugin plugin){
+		new BukkitRunnable() {
+			@SuppressWarnings("deprecation")
+			@Override
+			public void run() {
+				Player pl = Bukkit.getPlayer(player);
+				if(pl != null && pl.isOnline()) pl.updateInventory();
+			}
+		}.runTaskLater(plugin, 1);
 	}
 }

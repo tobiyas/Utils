@@ -8,19 +8,19 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.EnumParticle;
-import net.minecraft.server.v1_8_R1.IChatBaseComponent;
-import net.minecraft.server.v1_8_R1.PacketDataSerializer;
-import net.minecraft.server.v1_8_R1.PacketPlayOutChat;
-import net.minecraft.server.v1_8_R1.PacketPlayOutCustomPayload;
-import net.minecraft.server.v1_8_R1.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_8_R3.EnumParticle;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.PacketDataSerializer;
+import net.minecraft.server.v1_8_R3.PacketPlayOutCustomPayload;
+import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftArrow;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArrow;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -34,10 +34,10 @@ import de.tobiyas.util.vollotile.ParticleEffects;
 import de.tobiyas.util.vollotile.ReflectionsHelper;
 import de.tobiyas.util.vollotile.VollotileCode;
 
-public class MC_1_8_R1_VollotileCode extends VollotileCode {
+public class MC_1_8_R3_VollotileCode extends VollotileCode {
 
-	public MC_1_8_R1_VollotileCode() {
-		super("v1_8_R1");
+	public MC_1_8_R3_VollotileCode() {
+		super("v1_8_R3");
 	}
 
 
@@ -181,7 +181,7 @@ public class MC_1_8_R1_VollotileCode extends VollotileCode {
 	@Override
 	public void overwriteAIToDoNothing(LivingEntity entity) {
 		CraftEntity lEntity = (CraftEntity) entity;
-		net.minecraft.server.v1_8_R1.Entity eLiving = lEntity.getHandle();
+		net.minecraft.server.v1_8_R3.Entity eLiving = lEntity.getHandle();
 		
 		//set NO-AI flag.
 		eLiving.getDataWatcher().watch(15, Byte.valueOf( (byte) 1 ));
@@ -189,8 +189,13 @@ public class MC_1_8_R1_VollotileCode extends VollotileCode {
 	
 	
 	@Override
+	public void sendRawMessage(Player player, String rawMessage) {
+		((CraftPlayer) player).getHandle().sendMessage(IChatBaseComponent.ChatSerializer.a(rawMessage));
+	}
+	
+	@Override
 	public MCVersion getVersion() {
-		return MCVersion.v1_8_R1;
+		return MCVersion.v1_8_R3;
 	}
 	
 	
@@ -242,4 +247,5 @@ public class MC_1_8_R1_VollotileCode extends VollotileCode {
 			//Silently ignore error since it would spam a lot!
 		}
 	}
+	
 }

@@ -17,6 +17,8 @@ package de.tobiyas.util.permissions.plugins;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
@@ -157,6 +159,35 @@ public class GroupManagerPermissions implements PermissionPlugin {
 		if(subgroupObj == null) return;
 		
 		groupManager.getWorldsHolder().getDefaultWorld().getUser(player.getName()).removeSubGroup(subgroupObj);
+	}
+
+
+	@Override
+	public void addGroup(OfflinePlayer player, String group) {
+		Group groupObj = groupManager.getWorldsHolder().getDefaultWorld().getGroup(group);
+		if(groupObj == null) return;
+		
+		groupManager.getWorldsHolder().getDefaultWorld().getUser(player.getName()).setGroup(groupObj);
+	}
+
+
+	@Override
+	public void removeGroup(OfflinePlayer player, String group) {
+		Group groupObj = groupManager.getWorldsHolder().getDefaultWorld().getGroup(group);
+		if(groupObj == null) return;
+		
+		groupManager.getWorldsHolder().getDefaultWorld().getUser(player.getName()).removeSubGroup(groupObj);
+	}
+
+
+	@Override
+	public List<String> listSubgroups(OfflinePlayer player) {
+		List<String> ret = new LinkedList<String>();
+		for(Group group : groupManager.getWorldsHolder().getDefaultWorld().getGroupList()){
+			ret.add(group.getName());
+		}
+		
+		return ret;
 	}
 
 }

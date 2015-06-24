@@ -16,6 +16,8 @@
 package de.tobiyas.util.permissions.plugins;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -126,7 +128,7 @@ public class BPermissionsPermissions implements PermissionPlugin{
 
 	@Override
 	public boolean hasSubgroupSupport() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -143,6 +145,27 @@ public class BPermissionsPermissions implements PermissionPlugin{
 		String worldName = world.getName();
 		
 		ApiLayer.removeGroup(worldName, CalculableType.USER, player.getName(), subgroup);
+	}
+
+	@Override
+	public void addGroup(OfflinePlayer player, String group) {
+		World world = player.isOnline() ? player.getPlayer().getWorld() : Bukkit.getWorlds().get(0);
+		String worldName = world.getName();
+		
+		ApiLayer.addGroup(worldName, CalculableType.USER, player.getName(), group);
+	}
+
+	@Override
+	public void removeGroup(OfflinePlayer player, String group) {
+		World world = player.isOnline() ? player.getPlayer().getWorld() : Bukkit.getWorlds().get(0);
+		String worldName = world.getName();
+		
+		ApiLayer.removeGroup(worldName, CalculableType.USER, player.getName(), group);
+	}
+
+	@Override
+	public List<String> listSubgroups(OfflinePlayer player) {
+		return new LinkedList<String>();
 	}
 
 }

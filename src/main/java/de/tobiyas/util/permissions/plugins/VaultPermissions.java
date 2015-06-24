@@ -16,6 +16,7 @@
 package de.tobiyas.util.permissions.plugins;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.milkbowl.vault.permission.Permission;
 
@@ -132,9 +133,38 @@ public class VaultPermissions implements PermissionPlugin {
 
 	@Override
 	public void addSubgroup(OfflinePlayer player, String subgroup) {
+		//not supported
 	}
 
 	@Override
 	public void removeSubgroup(OfflinePlayer player, String subgroup) {
+		//not supported
+	}
+
+	@Override
+	public void addGroup(OfflinePlayer player, String group) {
+		Player rPlayer = player.getPlayer();
+		if(rPlayer == null) return;
+		
+		vaultPermission.playerAddGroup(rPlayer, group);
+	}
+
+	@Override
+	public void removeGroup(OfflinePlayer player, String group) {
+		Player rPlayer = player.getPlayer();
+		if(rPlayer == null) return;
+		
+		vaultPermission.playerRemoveGroup(rPlayer, group);
+	}
+
+	@Override
+	public List<String> listSubgroups(OfflinePlayer player) {
+		ArrayList<String> groups = new ArrayList<String>();
+		if(!isActive()) return groups;
+		
+		for(String group : vaultPermission.getGroups()){
+			groups.add(group);
+		}
+		return groups;
 	}
 }

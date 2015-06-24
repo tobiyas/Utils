@@ -16,6 +16,8 @@
 package de.tobiyas.util.permissions.plugins;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -94,6 +96,19 @@ public class OpPermissions implements PermissionPlugin {
 
 	@Override
 	public void removeSubgroup(OfflinePlayer player, String subgroup) {
+	}
+
+	@Override
+	public void addGroup(OfflinePlayer player, String group) {
+	}
+
+	@Override
+	public void removeGroup(OfflinePlayer player, String group) {
+	}
+
+	@Override
+	public List<String> listSubgroups(OfflinePlayer player) {
+		return new LinkedList<String>();
 	}
 
 }

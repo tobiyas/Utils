@@ -15,13 +15,17 @@
  ******************************************************************************/
 package de.tobiyas.util.vollotile.specific;
 
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import de.tobiyas.util.chat.components.TellRawChatMessage;
 import de.tobiyas.util.vollotile.ParticleEffects;
 import de.tobiyas.util.vollotile.VollotileCode;
 
@@ -56,4 +60,22 @@ public class UNKNOWN_VollotileCode extends VollotileCode {
 	@Override
 	public void makeArrowPickupable(Arrow arrow, boolean mayBePickedUp) {
 	}
+
+	@Override
+	public void overwriteAIToDoNothing(LivingEntity entity) {
+	}
+	
+	
+	@Override
+	public MCVersion getVersion() {
+		return MCVersion.unknown;
+	}
+	
+	
+	@Override
+	public void editBookToPages(ItemStack book, List<TellRawChatMessage> pages){
+		//Not possible.
+	}
+	
+	
 }

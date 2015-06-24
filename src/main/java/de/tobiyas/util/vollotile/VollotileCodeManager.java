@@ -15,6 +15,8 @@
  ******************************************************************************/
 package de.tobiyas.util.vollotile;
 
+import de.tobiyas.util.UtilsUsingPlugin;
+import de.tobiyas.util.vollotile.VollotileCode.MCVersion;
 import de.tobiyas.util.vollotile.specific.MC_1_6_R1_VollotileCode;
 import de.tobiyas.util.vollotile.specific.MC_1_6_R2_VollotileCode;
 import de.tobiyas.util.vollotile.specific.MC_1_6_R3_VollotileCode;
@@ -23,6 +25,8 @@ import de.tobiyas.util.vollotile.specific.MC_1_7_R2_VollotileCode;
 import de.tobiyas.util.vollotile.specific.MC_1_7_R3_VollotileCode;
 import de.tobiyas.util.vollotile.specific.MC_1_7_R4_VollotileCode;
 import de.tobiyas.util.vollotile.specific.MC_1_8_R1_VollotileCode;
+import de.tobiyas.util.vollotile.specific.MC_1_8_R2_VollotileCode;
+import de.tobiyas.util.vollotile.specific.MC_1_8_R3_VollotileCode;
 import de.tobiyas.util.vollotile.specific.UNKNOWN_VollotileCode;
 
 public class VollotileCodeManager {
@@ -40,7 +44,7 @@ public class VollotileCodeManager {
 	public static VollotileCode getVollotileCode(){
 		if(code == null){
 			initCode();
-			System.out.println("Loaded Vollotile Code for: " + code.CB_RELOCATION);
+			//System.out.println("Loaded Vollotile Code for: " + code.CB_RELOCATION);
 		}
 		
 		return code;
@@ -55,45 +59,55 @@ public class VollotileCodeManager {
 		if(ver == null) {
 			code = new UNKNOWN_VollotileCode();
 			System.out.println("Could not find a Vollotile for the Current MC Version. Using Fallback.");
+			return;
 		}
 		
+		if("v1_8_R3".equalsIgnoreCase(ver)){
+			code = new MC_1_8_R3_VollotileCode();
+			return;
+		}
 		
-		if(ver.equalsIgnoreCase("v1_8_R1")){
+		if("v1_8_R2".equalsIgnoreCase(ver)){
+			code = new MC_1_8_R2_VollotileCode();
+			return;
+		}
+		
+		if("v1_8_R1".equalsIgnoreCase(ver)){
 			code = new MC_1_8_R1_VollotileCode();
 			return;
 		}
 		
-		if(ver.equalsIgnoreCase("v1_7_R4")){
+		if("v1_7_R4".equalsIgnoreCase(ver)){
 			code = new MC_1_7_R4_VollotileCode();
 			return;
 		}
 		
-		if(ver.equalsIgnoreCase("v1_7_R3")){
+		if("v1_7_R3".equalsIgnoreCase(ver)){
 			code = new MC_1_7_R3_VollotileCode();
 			return;
 		}
 		
-		if(ver.equalsIgnoreCase("v1_7_R2")){
+		if("v1_7_R2".equalsIgnoreCase(ver)){
 			code = new MC_1_7_R2_VollotileCode();
 			return;
 		}
 		
-		if(ver.equalsIgnoreCase("v1_7_R1")){
+		if("v1_7_R1".equalsIgnoreCase(ver)){
 			code = new MC_1_7_R1_VollotileCode();
 			return;
 		}
 		
-		if(ver.equalsIgnoreCase("v1_6_R3")){
+		if("v1_6_R3".equalsIgnoreCase(ver)){
 			code = new MC_1_6_R3_VollotileCode();
 			return;
 		}
 		
-		if(ver.equalsIgnoreCase("v1_6_R2")){
+		if("v1_6_R2".equalsIgnoreCase(ver)){
 			code = new MC_1_6_R2_VollotileCode();
 			return;
 		}
 		
-		if(ver.equalsIgnoreCase("v1_6_R1")){
+		if("v1_6_R1".equalsIgnoreCase(ver)){
 			code = new MC_1_6_R1_VollotileCode();
 			return;
 		}
@@ -130,6 +144,24 @@ public class VollotileCodeManager {
 		}
 		
 		return null;
+	}
+	
+
+	/**
+	 * Inits the Vollotile Code.
+	 * 
+	 * @param utilsUsingPlugin to log to.
+	 */
+	public static void init(UtilsUsingPlugin utilsUsingPlugin) {
+		if(code == null) initCode();
+		
+		//notify if we have Unknown Version!
+		if(code.getVersion() == MCVersion.unknown) {
+			utilsUsingPlugin.log(
+					"Could not load Vollotile Code for: " 
+					+ utilsUsingPlugin.getName()
+				);
+		}
 	}
 	
 	

@@ -32,7 +32,7 @@ public class YAMLPersistenceProvider {
 	/**
 	 * The Cached Player YAML files
 	 */
-	protected static Map<String, YAMLConfigExtended> playerYamls = new HashMap<String, YAMLConfigExtended>();
+	protected Map<String, YAMLConfigExtended> playerYamls = new HashMap<String, YAMLConfigExtended>();
 	
 	/**
 	 * The knownPlayers.

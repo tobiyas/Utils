@@ -120,7 +120,7 @@ public class PEXPermissions implements PermissionPlugin {
 
 	@Override
 	public boolean hasSubgroupSupport() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -131,6 +131,29 @@ public class PEXPermissions implements PermissionPlugin {
 	@Override
 	public void removeSubgroup(OfflinePlayer player, String subgroup) {
 		PermissionsEx.getPermissionManager().getUser(player.getName()).removeGroup(subgroup);
+	}
+
+	@Override
+	public void addGroup(OfflinePlayer player, String group) {
+		PermissionsEx.getPermissionManager().getUser(player.getName()).addGroup(group);
+	}
+
+	@Override
+	public void removeGroup(OfflinePlayer player, String group) {
+		PermissionsEx.getPermissionManager().getUser(player.getName()).removeGroup(group);
+	}
+
+	@Override
+	public List<String> listSubgroups(OfflinePlayer player) {
+		ArrayList<String> groups = new ArrayList<String>();
+		if(!isActive()) return groups;
+		
+		List<PermissionGroup> pexGroups = PermissionsEx.getPermissionManager().getGroupList();
+		for(PermissionGroup pexGroup : pexGroups){
+			groups.add(pexGroup.getName());
+		}
+		
+		return groups;
 	}
 
 }

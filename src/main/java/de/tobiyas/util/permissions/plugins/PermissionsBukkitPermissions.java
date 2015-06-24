@@ -16,6 +16,7 @@
 package de.tobiyas.util.permissions.plugins;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -133,6 +134,28 @@ public class PermissionsBukkitPermissions implements PermissionPlugin {
 	@Override
 	public void removeSubgroup(OfflinePlayer player, String subgroup) {
 		plugin.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "permissions player removegroup " + player.getName() + " " + subgroup);
+	}
+
+	@Override
+	public void addGroup(OfflinePlayer player, String group) {
+		 plugin.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "permissions player addgroup " + player.getName() + " " + group);
+	}
+
+	@Override
+	public void removeGroup(OfflinePlayer player, String group) {
+		plugin.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "permissions player removegroup " + player.getName() + " " + group);
+		
+	}
+
+	@Override
+	public List<String> listSubgroups(OfflinePlayer player) {
+		ArrayList<String> groups = new ArrayList<String>();
+		if(!isActive()) return groups;
+		
+		for(Group group : permissions.getAllGroups()){
+			groups.add(group.getName());
+		}
+		return groups;
 	}
 
 }

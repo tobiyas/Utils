@@ -18,10 +18,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.tobiyas</groupId>
 	<artifactId>Utils</artifactId>
-	<version>1.0.12</version>
+	<version>1.0.14</version>
 	<name>Utils</name>
 
-	<repositories>	    
+	<repositories>
 		<repository>
 			<id>sk89q-repo</id>
 			<url>http://maven.sk89q.com/repo/</url>
@@ -60,7 +60,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.8-R0.1-SNAPSHOT</version>
+			<version>1.8.6-R0.1-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 
@@ -73,11 +73,12 @@
 		</dependency>
 		
 
-		<!-- We use GSON from CB -->
+		<!-- We use GSON from CB no longer -->
 	    <dependency>
 	      <groupId>com.google.code.gson</groupId>
 	      <artifactId>gson</artifactId>
 	      <version>2.1</version>
+	      <optional>false</optional>
 	    </dependency>
 
 		<dependency>
@@ -185,6 +186,8 @@
 			<optional>true</optional>
 		</dependency>
 		
+		
+		<!-- Craft Bukkits. -->
 		<dependency>
    			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit_1_6_R1</artifactId>
@@ -256,6 +259,24 @@
 			<version>1.8</version>
 			<optional>true</optional>
 		</dependency>
+		
+		<dependency>
+   			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit_1_8_R2</artifactId>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/cb/cb-1.8.3.jar</systemPath>
+			<version>1.8.3</version>
+			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+   			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit_1_8_R3</artifactId>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/cb/cb-1.8.6.jar</systemPath>
+			<version>1.8.6</version>
+			<optional>true</optional>
+		</dependency>
 
 	</dependencies>
 
@@ -288,15 +309,18 @@
 							<artifactSet>
 								<includes>
 									<include>org.mcstats:metrics</include>
+									<incluse>com.google.code.gson:gson</incluse>
 								</includes>
 							</artifactSet>
 							
 							<relocations>
    				                <!-- Relocate GSON This has to be done BEFORE!!! CB reloc.-->
+   				                <!-- Not needed any more for MC 1.8.3
 				                <relocation>
 				                  <pattern>com.google.gson</pattern>
 				                  <shadedPattern>org.bukkit.craftbukkit.libs.com.google.gson</shadedPattern>
 				                </relocation>
+				                -->
 				                
 				                <!--
 							    <relocation>

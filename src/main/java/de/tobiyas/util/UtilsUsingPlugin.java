@@ -17,15 +17,19 @@ package de.tobiyas.util;
 
 import java.io.File;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
+import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import de.tobiyas.util.chat.commands.ClickCommandManager;
 import de.tobiyas.util.debug.logger.DebugLogger;
 import de.tobiyas.util.economy.MoneyManager;
 import de.tobiyas.util.permissions.PermissionManager;
+import de.tobiyas.util.vollotile.VollotileCodeManager;
 
 public abstract class UtilsUsingPlugin extends JavaPlugin {
 
@@ -79,8 +83,62 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 		
 	}
 
+	
+	@Override
+	public final void onEnable(){
+		//first init Logger.
+		getDebugLogger().setAlsoToPlugin(true);
+		
+		//Now init the Vollotile Code manager.
+		VollotileCodeManager.init(this);
+		
+		//Call the Enable Function.
+		pluginEnable();
+		
+		//Inits the first Tick.
+		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+			@Override
+			public void run() {
+				firstTick();
+			}
+		}, 1);
+	}
+	
+	/**
+	 * The Plugin is beening enabled.
+	 */
+	protected abstract void pluginEnable();
+	
+	
+	/**
+	 * This is called on the first tick!
+	 */
+	protected void firstTick(){}
+	
 
-
+	
+	/**
+	 * Registers the Events for the Plugin.
+	 * 
+	 * @param listener to register.
+	 */
+	public void registerEvents(Listener listener){
+		if(listener == null) return;
+		Bukkit.getPluginManager().registerEvents(listener, this);
+	}
+	
+	
+	/**
+	 * Registers a Plugin Message Callback.
+	 * 
+	 * @param listener to register
+	 * @param channel to register
+	 */
+	public void registerPluginMessage(PluginMessageListener listener, String channel){
+		if(listener == null || channel == null || channel.isEmpty()) return;
+		Bukkit.getMessenger().registerIncomingPluginChannel(this, channel, listener);
+	}
+	
 
 
 	/**

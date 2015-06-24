@@ -5,6 +5,7 @@
 package de.tobiyas.util.permissions;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -303,17 +304,33 @@ public class PermissionManager implements PermissionPlugin{
 		return permPlugin.hasGroupSupport();
 	}
 
+	@Override
+	public void addGroup(OfflinePlayer player, String group) {
+		if(!hasGroupSupport()) return;
+		permPlugin.addGroup(player, group);
+	}
+	
+	@Override
+	public void removeGroup(OfflinePlayer player, String group) {
+		if(!hasGroupSupport()) return;
+		permPlugin.addGroup(player, group);
+	}
 
 	@Override
 	public boolean hasSubgroupSupport() {
 		return permPlugin.hasSubgroupSupport();
 	}
 
-
 	@Override
 	public void addSubgroup(OfflinePlayer player, String subgroup) {
 		if(!hasSubgroupSupport()) return;
 		permPlugin.addSubgroup(player, subgroup);
+	}
+	
+	@Override
+	public List<String> listSubgroups(OfflinePlayer player){
+		if(!hasSubgroupSupport()) return new LinkedList<String>();
+		return permPlugin.listSubgroups(player);
 	}
 
 

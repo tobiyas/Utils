@@ -15,17 +15,27 @@
  ******************************************************************************/
 package de.tobiyas.util.vollotile.specific;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
+import java.util.List;
 
-import net.minecraft.server.v1_7_R2.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_7_R2.EntityHuman;
+import net.minecraft.server.v1_7_R2.EntityInsentient;
+import net.minecraft.server.v1_7_R2.EntityLiving;
 import net.minecraft.server.v1_7_R2.PacketPlayOutCustomPayload;
+import net.minecraft.server.v1_7_R2.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_7_R2.PathfinderGoalFloat;
+import net.minecraft.server.v1_7_R2.PathfinderGoalLookAtPlayer;
+import net.minecraft.server.v1_7_R2.PathfinderGoalSelector;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_7_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_7_R2.entity.CraftArrow;
+import org.bukkit.craftbukkit.v1_7_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_7_R2.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -82,5 +92,38 @@ public class MC_1_7_R2_VollotileCode extends VollotileCode {
 		CraftArrow craftArrow = (CraftArrow) arrow;
 		craftArrow.getHandle().fromPlayer =  mayBePickedUp ? 1 : 0;
 	}
+	
+	@Override
+	public void overwriteAIToDoNothing(LivingEntity entity) {
+		try {
 
+			EntityLiving ev = ((CraftLivingEntity) entity).getHandle();
+
+			Field goalsField = EntityInsentient.class.getDeclaredField("goalSelector");
+			goalsField.setAccessible(true);
+			PathfinderGoalSelector goals = (PathfinderGoalSelector) goalsField.get(ev);
+
+			Field listField = PathfinderGoalSelector.class.getDeclaredField("b");
+			
+			listField.setAccessible(true);
+			List list = (List) listField.get(goals);
+			
+			list.clear();
+			listField = PathfinderGoalSelector.class.getDeclaredField("c");
+			listField.setAccessible(true);
+			list = (List) listField.get(goals);
+			list.clear();
+
+			goals.a(0, new PathfinderGoalFloat((EntityInsentient) ev));
+			goals.a(1, new PathfinderGoalLookAtPlayer((EntityInsentient) ev, EntityHuman.class, 12.0F, 1.0F));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	
+	@Override
+	public MCVersion getVersion() {
+		return MCVersion.v1_7_R2;
+	}
 }

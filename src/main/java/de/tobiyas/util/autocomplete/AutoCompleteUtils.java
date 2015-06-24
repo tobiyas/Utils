@@ -15,6 +15,7 @@
  ******************************************************************************/
 package de.tobiyas.util.autocomplete;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,6 +50,19 @@ public class AutoCompleteUtils {
 		}
 		
 		return list;
+	}
+	
+	
+	/**
+	 * Returns a list of all AutoCompletes from the passed list.
+	 * 
+	 * @param names the names to check
+	 * @param pre to check against
+	 * 
+	 * @return the list with the auto completed values.
+	 */
+	public static List<String> getAllNamesWith(String pre, String... toUse){
+		return getAllNamesWith(Arrays.asList(toUse), pre);
 	}
 	
 	

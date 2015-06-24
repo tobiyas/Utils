@@ -39,6 +39,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.IllegalPluginAccessException;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import de.tobiyas.util.UtilsUsingPlugin;
@@ -71,6 +73,11 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 * If the file may be auto 
 	 */
 	private int autoReloadableSchedulerID = -1;
+	
+	/**
+	 * The last exception read while parsing the config.
+	 */
+	private Throwable lastParseException = null;
 	
 	
 	/**
@@ -218,7 +225,19 @@ public class YAMLConfigExtended extends YamlConfiguration {
 			}
 		};
 		
-		new Thread(null, runnable, "ConfigSavingThread").start();
+		//just use anyones Plugin. We are so evil! >:D
+		try{
+			for(Plugin plugin : Bukkit.getPluginManager().getPlugins()){
+				if(!plugin.isEnabled()) continue;
+				
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
+				return;
+			}
+			
+			throw new IllegalPluginAccessException();
+		}catch(IllegalPluginAccessException exp){
+			new Thread(Thread.currentThread().getThreadGroup(), runnable, "ConfigSavingThread").start();
+		}
 	}
 	
 	/**
@@ -241,7 +260,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 			validLoad = false;
 			return this;
 		}
-				
+		
 		try {
 			load(saveFile);
 			
@@ -253,9 +272,12 @@ public class YAMLConfigExtended extends YamlConfiguration {
 			}
 			
 			this.lastChangeDate = new Date(savePathFile.lastModified());
+			this.lastParseException = null;
 		} catch (Exception e) {
-			validLoad = false;
+			this.validLoad = false;
+			this.lastParseException = e;
 			System.out.println("Error on loading YamlConfig: " + saveFile.getAbsolutePath());
+			
 			return this;
 		}
 		
@@ -760,6 +782,16 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	public void clearConfig(){
 		this.map.clear();
 		this.dirty = true;
+	}
+
+	/**
+	 * Returns the last parse Exception when present!
+	 * Returns null if no exception while reading.
+	 * 
+	 * @return
+	 */
+	public Throwable getLastParseException() {
+		return lastParseException;
 	}
 
 }

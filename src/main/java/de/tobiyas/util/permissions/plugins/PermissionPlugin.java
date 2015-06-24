@@ -16,6 +16,7 @@
 package de.tobiyas.util.permissions.plugins;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -103,6 +104,24 @@ public interface PermissionPlugin {
 	public void removePermission(OfflinePlayer player, String permission);
 	
 	
+	/**
+	 * Adds a Player to the Group.
+	 * 
+	 * @param player to add
+	 * @param group to add.
+	 */
+	public void addGroup(OfflinePlayer player, String group);
+	
+	/**
+	 * Removes a Player from the Group.
+	 * 
+	 * @param player to remove.
+	 * @param group to remove.
+	 */
+	public void removeGroup(OfflinePlayer player, String group);
+	
+	
+	
 	//SUBGROUP PART
 	
 	/**
@@ -120,4 +139,14 @@ public interface PermissionPlugin {
 	 * @param subgroup to remove
 	 */
 	public void removeSubgroup(OfflinePlayer player, String subgroup);
+	
+	
+	/**
+	 * Lists all Subgroups.
+	 * 
+	 * @param player to remove from
+	 * 
+	 * @return the List of Subgroups.
+	 */
+	public List<String> listSubgroups(OfflinePlayer player);
 }

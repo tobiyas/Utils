@@ -21,10 +21,11 @@ import java.nio.charset.Charset;
 import net.minecraft.server.v1_6_R3.Packet250CustomPayload;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_6_R3.entity.CraftArrow;
+import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -67,5 +68,16 @@ public class MC_1_6_R3_VollotileCode extends VollotileCode {
 		
 		CraftArrow craftArrow = (CraftArrow) arrow;
 		craftArrow.getHandle().fromPlayer =  mayBePickedUp ? 1 : 0;
+	}
+
+
+	@Override
+	public void overwriteAIToDoNothing(LivingEntity entity) {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public MCVersion getVersion() {
+		return MCVersion.v1_6_R3;
 	}
 }

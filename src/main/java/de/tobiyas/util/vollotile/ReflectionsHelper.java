@@ -1,9 +1,7 @@
 package de.tobiyas.util.vollotile;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 

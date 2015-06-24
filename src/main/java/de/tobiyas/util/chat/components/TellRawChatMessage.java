@@ -80,10 +80,25 @@ public class TellRawChatMessage {
 			array.add(this.message.get(i).getObject());
 		}
 		
-		message.add("text", array);
+		message.addProperty("text", "");
+		message.add("extra", array);
 		return message.toString();
 	}
 
+	
+	/**
+	 * Builds the Normal message without ANY Tellraw stuff.
+	 * 
+	 * @return normal message
+	 */
+	public String buildNormal() {
+		String returnString = "";
+		for(ChatMessageObject obj : message){
+			returnString += obj.getLabel();
+		}
+		
+		return returnString;
+	}
 
 
 	/**
@@ -102,7 +117,41 @@ public class TellRawChatMessage {
 	 * @param text to send.
 	 */
 	public TellRawChatMessage addSimpleText(String text){
+		if(text.contains("§")){
+			append(parse(text));
+			return this;
+		}
+		
 		message.add(new ChatMessageObject(text));
+		return this;
+	}
+	
+	
+	/**
+	 * Adds a simple text to the Message.
+	 * 
+	 * @param text to send.
+	 * @param bold if it should be bold
+	 * @param strikethrough if it should be striked through
+	 * @param underlined if it should be striked Through
+	 * @param italic if it should be italic
+	 * @param color the color to set. null to not use it.
+	 */
+	public TellRawChatMessage addSimpleText(String text, 
+			boolean magic, boolean bold, 
+			boolean strikethrough, boolean underlined, 
+			boolean italic, ChatColor color){
+		
+		ChatMessageObject obj = new ChatMessageObject(text);
+		if(bold) obj.addBold();
+		if(strikethrough) obj.addStrikeThrough();
+		if(underlined) obj.addUnderlined();
+		if(italic) obj.addItalic();
+		if(magic) obj.addMagic();
+		
+		if(color != null) obj.addChatColor(color);
+		
+		message.add(obj);
 		return this;
 	}
 
@@ -203,10 +252,21 @@ public class TellRawChatMessage {
 	 * 
 	 * @param buildTellRawMessage to append
 	 */
-	public void append(TellRawChatMessage buildTellRawMessage) {
+	public TellRawChatMessage append(TellRawChatMessage buildTellRawMessage) {
 		for(ChatMessageObject obj : buildTellRawMessage.message){
 			message.add(obj);
 		}
+		
+		return this;
+	}
+	
+	
+	/**
+	 * Adds a new Line to the end.
+	 */
+	public TellRawChatMessage addNewLine() {
+		addSimpleText("\n");
+		return this;
 	}
 	
 	
@@ -214,4 +274,54 @@ public class TellRawChatMessage {
 	public String toString() {
 		return buildMessage();
 	}
+
+	
+	
+	/**
+	 * This creates a TellRawMessage Dependent on the Message passed.
+	 * 
+	 * @param message to set.
+	 * @return the parsed TellRawMessage
+	 */
+	public static TellRawChatMessage parse(String message){
+		//if we have No ChatColor, ignore the Rest...
+		if(!message.contains("§")) return new TellRawChatMessage().addSimpleText(message);
+		
+		boolean magic = false;
+		boolean bold = false;
+		boolean strikethrough = false;
+		boolean underlined = false;
+		boolean italic = false;
+		ChatColor currentColor = ChatColor.WHITE;
+		
+		TellRawChatMessage tellRaw = new TellRawChatMessage();
+		String[] split = message.split("§");
+		
+		for(String sub : split){
+			//if we have a 0 lenght, we have to ignore it!
+			if(sub.length() == 0) continue;
+			
+			//first check for current color.
+			char toParse = sub.charAt(0);
+			
+			if((toParse >= '0' && toParse <= '9')
+				|| toParse >= 'a' && toParse <= 'f'){
+				
+				currentColor = ChatColor.getByChar(toParse);
+			}
+			
+			if(toParse == 'k') magic = true;
+			if(toParse == 'l') bold = true;
+			if(toParse == 'm') strikethrough = true;
+			if(toParse == 'n') underlined = true;
+			if(toParse == 'o') italic = true;
+			if(toParse == 'r'){ bold = false; strikethrough = false; underlined = false; italic = false; }
+			
+			sub = sub.substring(1);
+			tellRaw.addSimpleText(sub, magic, bold, strikethrough, underlined, italic, currentColor);
+		}
+		
+		return tellRaw;
+	}
+	
 }
