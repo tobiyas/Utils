@@ -3,8 +3,7 @@ package de.tobiyas.util.chat;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -47,7 +46,7 @@ public class RawBook {
 			List<IChatBaseComponent> metaPages = (List<IChatBaseComponent>) field.get(meta);
 			
 			for(TellRawChatMessage page : pages){
-				metaPages.add(ChatSerializer.a(page.buildBook()));
+				metaPages.add(IChatBaseComponent.ChatSerializer.a(page.buildBook()));
 			}
 			
 			book.setItemMeta(meta);

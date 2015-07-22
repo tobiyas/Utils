@@ -96,4 +96,18 @@ public class PlayerUtils {
 			}
 		}.runTaskLater(plugin, 1);
 	}
+
+	/**
+	 * Returns the Player ONLY from the online Players.
+	 * 
+	 * @param playerUUID to search
+	 * @return the player.
+	 */
+	public static Player getPlayer(UUID playerUUID) {
+		for(Player pl : getOnlinePlayers()){
+			if(pl.getUniqueId().equals(playerUUID)) return pl;
+		}
+		
+		return null;
+	}
 }
