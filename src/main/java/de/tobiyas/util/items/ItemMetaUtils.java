@@ -60,6 +60,20 @@ public class ItemMetaUtils {
 		item.setItemMeta(meta);
 	}
 	
+	/**
+	 * Adds a unformated String to the Lore of an Item
+	 * 
+	 * @param item to add to
+	 * @param toAdd to add
+	 */
+	public static void addUnformatedStringToLore(ItemStack item, String toAdd){
+		ItemMeta meta = item.getItemMeta();
+		List<String> lore = meta.hasLore() ? meta.getLore() : new LinkedList<String>();
+		lore.add(toAdd);
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+	}
+	
 	
 	
 	/**

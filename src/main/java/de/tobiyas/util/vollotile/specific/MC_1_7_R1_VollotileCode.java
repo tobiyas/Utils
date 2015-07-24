@@ -20,10 +20,13 @@ import java.nio.charset.Charset;
 
 import net.minecraft.server.v1_7_R1.PacketPlayOutCustomPayload;
 import net.minecraft.server.v1_7_R1.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_7_R1.EntityInsentient;
+import net.minecraft.server.v1_7_R1.PathEntity;
 
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftArrow;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_7_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -91,5 +94,18 @@ public class MC_1_7_R1_VollotileCode extends VollotileCode {
 	@Override
 	public MCVersion getVersion() {
 		return MCVersion.v1_7_R1;
+	}
+	
+	
+	@Override
+	public boolean entityWalkToLocation(LivingEntity entity, Location location, double speed){
+		try{
+			EntityInsentient nmsEntity = (EntityInsentient) ((CraftLivingEntity) entity).getHandle();
+			PathEntity path = nmsEntity.getNavigation().a(location.getX(), location.getY(), location.getZ());
+			nmsEntity.getNavigation().a(path, speed);
+			return true;
+		}catch(Throwable exp){
+			return false;
+		}
 	}
 }

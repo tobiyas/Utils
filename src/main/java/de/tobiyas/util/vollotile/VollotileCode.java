@@ -269,6 +269,22 @@ public abstract class VollotileCode {
 		//To be overriden.
 	}
 	
+	
+	/**
+	 * Lets an entity walk to an location.
+	 * 
+	 * @param entity to use
+	 * @param location to use.
+	 * @param speed to use.
+	 * 
+	 * @return true if worked. False if not.
+	 */
+	public boolean entityWalkToLocation(LivingEntity entity, Location location, double speed){
+		//Dummy implementation.
+		return false;
+	}
+	
+	
 	@Override
 	public String toString(){
 		return "Vollotile: " + CB_RELOCATION;
@@ -337,6 +353,16 @@ public abstract class VollotileCode {
 		 */
 		public boolean hasTitle(){
 			return isVersionGreaterOrEqual(v1_8_R1);
+		}
+
+		
+		/**
+		 * If the Version has tell-Raw support.
+		 * 
+		 * @return true if present.
+		 */
+		public boolean hasTellRawSupport() {
+			return isVersionGreaterOrEqual(v1_7_R3);
 		}
 		
 	}

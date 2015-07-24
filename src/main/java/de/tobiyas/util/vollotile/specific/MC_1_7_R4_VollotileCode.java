@@ -25,6 +25,7 @@ import net.minecraft.server.v1_7_R4.EntityInsentient;
 import net.minecraft.server.v1_7_R4.EntityLiving;
 import net.minecraft.server.v1_7_R4.PacketPlayOutCustomPayload;
 import net.minecraft.server.v1_7_R4.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_7_R4.PathEntity;
 import net.minecraft.server.v1_7_R4.PathfinderGoal;
 import net.minecraft.server.v1_7_R4.PathfinderGoalFloat;
 import net.minecraft.server.v1_7_R4.PathfinderGoalLookAtPlayer;
@@ -134,4 +135,18 @@ public class MC_1_7_R4_VollotileCode extends VollotileCode {
 		return MCVersion.v1_7_R4;
 	}
 
+	
+	
+	@Override
+	public boolean entityWalkToLocation(LivingEntity entity, Location location, double speed){
+		try{
+			EntityInsentient nmsEntity = (EntityInsentient) ((CraftLivingEntity) entity).getHandle();
+			PathEntity path = nmsEntity.getNavigation().a(location.getX(), location.getY(), location.getZ());
+			nmsEntity.getNavigation().a(path, speed);
+			return true;
+		}catch(Throwable exp){
+			return false;
+		}
+	}
+	
 }

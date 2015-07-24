@@ -15,12 +15,16 @@ import net.minecraft.server.v1_8_R1.PacketDataSerializer;
 import net.minecraft.server.v1_8_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_8_R1.PacketPlayOutCustomPayload;
 import net.minecraft.server.v1_8_R1.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_8_R1.BlockPosition;
+import net.minecraft.server.v1_8_R1.EntityInsentient;
+import net.minecraft.server.v1_8_R1.PathEntity;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftArrow;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -240,6 +244,20 @@ public class MC_1_8_R1_VollotileCode extends VollotileCode {
 			((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
 		}catch(Throwable exp){
 			//Silently ignore error since it would spam a lot!
+		}
+	}
+	
+	
+	
+	@Override
+	public boolean entityWalkToLocation(LivingEntity entity, Location location, double speed){
+		try{
+			EntityInsentient nmsEntity = (EntityInsentient) ((CraftLivingEntity) entity).getHandle();
+			PathEntity path = nmsEntity.getNavigation().a(new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+			nmsEntity.getNavigation().a(path, speed);
+			return true;
+		}catch(Throwable exp){
+			return false;
 		}
 	}
 }
