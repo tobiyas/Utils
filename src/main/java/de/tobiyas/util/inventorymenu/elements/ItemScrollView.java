@@ -15,6 +15,7 @@
  ******************************************************************************/
 package de.tobiyas.util.inventorymenu.elements;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,6 +24,10 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+
+import de.tobiyas.util.vollotile.VollotileCode.MCVersion;
+import de.tobiyas.util.vollotile.VollotileCodeManager;
 
 public class ItemScrollView {
 
@@ -55,30 +60,91 @@ public class ItemScrollView {
 		this.column = column;
 		this.inventory = inventory;
 		
-		upButton = new ItemStack(Material.ARROW);
+		upButton = generateUpItem();
+		indicator = generateIndicatorItem();		
+		downButton = generateDownItem(); 
+	}
+	
+	
+	/**
+	 * If inventory heads are resolved.
+	 * 
+	 * @return true if has support.
+	 */
+	private boolean hasInventoryHeadSupport(){
+		return VollotileCodeManager.getVollotileCode().getVersion().isVersionGreaterOrEqual(MCVersion.v1_8_R1);
+	}
+	
+	
+	/**
+	 * Generates the Down-Item.
+	 * 
+	 * @return the down Item.
+	 */
+	private ItemStack generateDownItem(){
+		if(hasInventoryHeadSupport()) return generateHead("MHF_ArrowDown", ChatColor.RED + "Scroll Down " + name, "Scrolls the List down.");
+		
+		ItemStack item = new ItemStack(Material.BLAZE_ROD);
+		ItemMeta meta = downButton.getItemMeta();
+		List<String> lore = new LinkedList<String>();
+		lore.add("LESS");
+		meta.setLore(lore);
+		meta.setDisplayName(ChatColor.RED + "LESS" + name);
+		item.setItemMeta(meta);
+		
+		return item;
+	}
+	
+	/**
+	 * Generates a Head for the playername passed.
+	 * 
+	 * @param playerHeadName to generate
+	 * @param displayname to set
+	 * @param lore to set
+	 * 
+	 * @return the generated Head.
+	 */
+	private ItemStack generateHead(String playerHeadName, String displayname, String... lore) {
+		ItemStack head = new ItemStack(Material.SKULL_ITEM);
+		head.setDurability((short) 3);
+		SkullMeta meta = (SkullMeta) head.getItemMeta();
+		
+		meta.setOwner(playerHeadName);
+		meta.setLore(Arrays.asList(lore));
+		meta.setDisplayName(displayname);
+		
+		head.setItemMeta(meta);
+		return head;
+	}
+
+
+	private ItemStack generateIndicatorItem(){
+		ItemStack item = new ItemStack(Material.PAPER);
+		ItemMeta meta = indicator.getItemMeta();
+		List<String> lore = new LinkedList<String>();
+		lore.add(ChatColor.LIGHT_PURPLE + "VALUE" + name);
+		meta.setLore(lore);
+		meta.setDisplayName(name + " : " + value);
+		item.setItemMeta(meta);
+		
+		return item;
+	}
+	
+	
+	private ItemStack generateUpItem(){
+		if(hasInventoryHeadSupport()) return generateHead("MHF_ArrowUp", ChatColor.RED + "Scroll Up " + name, "Scrolls the List down.");
+		
+		ItemStack item = new ItemStack(Material.ARROW);
 		ItemMeta meta = upButton.getItemMeta();
 		List<String> lore = new LinkedList<String>();
 		lore.add("MORE");
 		meta.setLore(lore);
 		meta.setDisplayName(ChatColor.GREEN + "More " + name);
-		upButton.setItemMeta(meta);
-		
-		indicator = new ItemStack(Material.PAPER);
-		meta = indicator.getItemMeta();
-		lore = new LinkedList<String>();
-		lore.add(ChatColor.LIGHT_PURPLE + "VALUE" + name);
-		meta.setLore(lore);
-		meta.setDisplayName(name + " : " + value);
-		indicator.setItemMeta(meta);
-		
-		downButton = new ItemStack(Material.BLAZE_ROD);
-		meta = downButton.getItemMeta();
-		lore = new LinkedList<String>();
-		lore.add("LESS");
-		meta.setLore(lore);
-		meta.setDisplayName(ChatColor.RED + "LESS" + name);
-		downButton.setItemMeta(meta);
+		item.setItemMeta(meta);
+		//MHF_ArrowUp
+		return item;
 	}
+	
 	
 	
 	/**
