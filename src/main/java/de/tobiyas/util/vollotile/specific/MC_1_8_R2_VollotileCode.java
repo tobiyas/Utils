@@ -8,23 +8,30 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import net.minecraft.server.v1_8_R2.PacketPlayOutChat;
-import net.minecraft.server.v1_8_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_8_R2.EnumParticle;
-import net.minecraft.server.v1_8_R2.IChatBaseComponent;
-import net.minecraft.server.v1_8_R2.PacketDataSerializer;
-import net.minecraft.server.v1_8_R2.PacketPlayOutCustomPayload;
-import net.minecraft.server.v1_8_R2.PacketPlayOutWorldParticles;
 import net.minecraft.server.v1_8_R2.BlockPosition;
 import net.minecraft.server.v1_8_R2.EntityInsentient;
+import net.minecraft.server.v1_8_R2.EnumParticle;
+import net.minecraft.server.v1_8_R2.IChatBaseComponent;
+import net.minecraft.server.v1_8_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_8_R2.PacketDataSerializer;
+import net.minecraft.server.v1_8_R2.PacketPlayOutChat;
+import net.minecraft.server.v1_8_R2.PacketPlayOutCustomPayload;
+import net.minecraft.server.v1_8_R2.PacketPlayOutWorldParticles;
 import net.minecraft.server.v1_8_R2.PathEntity;
+import net.minecraft.server.v1_8_R2.NBTTagCompound;
+import net.minecraft.server.v1_8_R2.NBTTagInt;
+import net.minecraft.server.v1_8_R2.PacketPlayOutTitle;
+import net.minecraft.server.v1_8_R2.PlayerConnection;
+import net.minecraft.server.v1_8_R2.PacketPlayOutTitle.EnumTitleAction;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftArrow;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -263,5 +270,50 @@ public class MC_1_8_R2_VollotileCode extends VollotileCode {
 			return false;
 		}
 	}
+	
+	
+	@Override
+	public ItemStack removeAttackDamageTag(ItemStack item) {
+        net.minecraft.server.v1_8_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag;
+        if (!nmsStack.hasTag()) {
+            tag = new NBTTagCompound();
+            nmsStack.setTag(tag);
+        } else {
+            tag = nmsStack.getTag();
+        }
+        
+        tag.set("HideFlags", new NBTTagInt(Integer.MAX_VALUE));
+        nmsStack.setTag(tag);
+        return CraftItemStack.asCraftMirror(nmsStack);
+	}
+	
+	
+	@Override
+	public void resetTitle(Player player){
+		PlayerConnection pc = ((CraftPlayer)player).getHandle().playerConnection;
+		PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(EnumTitleAction.RESET, null);
+		pc.sendPacket(titlePacket);
+	}
+	
+	
+	
+	@Override
+	public void sendTitle(Player player, String title, String subtitle) {
+		title = ChatColor.translateAlternateColorCodes('&', title);
+		subtitle = ChatColor.translateAlternateColorCodes('&', subtitle);
+		
+		PlayerConnection pc = ((CraftPlayer)player).getHandle().playerConnection;
+		if(title != null && !title.isEmpty()){
+			PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(EnumTitleAction.TITLE, ChatSerializer.a("\"" + title + "\""));
+			pc.sendPacket(titlePacket);
+		}
+		
+		if(subtitle != null && !subtitle.isEmpty()){
+			PacketPlayOutTitle titlePacket2 = new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, ChatSerializer.a("\"" + subtitle + "\""));
+			pc.sendPacket(titlePacket2);
+		}
+	}
+	
 	
 }

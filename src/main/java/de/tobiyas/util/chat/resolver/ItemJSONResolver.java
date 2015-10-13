@@ -36,8 +36,14 @@ import de.tobiyas.util.naming.MCPrettyName;
 
 public class ItemJSONResolver {
 
-	
-	private static String getHoverText(ItemStack itemToParse){
+	/**
+	 * Generates an Item Text for the Item.
+	 * 
+	 * @param itemToParse to parse.
+	 * @return the item to parse.
+	 */
+	@SuppressWarnings("deprecation")
+	public static String getHoverText(ItemStack itemToParse){
 		if(itemToParse == null){
 			return "";
 		}

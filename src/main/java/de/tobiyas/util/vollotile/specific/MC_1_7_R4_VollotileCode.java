@@ -23,6 +23,8 @@ import java.util.List;
 import net.minecraft.server.v1_7_R4.EntityHuman;
 import net.minecraft.server.v1_7_R4.EntityInsentient;
 import net.minecraft.server.v1_7_R4.EntityLiving;
+import net.minecraft.server.v1_7_R4.NBTTagCompound;
+import net.minecraft.server.v1_7_R4.NBTTagInt;
 import net.minecraft.server.v1_7_R4.PacketPlayOutCustomPayload;
 import net.minecraft.server.v1_7_R4.PacketPlayOutWorldParticles;
 import net.minecraft.server.v1_7_R4.PathEntity;
@@ -35,10 +37,12 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftArrow;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import de.tobiyas.util.vollotile.ParticleEffects;
@@ -149,4 +153,21 @@ public class MC_1_7_R4_VollotileCode extends VollotileCode {
 		}
 	}
 	
+	
+	@Override
+	public ItemStack removeAttackDamageTag(ItemStack item) {
+        net.minecraft.server.v1_7_R4.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag;
+        if (!nmsStack.hasTag()) {
+            tag = new NBTTagCompound();
+            nmsStack.setTag(tag);
+        } else {
+            tag = nmsStack.getTag();
+        }
+        
+        tag.set("HideFlags", new NBTTagInt(Integer.MAX_VALUE));
+        nmsStack.setTag(tag);
+        return CraftItemStack.asCraftMirror(nmsStack);
+	}
+
 }

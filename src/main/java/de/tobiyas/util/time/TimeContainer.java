@@ -15,7 +15,7 @@ public class TimeContainer {
 	/**
 	 * The Constants to use for output.
 	 */
-	private TimeNameConstants constants;
+	private TimeNameConstants constants = TimeNameConstants.ENGLISH_CONSTANTS;
 	
 	
 
@@ -76,10 +76,9 @@ public class TimeContainer {
 	}
 
 
-	public void setConstants(TimeNameConstants constants) {
-		if(constants == null) return;
-		
-		this.constants = constants;
+	public TimeContainer setConstants(TimeNameConstants constants) {
+		if(constants != null) this.constants = constants;
+		return this;
 	}
 	
 	
@@ -151,13 +150,15 @@ public class TimeContainer {
 		boolean hasMiliseconds = miliseconds > 0;
 		
 		StringBuilder builder = new StringBuilder();
-		if(hasDays) builder.append(days + " " + constants.getDayTag() + ", ");
-		if(hasHours) builder.append(hours + " " + constants.getHourTag() + ", ");
-		if(hasMinutes) builder.append(minutes + " " + constants.getMinuteTag() + ", ");
-		if(hasSeconds) builder.append(seconds + " " + constants.getSecondsTag() + ", ");
+		if(hasDays) builder.append(days + " " + constants.getDaysByNumber(days) + ", ");
+		if(hasHours) builder.append(hours + " " + constants.getHoursByNumber(hours) + ", ");
+		if(hasMinutes) builder.append(minutes + " " + constants.getMinutesByNumber(minutes) + ", ");
+		if(hasSeconds) builder.append(seconds + " " + constants.getSecondsByNumber(seconds) + ", ");
 		
-		if(hasMiliseconds) builder.append(miliseconds + " " + constants.getMilisecondsTag());
-		return builder.toString();
+		if(hasMiliseconds) builder.append(miliseconds + " " + constants.getMilisecondsByNumber(miliseconds) + ", ");
+		
+		if(builder.length() <= 2) builder.append("  ");
+		return builder.substring(0, builder.length() - 2);
 	}
 	
 

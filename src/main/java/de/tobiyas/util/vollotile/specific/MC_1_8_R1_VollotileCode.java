@@ -10,6 +10,7 @@ import java.util.List;
 
 import net.minecraft.server.v1_8_R1.ChatSerializer;
 import net.minecraft.server.v1_8_R1.EnumParticle;
+import net.minecraft.server.v1_8_R1.EnumTitleAction;
 import net.minecraft.server.v1_8_R1.IChatBaseComponent;
 import net.minecraft.server.v1_8_R1.PacketDataSerializer;
 import net.minecraft.server.v1_8_R1.PacketPlayOutChat;
@@ -18,13 +19,19 @@ import net.minecraft.server.v1_8_R1.PacketPlayOutWorldParticles;
 import net.minecraft.server.v1_8_R1.BlockPosition;
 import net.minecraft.server.v1_8_R1.EntityInsentient;
 import net.minecraft.server.v1_8_R1.PathEntity;
+import net.minecraft.server.v1_8_R1.NBTTagCompound;
+import net.minecraft.server.v1_8_R1.NBTTagInt;
+import net.minecraft.server.v1_8_R1.PacketPlayOutTitle;
+import net.minecraft.server.v1_8_R1.PlayerConnection;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftArrow;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -260,4 +267,51 @@ public class MC_1_8_R1_VollotileCode extends VollotileCode {
 			return false;
 		}
 	}
+	
+	
+	@Override
+	public ItemStack removeAttackDamageTag(ItemStack item) {
+        net.minecraft.server.v1_8_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag;
+        if (!nmsStack.hasTag()) {
+            tag = new NBTTagCompound();
+            nmsStack.setTag(tag);
+        } else {
+            tag = nmsStack.getTag();
+        }
+        
+        tag.set("HideFlags", new NBTTagInt(Integer.MAX_VALUE));
+        nmsStack.setTag(tag);
+        return CraftItemStack.asCraftMirror(nmsStack);
+	}
+	
+	
+	
+	@Override
+	public void resetTitle(Player player){
+		PlayerConnection pc = ((CraftPlayer)player).getHandle().playerConnection;
+		PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(EnumTitleAction.RESET, null);
+		pc.sendPacket(titlePacket);
+	}
+	
+	
+	
+	@Override
+	public void sendTitle(Player player, String title, String subtitle) {
+		title = ChatColor.translateAlternateColorCodes('&', title);
+		subtitle = ChatColor.translateAlternateColorCodes('&', subtitle);
+		
+		PlayerConnection pc = ((CraftPlayer)player).getHandle().playerConnection;
+		if(title != null && !title.isEmpty()){
+			PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(EnumTitleAction.TITLE, ChatSerializer.a("\"" + title + "\""));
+			pc.sendPacket(titlePacket);
+		}
+		
+		if(subtitle != null && !subtitle.isEmpty()){
+			PacketPlayOutTitle titlePacket2 = new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, ChatSerializer.a("\"" + subtitle + "\""));
+			pc.sendPacket(titlePacket2);
+		}
+	}
+	
+	
 }

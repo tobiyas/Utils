@@ -6,10 +6,12 @@ import java.util.HashSet;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
+
+import de.tobiyas.util.schedule.DebugBukkitRunnable;
 
 public class PlayerUtils {
 
@@ -30,6 +32,8 @@ public class PlayerUtils {
 		if(player != null) return player;
 		
 		for(OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()){
+			if(offlinePlayer == null || offlinePlayer.getName() == null) continue;
+			
 			if(offlinePlayer.getName().equalsIgnoreCase(playerName)) return offlinePlayer;			
 		}
 		
@@ -46,7 +50,8 @@ public class PlayerUtils {
 	 */
 	public static Player getPlayer(String playerName){
 		for(Player player : getOnlinePlayers()){
-			if(player.getName().equalsIgnoreCase(playerName)) return player;
+			if(player.getName().equalsIgnoreCase(playerName)
+					|| ChatColor.stripColor(player.getDisplayName()).equalsIgnoreCase(playerName)) return player;
 		}
 		
 		return null;
@@ -87,10 +92,10 @@ public class PlayerUtils {
 	 * @param plugin to call on.
 	 */
 	public static void updateInvNextTick(final UUID player, Plugin plugin){
-		new BukkitRunnable() {
+		new DebugBukkitRunnable("PlayerUpdateInvTick") {
 			@SuppressWarnings("deprecation")
 			@Override
-			public void run() {
+			protected void runIntern() {
 				Player pl = Bukkit.getPlayer(player);
 				if(pl != null && pl.isOnline()) pl.updateInventory();
 			}
@@ -104,6 +109,8 @@ public class PlayerUtils {
 	 * @return the player.
 	 */
 	public static Player getPlayer(UUID playerUUID) {
+		if(playerUUID == null) return null;
+		
 		for(Player pl : getOnlinePlayers()){
 			if(pl.getUniqueId().equals(playerUUID)) return pl;
 		}

@@ -131,6 +131,7 @@ public class TellRawChatMessage {
 	 * Adds a simple text to the Message.
 	 * 
 	 * @param text to send.
+	 * @param magic if magic is applied
 	 * @param bold if it should be bold
 	 * @param strikethrough if it should be striked through
 	 * @param underlined if it should be striked Through
@@ -231,6 +232,24 @@ public class TellRawChatMessage {
 		this.message.add(obj);
 		return this;
 	}
+	
+	
+	/**
+	 * Adds a simple Clickable Command.
+	 * 
+	 * @param label to add
+	 * @param hover a hover label.
+	 * @param command to add
+	 */
+	public TellRawChatMessage addSimpleCommand(String label, String hover, String command){
+		ChatMessageObject obj = new ChatMessageObject(label);
+		obj.addCommandClickable(command);
+		obj.addPopupHover(hover);
+		
+		this.message.add(obj);
+		return this;
+	}
+	
 	
 	/**
 	 * Adds a simple Clickable commandSuggestion.

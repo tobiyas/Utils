@@ -23,21 +23,25 @@ import java.util.List;
 import net.minecraft.server.v1_7_R3.EntityHuman;
 import net.minecraft.server.v1_7_R3.EntityInsentient;
 import net.minecraft.server.v1_7_R3.EntityLiving;
+import net.minecraft.server.v1_7_R3.NBTTagCompound;
+import net.minecraft.server.v1_7_R3.NBTTagInt;
 import net.minecraft.server.v1_7_R3.PacketPlayOutCustomPayload;
 import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_7_R3.PathEntity;
 import net.minecraft.server.v1_7_R3.PathfinderGoalFloat;
 import net.minecraft.server.v1_7_R3.PathfinderGoalLookAtPlayer;
 import net.minecraft.server.v1_7_R3.PathfinderGoalSelector;
-import net.minecraft.server.v1_7_R3.PathEntity;
 
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_7_R3.entity.CraftArrow;
 import org.bukkit.craftbukkit.v1_7_R3.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import de.tobiyas.util.UtilsUsingPlugin;
@@ -100,6 +104,7 @@ public class MC_1_7_R3_VollotileCode extends VollotileCode {
 		craftArrow.getHandle().fromPlayer =  mayBePickedUp ? 1 : 0;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void overwriteAIToDoNothing(LivingEntity entity) {
 		try {
@@ -145,4 +150,21 @@ public class MC_1_7_R3_VollotileCode extends VollotileCode {
 			return false;
 		}
 	}
+	
+	@Override
+	public ItemStack removeAttackDamageTag(ItemStack item) {
+        net.minecraft.server.v1_7_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag;
+        if (!nmsStack.hasTag()) {
+            tag = new NBTTagCompound();
+            nmsStack.setTag(tag);
+        } else {
+            tag = nmsStack.getTag();
+        }
+        
+        tag.set("HideFlags", new NBTTagInt(Integer.MAX_VALUE));
+        nmsStack.setTag(tag);
+        return CraftItemStack.asCraftMirror(nmsStack);
+	}
+	
 }

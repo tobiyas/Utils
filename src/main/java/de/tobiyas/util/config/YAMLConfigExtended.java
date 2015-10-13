@@ -41,10 +41,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import de.tobiyas.util.UtilsUsingPlugin;
 import de.tobiyas.util.config.returncontainer.DropContainer;
+import de.tobiyas.util.schedule.DebugBukkitRunnable;
 
 
 public class YAMLConfigExtended extends YamlConfiguration {
@@ -742,9 +742,9 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		}
 		
 		if(autoReloadable){
-			new BukkitRunnable(){
+			new DebugBukkitRunnable("YMLConfigAutoReloader") {
 				@Override
-				public void run() {
+				protected void runIntern() {
 					File savePathFile = new File(totalPath);
 					if(savePathFile.exists()){
 						Date lastChangeDate = new Date(savePathFile.lastModified());

@@ -19,16 +19,19 @@ import java.io.File;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import de.tobiyas.util.chat.commands.ClickCommandManager;
 import de.tobiyas.util.debug.logger.DebugLogger;
 import de.tobiyas.util.economy.MoneyManager;
 import de.tobiyas.util.permissions.PermissionManager;
+import de.tobiyas.util.schedule.DebugBukkitRunnable;
 import de.tobiyas.util.vollotile.VollotileCodeManager;
 
 public abstract class UtilsUsingPlugin extends JavaPlugin {
@@ -96,12 +99,13 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 		pluginEnable();
 		
 		//Inits the first Tick.
-		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+		new DebugBukkitRunnable("StartTick"){
+			
 			@Override
-			public void run() {
+			protected void runIntern() {
 				firstTick();
-			}
-		}, 1);
+			};
+		}.runTaskLater(this, 1);
 	}
 	
 	/**
@@ -247,6 +251,27 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 		
 		logError(message);
 		getDebugLogger().logStackTrace(exp);
+	}
+	
+	
+	
+	/**
+	 * Calls an event Sync or Async.
+	 * 
+	 * @param event to use
+	 */
+	public void callEvent(final Event event){
+		boolean async = event.isAsynchronous();
+		BukkitRunnable run = new DebugBukkitRunnable("UtilsCallEvent") {
+			@Override
+			public void runIntern() {
+				Bukkit.getPluginManager().callEvent(event);
+			}
+		};
+		
+		
+		if( async ) run.runTaskAsynchronously(this);
+		else run.runTask(this);
 	}
 	
 }

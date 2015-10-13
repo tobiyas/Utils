@@ -39,7 +39,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public abstract class BasicSelectionInterface extends ItemGeneratorInterface implements Listener{	
+public abstract class BasicSelectionInterface extends ItemGeneratorInterface implements Listener {	
 	
 	/**
 	 * The list of open invs.

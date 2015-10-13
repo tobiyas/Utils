@@ -23,21 +23,25 @@ import java.util.List;
 import net.minecraft.server.v1_7_R2.EntityHuman;
 import net.minecraft.server.v1_7_R2.EntityInsentient;
 import net.minecraft.server.v1_7_R2.EntityLiving;
+import net.minecraft.server.v1_7_R2.NBTTagCompound;
+import net.minecraft.server.v1_7_R2.NBTTagInt;
 import net.minecraft.server.v1_7_R2.PacketPlayOutCustomPayload;
 import net.minecraft.server.v1_7_R2.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_7_R2.PathEntity;
 import net.minecraft.server.v1_7_R2.PathfinderGoalFloat;
 import net.minecraft.server.v1_7_R2.PathfinderGoalLookAtPlayer;
 import net.minecraft.server.v1_7_R2.PathfinderGoalSelector;
-import net.minecraft.server.v1_7_R2.PathEntity;
 
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_7_R2.entity.CraftArrow;
 import org.bukkit.craftbukkit.v1_7_R2.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_7_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_7_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import de.tobiyas.util.vollotile.ParticleEffects;
@@ -94,6 +98,7 @@ public class MC_1_7_R2_VollotileCode extends VollotileCode {
 		craftArrow.getHandle().fromPlayer =  mayBePickedUp ? 1 : 0;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void overwriteAIToDoNothing(LivingEntity entity) {
 		try {
@@ -139,4 +144,22 @@ public class MC_1_7_R2_VollotileCode extends VollotileCode {
 			return false;
 		}
 	}
+	
+	
+	@Override
+	public ItemStack removeAttackDamageTag(ItemStack item) {
+        net.minecraft.server.v1_7_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag;
+        if (!nmsStack.hasTag()) {
+            tag = new NBTTagCompound();
+            nmsStack.setTag(tag);
+        } else {
+            tag = nmsStack.getTag();
+        }
+        
+        tag.set("HideFlags", new NBTTagInt(Integer.MAX_VALUE));
+        nmsStack.setTag(tag);
+        return CraftItemStack.asCraftMirror(nmsStack);
+	}
+	
 }

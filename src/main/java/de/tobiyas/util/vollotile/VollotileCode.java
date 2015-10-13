@@ -198,6 +198,39 @@ public abstract class VollotileCode {
 		}
 	}
 	
+	
+	
+	/**
+	 * Sends the particle Effects to the Players for the Locations.
+	 * 
+	 * @param effect to send
+	 * @param locations to use
+	 * @param width to use
+	 * @param data to use 
+	 * @param amount to use
+	 * @param players to send to
+	 */
+	public void sendParticleEffectsTo(ParticleEffects effect, Collection<Location> locations, Vector width, float data, int amount, Collection<Player> players){
+		for(Location loc : locations){
+			sendParticleEffectToPlayers(effect, loc, width, data, amount, players);
+		}
+	}
+	
+	/**
+	 * Sends the particle Effects to the Players for the Locations.
+	 * 
+	 * @param effect to send
+	 * @param locations to use
+	 * @param width to use
+	 * @param data to use 
+	 * @param amount to use
+	 * @param players to send to
+	 */
+	public void sendParticleEffectsTo(ParticleEffects effect, Collection<Location> locations, Vector width, float data, int amount, Player... players){
+		sendParticleEffectsTo(effect, locations, width, data, amount, Arrays.asList(players));
+	}
+	
+	
 	/**
 	 * Makes an arrow pickupable or not.
 	 * 
@@ -283,6 +316,49 @@ public abstract class VollotileCode {
 		//Dummy implementation.
 		return false;
 	}
+	
+	
+	
+	/**
+	 * Removes the AttackDamage-Tag.
+	 * 
+	 * @param item to remove
+	 * @return the Item with the removed tag.
+	 */
+	public ItemStack removeAttackDamageTag(ItemStack item){
+		return item;
+	}
+	
+	
+	/**
+	 * Converts to a Tellraw Message.
+	 * 
+	 * @param unconverted to use
+	 * 
+	 * @return the converted Message.
+	 */
+	public String convertToTellraw(String unconverted){
+		return TellRawChatMessage.parse(unconverted).toString();
+	}
+	
+	
+	/**
+	 * Sends the Title to the Player.
+	 * 
+	 * @param player to send
+	 * @param title to send
+	 * @param subtitle to send
+	 */
+	public void sendTitle(Player player, String title, String subtitle){}
+	
+	
+	/**
+	 * Resets the Title of a Player.
+	 * 
+	 * @param player
+	 */
+	public void resetTitle(Player player){}
+	
 	
 	
 	@Override

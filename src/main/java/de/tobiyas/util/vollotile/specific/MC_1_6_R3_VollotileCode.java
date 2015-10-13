@@ -80,4 +80,5 @@ public class MC_1_6_R3_VollotileCode extends VollotileCode {
 	public MCVersion getVersion() {
 		return MCVersion.v1_6_R3;
 	}
+	
 }
