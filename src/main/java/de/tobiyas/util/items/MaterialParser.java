@@ -57,12 +57,13 @@ public class MaterialParser {
 		//first try to check if it is an ID
 		try{
 			int id = Integer.parseInt(arg);
+			@SuppressWarnings("deprecation")
 			Material mat = Material.getMaterial(id);
 			return mat;
 		}catch(NumberFormatException exp){}
 		
 		try{
-			Material mat = Material.valueOf(arg.toUpperCase());
+			Material mat = Material.matchMaterial(arg.toUpperCase());
 			return mat;
 		}catch(IllegalArgumentException exp){}
 		

@@ -135,8 +135,7 @@ public class TimeContainer {
 			newMiliseconds = 0;
 		}
 		
-		
-		return new TimeContainer(newDays, newHours, newMinutes, newSeconds, newMiliseconds);
+		return new TimeContainer(newDays, newHours, newMinutes, newSeconds, newMiliseconds).setConstants(constants);
 	}
 
 	

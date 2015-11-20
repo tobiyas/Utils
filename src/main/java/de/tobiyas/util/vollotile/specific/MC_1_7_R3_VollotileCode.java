@@ -20,18 +20,6 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import net.minecraft.server.v1_7_R3.EntityHuman;
-import net.minecraft.server.v1_7_R3.EntityInsentient;
-import net.minecraft.server.v1_7_R3.EntityLiving;
-import net.minecraft.server.v1_7_R3.NBTTagCompound;
-import net.minecraft.server.v1_7_R3.NBTTagInt;
-import net.minecraft.server.v1_7_R3.PacketPlayOutCustomPayload;
-import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
-import net.minecraft.server.v1_7_R3.PathEntity;
-import net.minecraft.server.v1_7_R3.PathfinderGoalFloat;
-import net.minecraft.server.v1_7_R3.PathfinderGoalLookAtPlayer;
-import net.minecraft.server.v1_7_R3.PathfinderGoalSelector;
-
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_7_R3.entity.CraftArrow;
 import org.bukkit.craftbukkit.v1_7_R3.entity.CraftLivingEntity;
@@ -44,11 +32,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import de.tobiyas.util.UtilsUsingPlugin;
 import de.tobiyas.util.vollotile.ParticleEffects;
 import de.tobiyas.util.vollotile.ReflectionsHelper;
 import de.tobiyas.util.vollotile.VollotileCode;
-import de.tobiyas.util.vollotile.helper.PlayerDisplayModifier;
+import net.minecraft.server.v1_7_R3.EntityHuman;
+import net.minecraft.server.v1_7_R3.EntityInsentient;
+import net.minecraft.server.v1_7_R3.EntityLiving;
+import net.minecraft.server.v1_7_R3.NBTTagCompound;
+import net.minecraft.server.v1_7_R3.NBTTagInt;
+import net.minecraft.server.v1_7_R3.PacketPlayOutCustomPayload;
+import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_7_R3.PathEntity;
+import net.minecraft.server.v1_7_R3.PathfinderGoalFloat;
+import net.minecraft.server.v1_7_R3.PathfinderGoalLookAtPlayer;
+import net.minecraft.server.v1_7_R3.PathfinderGoalSelector;
 
 public class MC_1_7_R3_VollotileCode extends VollotileCode {
 
@@ -83,11 +80,6 @@ public class MC_1_7_R3_VollotileCode extends VollotileCode {
 		}catch(Throwable exp){
 			exp.printStackTrace();
 		}
-	}
-
-	@Override
-	public void setSkinOfPlayer(UtilsUsingPlugin plugin, Player player, String skin, String name) {
-		new PlayerDisplayModifier(plugin).changeDisplay(player, skin, name);
 	}
 	
 	@Override

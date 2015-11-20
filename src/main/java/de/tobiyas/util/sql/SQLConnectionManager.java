@@ -28,7 +28,7 @@ public class SQLConnectionManager {
 	private UtilsUsingPlugin plugin;
 	
 	private String connectionString;
-	private String tablePrefix = "";
+	//private String tablePrefix = "";
 	private Connection connection = null;
 	
 	

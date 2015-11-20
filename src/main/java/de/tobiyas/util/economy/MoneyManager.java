@@ -24,6 +24,7 @@ import de.tobiyas.util.economy.plugins.AbstractMoneyPlugin;
 import de.tobiyas.util.economy.plugins.EssentialsEcoMoney;
 import de.tobiyas.util.economy.plugins.IconomyMoney;
 import de.tobiyas.util.economy.plugins.MoneyPlugin;
+import de.tobiyas.util.economy.plugins.OwnCurrencyPlugin;
 import de.tobiyas.util.economy.plugins.VaultMoney;
 
 public class MoneyManager extends AbstractMoneyPlugin{
@@ -45,6 +46,12 @@ public class MoneyManager extends AbstractMoneyPlugin{
 	
 	private boolean initMoneyPlugin(){
 		MoneyPlugin tempPlugin;
+		
+		tempPlugin = new OwnCurrencyPlugin();
+		if(tempPlugin.isActive()){
+			moneyPlugin = tempPlugin;
+			return true;
+		}
 		
 		tempPlugin = new VaultMoney();
 		if(tempPlugin.isActive()){

@@ -7,7 +7,9 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -117,4 +119,30 @@ public class PlayerUtils {
 		
 		return null;
 	}
+	
+	
+	/**
+	 * Gets all Players near the Location.
+	 * 
+	 * @param location to search around.
+	 * @param distance to search.
+	 * 
+	 * @return the players near.
+	 */
+	public static Collection<Player> getPlayersNear(Location location, double distance){
+		distance *= distance; //sqare the Distance.
+		
+		Collection<Player> players = new HashSet<Player>();
+		if( location == null || distance <= 0 ) return players;
+		
+		World world = location.getWorld();
+		for(Player player : world.getPlayers()){
+			if(player.getLocation().distanceSquared(location) < distance){
+				players.add(player);
+			}
+		}
+		
+		return players;
+	}
+	
 }

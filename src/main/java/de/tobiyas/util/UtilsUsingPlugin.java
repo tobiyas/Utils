@@ -16,6 +16,7 @@
 package de.tobiyas.util;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -26,6 +27,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.mcstats.Metrics;
 
 import de.tobiyas.util.chat.commands.ClickCommandManager;
 import de.tobiyas.util.debug.logger.DebugLogger;
@@ -65,8 +67,7 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 	/**
 	 * Default constructor
 	 */
-	public UtilsUsingPlugin() {
-	}
+	public UtilsUsingPlugin() {}
 	
 	
 	
@@ -100,10 +101,16 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 		
 		//Inits the first Tick.
 		new DebugBukkitRunnable("StartTick"){
-			
 			@Override
 			protected void runIntern() {
 				firstTick();
+				
+				//Call Metrics, if wanted:
+				if(useMetrics()){
+					try{
+						new Metrics(UtilsUsingPlugin.this).start();
+					}catch(IOException exp) {}
+				}
 			};
 		}.runTaskLater(this, 1);
 	}
@@ -251,6 +258,17 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 		
 		logError(message);
 		getDebugLogger().logStackTrace(exp);
+	}
+	
+	
+	/**
+	 * If Metrics should be used.
+	 * <br>This is called First Tick!
+	 * 
+	 * @return true if should be used.
+	 */
+	protected boolean useMetrics(){
+		return false;
 	}
 	
 	
