@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -431,9 +432,13 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	
 	@Override
 	public List<String> getStringList(String path) {
-		List<String> stringList = super.getStringList(path);
 		List<String> newStringList = new LinkedList<String>();
 		
+		//If we only have a String -> Put it in an list.
+		if(isString(path)) return Arrays.asList(getString(path));
+		
+		//If a list -> put it to the List.
+		List<String> stringList = super.getStringList(path);
 		for(String string : stringList){
 			string = replaceUmlauts(string);
 			newStringList.add(string);
