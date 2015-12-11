@@ -1,5 +1,7 @@
 package de.tobiyas.util.schedule;
 
+import java.util.logging.Level;
+
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -25,7 +27,7 @@ public abstract class DebugBukkitRunnable extends BukkitRunnable {
 	
 	
 	public DebugBukkitRunnable(String name) {
-		this.name = name;
+		this.name = name == null ? "UNKNOWN" : name;
 	}
 	
 	
@@ -34,7 +36,12 @@ public abstract class DebugBukkitRunnable extends BukkitRunnable {
 		long startMS = System.currentTimeMillis();
 		long startNano = System.nanoTime();
 		
-		runIntern();
+		try{
+			runIntern();
+		}catch(Throwable exp){
+			String message = String.format("Error in Runnable '%s' in plugin '%s'", name, plugin.getName());
+			plugin.getLogger().log(Level.WARNING, message, exp);
+		}
 		
 		startMS = System.currentTimeMillis() - startMS;
 		startNano = System.nanoTime() - startNano;
