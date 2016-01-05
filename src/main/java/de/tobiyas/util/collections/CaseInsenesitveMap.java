@@ -16,16 +16,29 @@
 package de.tobiyas.util.collections;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class CaseInsenesitveMap<V> extends HashMap<String, V> {
 	private static final long serialVersionUID = -8806664568740114127L;
 
+	
+	/**
+	 * Copy constructor!
+	 * @param copyMap to copy.
+	 */
+	public CaseInsenesitveMap(Map<String, V> copyMap) {
+		for(Map.Entry<String, V> entry : copyMap.entrySet()){
+			put(entry.getKey(), entry.getValue());
+		}
+	}
+	
+	
+	public CaseInsenesitveMap(){}
+	
+
 	@Override
 	public V get(Object key) {
-		if(key instanceof String){
-			key = ((String) key).toLowerCase();
-		}
-		
+		if(key instanceof String) key = ((String) key).toLowerCase();
 		return super.get(key);
 	}
 
@@ -37,10 +50,8 @@ public class CaseInsenesitveMap<V> extends HashMap<String, V> {
 
 	@Override
 	public boolean containsKey(Object key) {
-		if(key instanceof String){
-			key = ((String) key).toLowerCase();
-		}
-		
+		if(key instanceof String) key = ((String) key).toLowerCase();
 		return super.containsKey(key);
 	}
+	
 }

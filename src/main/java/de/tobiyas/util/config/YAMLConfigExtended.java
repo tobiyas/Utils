@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -435,7 +436,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		List<String> newStringList = new LinkedList<String>();
 		
 		//If we only have a String -> Put it in an list.
-		if(isString(path)) return Arrays.asList(getString(path));
+		if(isString(path)) return new ArrayList<String>(Arrays.asList(getString(path)));
 		
 		//If a list -> put it to the List.
 		List<String> stringList = super.getStringList(path);
