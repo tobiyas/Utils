@@ -82,4 +82,77 @@ public class CollectionUtils {
 		return array2;
 	}
 	
+	
+	/**
+	 * Converts to primitive Array.
+	 * @param array to use.
+	 * @return the primitive Array.
+	 */
+	public static Integer[] toIntegerArry(int[] array){
+		Integer[] array2 = new Integer[array.length];
+		for(int i = 0; i < array.length; i++){
+			array2[i] = array[i];
+		}
+		
+		return array2;
+	}
+	
+	
+	/**
+	 * Converts to primitive Array.
+	 * @param array to use.
+	 * @return the primitive Array.
+	 */
+	public static double[] toPrimitive(Double[] array){
+		double[] array2 = new double[array.length];
+		for(int i = 0; i < array.length; i++){
+			array2[i] = array[i];
+		}
+		
+		return array2;
+	}
+	
+	
+	/**
+	 * Converts to primitive Array.
+	 * @param array to use.
+	 * @return the primitive Array.
+	 */
+	public static Double[] toDoubleArray(double[] array){
+		Double[] array2 = new Double[array.length];
+		for(int i = 0; i < array.length; i++){
+			array2[i] = array[i];
+		}
+		
+		return array2;
+	}
+	
+	/**
+	 * Converts to primitive Array.
+	 * @param array to use.
+	 * @return the primitive Array.
+	 */
+	public static boolean[] toPrimitive(Boolean[] array){
+		boolean[] array2 = new boolean[array.length];
+		for(int i = 0; i < array.length; i++){
+			array2[i] = array[i];
+		}
+		
+		return array2;
+	}
+	
+	/**
+	 * Converts to primitive Array.
+	 * @param array to use.
+	 * @return the primitive Array.
+	 */
+	public static Boolean[] toBooleanArray(boolean[] array){
+		Boolean[] array2 = new Boolean[array.length];
+		for(int i = 0; i < array.length; i++){
+			array2[i] = array[i];
+		}
+		
+		return array2;
+	}
+	
 }

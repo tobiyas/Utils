@@ -205,11 +205,12 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 		if(getBottomInventory().getSize() - 1 >= slotNumber
 				&& itemClicked.equals(getBottomInventory().getItem(slotNumber))){
 			
-			for(ItemStack item : getBottomInventory().getContents()){
+			for(int slot = 0; slot < getBottomInventory().getSize(); slot++){
+				ItemStack item = getBottomInventory().getItem(slot);
 				if(item != null && item.getType() != Material.AIR 
 						&& item.equals(itemClicked)){
 					
-					onControlItemPressed(item);	
+					onControlItemPressed(slot, item);	
 					return;
 				}
 			}
@@ -222,11 +223,12 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 		if(getTopInventory().getSize() - 1 >= slotNumber
 				&& itemClicked.equals(getTopInventory().getItem(slotNumber))){
 			
-			for(ItemStack item : getTopInventory().getContents()){
+			for(int slot = 0; slot < getTopInventory().getSize(); slot++){
+				ItemStack item = getTopInventory().getItem(slot);
 				if( item != null && item.getType() != Material.AIR 
 						&& item.equals(itemClicked)){
 					
-					onSelectionItemPressed(item);					
+					onSelectionItemPressed(slot, item);					
 					return;
 				}
 			}
@@ -272,7 +274,16 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 	 * This is called when the Player presses an Selection Item (upper inventory)
 	 * @param item that was clicked.
 	 */
-	protected abstract void onSelectionItemPressed(ItemStack item); 
+	protected void onSelectionItemPressed(ItemStack item) { /* Empty Implementation */ }
+	
+	/**
+	 * This is called when the Player presses an Selection Item (upper inventory)
+	 * @param slot it is in.
+	 * @param item that was clicked.
+	 */
+	protected void onSelectionItemPressed(int slot, ItemStack item){
+		onSelectionItemPressed(item);
+	}
 	
 	/**
 	 * This is called when the Player presses an Control Item (lower inventory)
@@ -282,7 +293,17 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 	 * 
 	 * @param item that was clicked.
 	 */
-	protected abstract void onControlItemPressed(ItemStack item); 
+	protected void onControlItemPressed(ItemStack item){ /* Empty Implementation */ }
+	
+	/**
+	 * This is called when the Player presses an Control Item (lower inventory)
+	 * 
+	 * HINT: The Accept / Abort buttons are NOT passed here. They are handled in:
+	 * {@link #onBackPressed()} and {@link #onAcceptPressed()}.
+	 * @slot it is in.
+	 * @param item that was clicked.
+	 */
+	protected void onControlItemPressed(int slot, ItemStack item){ onControlItemPressed(item); }
 	
 	
 	/**
