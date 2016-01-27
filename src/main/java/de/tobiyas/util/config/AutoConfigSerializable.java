@@ -129,6 +129,7 @@ public class AutoConfigSerializable implements ConfigurationSerializable {
 	private static boolean isDefaultSerializable(Object obj){
 		if(obj instanceof ConfigurationSerializable) return true;
 		if(obj instanceof String) return true;
+		if(obj instanceof Boolean) return true;
 		if(obj instanceof Number) return true;
 		if(obj instanceof List) return true;
 		
