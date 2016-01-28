@@ -144,10 +144,8 @@ public class YAMLConfigExtended extends YamlConfiguration {
 			ConfigurationSection tempMem = getConfigurationSection(yamlNode);
 			Set<String> tempSet = tempMem.getKeys(false);
 			return tempSet;
-			
 		}catch(Exception e){
-			Set<String> empty = new LinkedHashSet<String>();
-			return empty;
+			return new LinkedHashSet<String>();
 		}
 	}
 	
