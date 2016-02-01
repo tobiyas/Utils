@@ -130,6 +130,35 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 		openInterfaces.add(this);
 	}
 	
+	/**
+	 * Creates a Selection Interface.
+	 * The control interface is fixed at the bottom.
+	 * 
+	 * parent is the Parent object to open.
+	 * If No Parent is found (parent == null), the Interface is closed.
+	 *  
+	 * @param player to show
+	 * @param parent that it is linked to
+	 * @param controlInventoryName name of the control inventory
+	 * @param selectionInventoryName name of the selection inventory
+	 */
+	public BasicSelectionInterface(Player player, BasicSelectionInterface parent, 
+			Inventory topInv, Inventory bottomInv, JavaPlugin plugin) {
+		
+		this.player = player;
+		this.parent = parent;
+		this.plugin = plugin;
+		
+		selectionInventory = topInv == null ? Bukkit.createInventory(player, 3 * 9) : topInv;
+		controlInventory = bottomInv == null ? Bukkit.createInventory(player, 4 * 9) : bottomInv;
+		
+		BACK_OBJECT = generateBackItem();
+		ACCEPT_OBJECT = generateAcceptItem();
+		
+		Bukkit.getPluginManager().registerEvents(this, plugin);
+		openInterfaces.add(this);
+	}
+	
 	
 	/**
 	 * Creates a Selection Interface.
@@ -178,13 +207,8 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 		
 		event.setCancelled(true);
 		
-		if(event.getClick() != ClickType.RIGHT){
-			if(!(event.getClick() == ClickType.LEFT 
-					//&& plugin.getConfigManager().getGeneralConfig().isConfig_alsoUseLeftClickInGuis()
-			  )){
-				return;
-			}
-		}
+		//If not right or left-click.
+		if(!(event.getClick() == ClickType.RIGHT || event.getClick() == ClickType.LEFT)) return; 
 		
 		if(this.ACCEPT_OBJECT.equals(itemClicked)){
 			onAcceptPressed();
@@ -196,43 +220,12 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 			return;
 		}
 		
+		int rawSlot = event.getRawSlot();
 		int slotNumber = event.getSlot();
+		boolean usedTopInv = rawSlot < getTopInventory().getSize();
 		
-		if(getBottomInventory() == null){
-			System.out.println("WTF?!?! bottom Inv == null classe: " + getClass());
-		}
-		
-		if(getBottomInventory().getSize() - 1 >= slotNumber
-				&& itemClicked.equals(getBottomInventory().getItem(slotNumber))){
-			
-			for(int slot = 0; slot < getBottomInventory().getSize(); slot++){
-				ItemStack item = getBottomInventory().getItem(slot);
-				if(item != null && item.getType() != Material.AIR 
-						&& item.equals(itemClicked)){
-					
-					onControlItemPressed(slot, item);	
-					return;
-				}
-			}
-		}
-
-		if(getTopInventory() == null){
-			System.out.println("WTF?!?! Top Inv == null classe: " + getClass());
-		}
-		
-		if(getTopInventory().getSize() - 1 >= slotNumber
-				&& itemClicked.equals(getTopInventory().getItem(slotNumber))){
-			
-			for(int slot = 0; slot < getTopInventory().getSize(); slot++){
-				ItemStack item = getTopInventory().getItem(slot);
-				if( item != null && item.getType() != Material.AIR 
-						&& item.equals(itemClicked)){
-					
-					onSelectionItemPressed(slot, item);					
-					return;
-				}
-			}
-		}
+		if(usedTopInv) onControlItemPressed(slotNumber, itemClicked);
+		else onSelectionItemPressed(slotNumber, itemClicked);
 	}
 	
 	
