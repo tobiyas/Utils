@@ -42,4 +42,23 @@ public class FileUtils {
 		return getAllFiles(base, null);
 	}
 	
+	
+	/**
+	 * Deletes all Files + Subfolders in the File.
+	 * @param file to delete.
+	 */
+	public static void deleteFileRecursivly(File file){
+		if(file.isDirectory()){
+			File[] files = file.listFiles();
+			if(files != null && files.length > 0) for(File f : files) deleteFileRecursivly(f);
+			file.delete();
+			return;
+		}
+		
+		if(file.isFile()) {
+			try{ file.delete(); }catch(Throwable exp){}
+			return;
+		}
+	}
+	
 }

@@ -15,7 +15,6 @@
  ******************************************************************************/
 package de.tobiyas.util.permissions.plugins;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.OfflinePlayer;
@@ -67,7 +66,7 @@ public interface PermissionPlugin {
 	 * 
 	 * @return List of all groups
 	 */
-	public ArrayList<String> getGroups();
+	public List<String> getGroups();
 	
 	/**
 	 * Returns the Main Group of a player.

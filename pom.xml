@@ -71,6 +71,14 @@
 			<version>1</version>
 			<optional>true</optional>
 		</dependency>
+		
+		<!-- Own Perm Plugin -->
+		<dependency>
+			<groupId>de.tobiyas</groupId>
+			<artifactId>YAPP</artifactId>
+			<version>1</version>
+			<optional>true</optional>
+		</dependency>
 
 		<!-- Sponge API -->
 		<dependency>

@@ -75,7 +75,6 @@ public class ItemMetaUtils {
 	}
 	
 	
-	
 	/**
 	 * Formats the unformatted Configuration to a multi line Lore.
 	 * 
@@ -83,6 +82,17 @@ public class ItemMetaUtils {
 	 * @return
 	 */
 	public static List<String> formatToLore(String unformated){
+		return formatToLore(unformated, 27);
+	}
+	
+	/**
+	 * Formats the unformatted Configuration to a multi line Lore.
+	 * 
+	 * @param unformated the text to format.
+	 * @param maxLineLength the max length of the Line
+	 * @return
+	 */
+	public static List<String> formatToLore(String unformated, int maxLineLength){
 		String[] words = unformated.split(" ");
 		
 		List<String> lore = new LinkedList<String>();
@@ -90,7 +100,7 @@ public class ItemMetaUtils {
 		for(int i = 1; i < words.length; i++){
 			String currentWord = words[i];
 			
-			if(currentLine.length() + words.length + 1 > 29){
+			if(getLengthWithoutColor(currentLine) + getLengthWithoutColor(currentWord) + 1 > maxLineLength){
 				lore.add(currentLine);
 				currentLine = ChatColor.YELLOW + "  " + currentWord;
 			}else{
@@ -103,6 +113,17 @@ public class ItemMetaUtils {
 		
 		return lore;
 	}
+	
+	
+	/**
+	 * Returns the Length of a Text without color-codes.
+	 * @param text to check
+	 * @return the length in amount of chars.
+	 */
+	private static int getLengthWithoutColor(String text){
+		return ChatColor.stripColor(text).length();
+	}
+	
 	
 	/**
 	 * Replaces the Lore with the one passed

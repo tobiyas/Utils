@@ -40,6 +40,7 @@ public class OpPermissions implements PermissionPlugin {
 
 	@Override
 	public boolean getPermissions(CommandSender sender, String permissionNode) {
+		if(sender.hasPermission(permissionNode)) return true;
 		return sender.isOp();
 	}
 
@@ -69,7 +70,7 @@ public class OpPermissions implements PermissionPlugin {
 		Player player = PlayerUtils.getPlayer(playerName);
 		if(player == null) return false;
 		
-		return player.isOp();
+		return getPermissions(player, permissionNode);
 	}
 
 	@Override

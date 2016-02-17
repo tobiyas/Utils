@@ -21,6 +21,7 @@ import de.tobiyas.util.permissions.plugins.PEXPermissions;
 import de.tobiyas.util.permissions.plugins.PermissionPlugin;
 import de.tobiyas.util.permissions.plugins.PermissionsBukkitPermissions;
 import de.tobiyas.util.permissions.plugins.VaultPermissions;
+import de.tobiyas.util.permissions.plugins.YAPPPerms;
 
 public class PermissionManager implements PermissionPlugin{
 
@@ -54,7 +55,15 @@ public class PermissionManager implements PermissionPlugin{
 			denialList = new ArrayList<String>();
 		
 		PermissionPlugin tempPlugin;
-		if(!containsStringIgnoreCase("Vault", denialList))
+		if(!containsStringIgnoreCase("YAPP", denialList)){
+			try{
+				tempPlugin = new YAPPPerms();
+				tempPlugin.init();
+				if(tempPlugin.isActive()) return tempPlugin;
+			}catch(NoClassDefFoundError e){}
+		}
+		
+		if(!containsStringIgnoreCase("Vault", denialList)){
 			try{
 				tempPlugin = new VaultPermissions();
 				tempPlugin.init();
@@ -62,8 +71,9 @@ public class PermissionManager implements PermissionPlugin{
 					return tempPlugin;
 				}
 			}catch(NoClassDefFoundError e){}
+		}
 		
-		if(!containsStringIgnoreCase("PermissionsEX", denialList))
+		if(!containsStringIgnoreCase("PermissionsEX", denialList)){
 			try{
 				tempPlugin = new PEXPermissions();
 				tempPlugin.init();
@@ -71,8 +81,9 @@ public class PermissionManager implements PermissionPlugin{
 					return tempPlugin;
 				}
 			}catch(NoClassDefFoundError e){}
+		}
 		
-		if(!containsStringIgnoreCase("GroupManager", denialList))
+		if(!containsStringIgnoreCase("GroupManager", denialList)){
 			try{
 				tempPlugin = new GroupManagerPermissions();
 				tempPlugin.init();
@@ -80,8 +91,9 @@ public class PermissionManager implements PermissionPlugin{
 					return tempPlugin;
 				}
 			}catch(NoClassDefFoundError e){}
+		}
 		
-		if(!containsStringIgnoreCase("PermissionsBukkit", denialList))
+		if(!containsStringIgnoreCase("PermissionsBukkit", denialList)){
 			try{
 				tempPlugin = new PermissionsBukkitPermissions(plugin);
 				tempPlugin.init();
@@ -89,8 +101,9 @@ public class PermissionManager implements PermissionPlugin{
 					return tempPlugin;
 				}
 			}catch(NoClassDefFoundError e){}
+		}
 		
-		if(!containsStringIgnoreCase("BPermissions", denialList))
+		if(!containsStringIgnoreCase("BPermissions", denialList)){
 			try{
 				tempPlugin = new BPermissionsPermissions();
 				tempPlugin.init();
@@ -98,6 +111,7 @@ public class PermissionManager implements PermissionPlugin{
 					return tempPlugin;
 				}
 			}catch(NoClassDefFoundError e){}
+		}
 		
 		
 		tempPlugin = new OpPermissions();
@@ -175,7 +189,7 @@ public class PermissionManager implements PermissionPlugin{
 	 * 
 	 * @return ArrayList with all groups
 	 */
-	public ArrayList<String> getAllGroups(){
+	public List<String> getAllGroups(){
 		return permPlugin.getGroups();
 	}
 	
@@ -276,7 +290,7 @@ public class PermissionManager implements PermissionPlugin{
 
 
 	@Override
-	public ArrayList<String> getGroups() {
+	public List<String> getGroups() {
 		return permPlugin.getGroups();
 	}
 
