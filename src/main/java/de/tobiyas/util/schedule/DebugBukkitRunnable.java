@@ -43,7 +43,10 @@ public abstract class DebugBukkitRunnable extends BukkitRunnable {
 		try{
 			runIntern();
 		}catch(Throwable exp){
-			String message = String.format("Error in Runnable '%s' in plugin '%s'", name, plugin.getName());
+			String name = this.name == null ? "unknown" : this.name;
+			String pluginName = this.plugin == null ? "unknown-plugin" : plugin.getName();
+			
+			String message = String.format("Error in Runnable '%s' in plugin '%s'", name, pluginName);
 			plugin.getLogger().log(Level.WARNING, message, exp);
 		}
 		

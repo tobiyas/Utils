@@ -224,8 +224,8 @@ public abstract class BasicSelectionInterface extends ItemGeneratorInterface imp
 		int slotNumber = event.getSlot();
 		boolean usedTopInv = rawSlot < getTopInventory().getSize();
 		
-		if(usedTopInv) onControlItemPressed(slotNumber, itemClicked);
-		else onSelectionItemPressed(slotNumber, itemClicked);
+		if(usedTopInv) onSelectionItemPressed(slotNumber, itemClicked);
+		else onControlItemPressed(slotNumber, itemClicked);
 	}
 	
 	

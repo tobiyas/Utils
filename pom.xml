@@ -310,67 +310,46 @@
 				</configuration>
 			</plugin>
 
-			<!-- We want to bundle in some dependencies -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.2</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<artifactSet>
-								<includes>
-									<include>org.mcstats:metrics</include>
-									<incluse>com.google.code.gson:gson</incluse>
-								</includes>
-							</artifactSet>
-							
-							<relocations>
-   				                <!-- Relocate GSON This has to be done BEFORE!!! CB reloc.-->
-   				                <!-- Not needed any more for MC 1.8.3
-				                <relocation>
-				                  <pattern>com.google.gson</pattern>
-				                  <shadedPattern>org.bukkit.craftbukkit.libs.com.google.gson</shadedPattern>
-				                </relocation>
-				                -->
-				                
-				                <!--
-							    <relocation>
-				                    <pattern>org.bukkit.craftbukkit</pattern>
-				                    <shadedPattern>org.bukkit.craftbukkit.v${minecraft_version}</shadedPattern>
-				                    <excludes>
-				                        <exclude>org.bukkit.craftbukkit.Main*</exclude>
-				                        <exclude>org.bukkit.craftbukkit.libs.*</exclude>
-				                    </excludes>
-				                </relocation>
-				                
-				                
-				                <relocation>
-				                    <pattern>net.minecraft.server</pattern>
-				                    <shadedPattern>net.minecraft.server.v${minecraft_version}</shadedPattern>
-				                </relocation>
-				                -->
-				            </relocations>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			
-		</plugins>
+		<!-- We want to bundle in some dependencies -->
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-shade-plugin</artifactId>
+			<version>2.2</version>
+			<executions>
+				<execution>
+					<phase>package</phase>
+					<goals>
+						<goal>shade</goal>
+					</goals>
+					<configuration>
+						<artifactSet>
+							<includes>
+								<include>org.mcstats:metrics</include>
+								<incluse>com.google.code.gson:gson</incluse>
+							</includes>
+						</artifactSet>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
 		
-		<!-- Pushing to Maven -->
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
-				<version>1.0-beta-6</version>
-			</extension>
-		</extensions>
-	</build>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+			
+	</plugins>
+		
+	<!-- Pushing to Maven -->
+	<extensions>
+		<extension>
+			<groupId>org.apache.maven.wagon</groupId>
+			<artifactId>wagon-ssh</artifactId>
+			<version>2.10</version>
+		</extension>
+	</extensions>
+</build>
 	
 	<dependencyManagement>
 		<dependencies>
@@ -440,7 +419,7 @@
 	<distributionManagement>
 		<repository>
 			<id>home-pi-maven</id>
-			<url>ftp://192.168.0.116/var/www/maven/</url>
+			<url>sftp://192.168.192.48/var/www/maven/</url>
 		</repository>
 	</distributionManagement>
 	
