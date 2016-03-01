@@ -66,6 +66,24 @@ public class CollectionUtils {
 	}
 	
 	
+	/**
+	 * Removes all Null objects from the Collection.
+	 * @param collection to use.
+	 */
+	public static void removeNullObjects(Collection<? extends Object> collection){
+		if(collection == null) return;
+		removeNullObjects(collection.iterator());
+	}
+	
+
+	/**
+	 * Removes all Null objects from the Iterator.
+	 * @param iterator to use.
+	 */
+	public static void removeNullObjects(Iterator<? extends Object> iterator){
+		if(iterator == null) return;
+		while(iterator.hasNext()) if(iterator.next() == null) iterator.remove();
+	}
 	
 	
 	/**

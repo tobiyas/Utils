@@ -14,4 +14,30 @@ public class StringFormatUtils {
 		return value.substring(0,1).toUpperCase() + value.substring(1).toLowerCase();
 	}
 	
+	
+	
+	/**
+	 * Reads an int from the String
+	 * @param val to parse
+	 * @param defaultValue to pass if failed.
+	 * @return the parsed / default value.
+	 */
+	public static int parseInt(String val, int defaultValue){
+		try{
+			return Integer.parseInt(val);
+		}catch(Throwable exp){ return defaultValue; }
+	}
+	
+	/**
+	 * Reads an Double from the String
+	 * @param val to parse
+	 * @param defaultValue to pass if failed.
+	 * @return the parsed / default value.
+	 */
+	public static double parseDouble(String val, double defaultValue){
+		try{
+			return Double.parseDouble(val);
+		}catch(Throwable exp){ return defaultValue; }
+	}
+	
 }

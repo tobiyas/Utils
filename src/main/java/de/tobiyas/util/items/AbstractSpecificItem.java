@@ -29,6 +29,7 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -173,7 +174,8 @@ public abstract class AbstractSpecificItem implements Listener {
 		
 		if(trigger(event.getPlayer()) && consume){
 			item.setAmount(item.getAmount() - consumeAmount);
-			event.getPlayer().setItemInHand(item);
+			PlayerInventory inv = event.getPlayer().getInventory();
+			inv.setItem(inv.getHeldItemSlot(), item);
 		}
 		
 	}

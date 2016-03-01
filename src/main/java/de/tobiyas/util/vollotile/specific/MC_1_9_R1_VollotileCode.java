@@ -191,9 +191,10 @@ public class MC_1_9_R1_VollotileCode extends VollotileCode {
 	public void overwriteAIToDoNothing(LivingEntity entity) {
 		CraftEntity lEntity = (CraftEntity) entity;
 		net.minecraft.server.v1_9_R1.Entity eLiving = lEntity.getHandle();
-		
-		//set NO-AI flag.
-		//TODO add no AI flag!
+		if(eLiving instanceof EntityInsentient){
+			EntityInsentient iEntity = (EntityInsentient) eLiving;
+			iEntity.m(true);
+		}
 	}
 	
 	
