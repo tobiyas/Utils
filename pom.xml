@@ -30,10 +30,6 @@
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
 		</repository>
-		<repository>
-			<id>Plugin Metrics</id>
-			<url>http://repo.mcstats.org/content/repositories/public</url>
-		</repository>
 
 		<!-- Vault repo -->
 		<repository>
@@ -102,13 +98,6 @@
 	      <version>2.1</version>
 	      <optional>false</optional>
 	    </dependency>
-
-		<dependency>
-			<groupId>org.mcstats</groupId>
-			<artifactId>metrics</artifactId>
-			<version>1.2-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
@@ -339,7 +328,6 @@
 					<configuration>
 						<artifactSet>
 							<includes>
-								<include>org.mcstats:metrics</include>
 								<incluse>com.google.code.gson:gson</incluse>
 							</includes>
 						</artifactSet>
