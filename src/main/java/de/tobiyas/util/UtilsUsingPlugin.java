@@ -96,9 +96,6 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 		//Now init the Vollotile Code manager.
 		VollotileCodeManager.init(this);
 		
-		//Call the Enable Function.
-		pluginEnable();
-		
 		//Inits the first Tick.
 		new DebugBukkitRunnable("StartTick"){
 			@Override
@@ -113,6 +110,10 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 				}
 			};
 		}.runTaskLater(this, 1);
+		
+		//Call the Enable Function. This has to be after scheduling the first tick.
+		//This is because otherwise it is not cancelable.
+		pluginEnable();
 	}
 	
 	/**

@@ -8,6 +8,7 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftArrow;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftLivingEntity;
@@ -22,6 +23,8 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
+import com.google.gson.JsonObject;
+
 import de.tobiyas.util.chat.components.TellRawChatMessage;
 import de.tobiyas.util.vollotile.ParticleEffects;
 import de.tobiyas.util.vollotile.ReflectionsHelper;
@@ -31,15 +34,15 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_9_R1.BlockPosition;
 import net.minecraft.server.v1_9_R1.EntityArrow.PickupStatus;
 import net.minecraft.server.v1_9_R1.EntityInsentient;
-import net.minecraft.server.v1_9_R1.EnumParticle;
 import net.minecraft.server.v1_9_R1.IChatBaseComponent;
 import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_9_R1.Item;
+import net.minecraft.server.v1_9_R1.MinecraftKey;
 import net.minecraft.server.v1_9_R1.PacketDataSerializer;
 import net.minecraft.server.v1_9_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_9_R1.PacketPlayOutCustomPayload;
 import net.minecraft.server.v1_9_R1.PacketPlayOutTitle;
 import net.minecraft.server.v1_9_R1.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_9_R1.PacketPlayOutWorldParticles;
 import net.minecraft.server.v1_9_R1.PathEntity;
 import net.minecraft.server.v1_9_R1.PlayerConnection;
 
@@ -67,33 +70,26 @@ public class MC_1_9_R1_VollotileCode extends VollotileCode {
 	public void sendParticleEffect(ParticleEffects effect, Location loc, Vector width, float speed, int amount, Player player) {
 		if(width == null) width = new Vector();
 		
-		try{
-			PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(
-					castParticle(effect), 
-					true, 
-					
-					(float)loc.getX(), 
-					(float)loc.getY(), 
-					(float)loc.getZ(),
-					
-					(float)width.getX(),
-					(float)width.getY(),
-					(float)width.getZ(),
-					
-					speed,
-					amount
-					);
-
-			((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
-		}catch(Throwable exp){
-			exp.printStackTrace();
-		}
+		player.spawnParticle(
+				castParticle(effect), 
+				loc.getX(), 
+				loc.getY(), 
+				loc.getZ(), 
+				
+				amount, 
+				width.getX(), 
+				width.getY(), 
+				width.getZ(), 
+				
+				speed);
 	}
 	
 	@Override
 	public void sendCustomPayload(Player player, String channel, String message) {
+		byte[] messageBytes = message.getBytes(Charset.forName("UTF-8"));
 		ByteBuf buffer = Unpooled.buffer();
-		buffer.writeBytes(message.getBytes(Charset.forName("UTF-8")));
+		buffer.writeByte(messageBytes.length);
+		buffer.writeBytes(messageBytes);
 		PacketDataSerializer serializer = new PacketDataSerializer(buffer);
 		
 		PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(channel, serializer);
@@ -111,76 +107,76 @@ public class MC_1_9_R1_VollotileCode extends VollotileCode {
 
 	
 	
-	private static EnumParticle castParticle(ParticleEffects effect){
+	private static Particle castParticle(ParticleEffects effect){
 		switch(effect){
 		case ANGRY_VILLAGER:
-			return EnumParticle.VILLAGER_ANGRY;
+			return Particle.VILLAGER_ANGRY;
 		case BUBBLE:
-			return EnumParticle.WATER_BUBBLE;
+			return Particle.WATER_BUBBLE;
 		case CLOUD:
-			return EnumParticle.CLOUD;
+			return Particle.CLOUD;
 		case CRIT:
-			return EnumParticle.CRIT;
+			return Particle.CRIT;
 		case DEPTH_SUSPEND:
-			return EnumParticle.SUSPENDED_DEPTH;
+			return Particle.SUSPENDED_DEPTH;
 		case DRIP_LAVA:
-			return EnumParticle.DRIP_LAVA;
+			return Particle.DRIP_LAVA;
 		case DRIP_WATER:
-			return EnumParticle.DRIP_WATER;
+			return Particle.DRIP_WATER;
 		case ENCHANTMENT_TABLE:
-			return EnumParticle.ENCHANTMENT_TABLE;
+			return Particle.ENCHANTMENT_TABLE;
 		case EXPLODE:
-			return EnumParticle.EXPLOSION_NORMAL;
+			return Particle.EXPLOSION_NORMAL;
 		case FIREWORKS_SPARK:
-			return EnumParticle.FIREWORKS_SPARK;
+			return Particle.FIREWORKS_SPARK;
 		case FLAME:
-			return EnumParticle.FLAME;
+			return Particle.FLAME;
 		case FOOTSTEP:
-			return EnumParticle.FOOTSTEP;
+			return Particle.FOOTSTEP;
 		case HAPPY_VILLAGER:
-			return EnumParticle.VILLAGER_HAPPY;
+			return Particle.VILLAGER_HAPPY;
 		case HEART:
-			return EnumParticle.HEART;
+			return Particle.HEART;
 		case HUGE_EXPLOSION:
-			return EnumParticle.EXPLOSION_HUGE;
+			return Particle.EXPLOSION_HUGE;
 		case INSTANT_SPELL:
-			return EnumParticle.SPELL_INSTANT;
+			return Particle.SPELL_INSTANT;
 		case LARGE_EXPLODE:
-			return EnumParticle.EXPLOSION_LARGE;
+			return Particle.EXPLOSION_LARGE;
 		case LARGE_SMOKE:
-			return EnumParticle.SMOKE_LARGE;
+			return Particle.SMOKE_LARGE;
 		case LAVA:
-			return EnumParticle.LAVA;
+			return Particle.LAVA;
 		case MAGIC_CRIT:
-			return EnumParticle.CRIT_MAGIC;
+			return Particle.CRIT_MAGIC;
 		case MOB_SPELL:
-			return EnumParticle.SPELL_MOB;
+			return Particle.SPELL_MOB;
 		case MOB_SPELL_AMBIENT:
-			return EnumParticle.SPELL_MOB_AMBIENT;
+			return Particle.SPELL_MOB_AMBIENT;
 		case NOTE:
-			return EnumParticle.NOTE;
+			return Particle.NOTE;
 		case PORTAL:
-			return EnumParticle.PORTAL;
+			return Particle.PORTAL;
 		case RED_DUST:
-			return EnumParticle.REDSTONE;
+			return Particle.REDSTONE;
 		case SLIME:
-			return EnumParticle.SLIME;
+			return Particle.SLIME;
 		case SNOWBALL_POOF:
-			return EnumParticle.SNOWBALL;
+			return Particle.SNOWBALL;
 		case SNOW_SHOVEL:
-			return EnumParticle.SNOW_SHOVEL;
+			return Particle.SNOW_SHOVEL;
 		case SPELL:
-			return EnumParticle.SPELL;
+			return Particle.SPELL;
 		case SPLASH:
-			return EnumParticle.WATER_SPLASH;
+			return Particle.WATER_SPLASH;
 		case SUSPEND:
-			return EnumParticle.SUSPENDED;
+			return Particle.SUSPENDED;
 		case TOWN_AURA:
-			return EnumParticle.TOWN_AURA;
+			return Particle.TOWN_AURA;
 		case WITCH_MAGIC:
-			return EnumParticle.SPELL_WITCH;
+			return Particle.SPELL_WITCH;
 		default:
-			return EnumParticle.CRIT;
+			return Particle.CRIT;
 		}
 		
 	}
@@ -290,7 +286,6 @@ public class MC_1_9_R1_VollotileCode extends VollotileCode {
 	}
 	
 	
-	
 	@Override
 	public void sendTitle(Player player, String title, String subtitle) {
 		title = ChatColor.translateAlternateColorCodes('&', title);
@@ -298,14 +293,29 @@ public class MC_1_9_R1_VollotileCode extends VollotileCode {
 		
 		PlayerConnection pc = ((CraftPlayer)player).getHandle().playerConnection;
 		if(title != null && !title.isEmpty()){
-			PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(EnumTitleAction.TITLE, ChatSerializer.a("\"" + title + "\""));
+			JsonObject obj = new JsonObject();
+			obj.addProperty("text", title);
+			PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(EnumTitleAction.TITLE, ChatSerializer.a(obj.toString()));
 			pc.sendPacket(titlePacket);
 		}
 		
 		if(subtitle != null && !subtitle.isEmpty()){
-			PacketPlayOutTitle titlePacket2 = new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, ChatSerializer.a("\"" + subtitle + "\""));
+			JsonObject obj = new JsonObject();
+			obj.addProperty("text", subtitle);
+			PacketPlayOutTitle titlePacket2 = new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, ChatSerializer.a(obj.toString()));
 			pc.sendPacket(titlePacket2);
 		}
+	}
+	
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public String generateItemIDString(ItemStack item) {
+		if(item == null) return "";
+		
+		Item nmsMat = Item.getById(item.getType().getId());
+		MinecraftKey key = Item.REGISTRY.b(nmsMat);
+		return "\\\""+key.toString()+"\\\"";
 	}
 	
 }

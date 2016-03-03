@@ -77,5 +77,4 @@ public class UNKNOWN_VollotileCode extends VollotileCode {
 		//Not possible.
 	}
 	
-	
 }

@@ -33,6 +33,7 @@ import org.bukkit.potion.PotionEffect;
 import com.google.gson.JsonObject;
 
 import de.tobiyas.util.naming.MCPrettyName;
+import de.tobiyas.util.vollotile.VollotileCodeManager;
 
 public class ItemJSONResolver {
 
@@ -44,9 +45,7 @@ public class ItemJSONResolver {
 	 */
 	@SuppressWarnings("deprecation")
 	public static String getHoverText(ItemStack itemToParse){
-		if(itemToParse == null){
-			return "";
-		}
+		if(itemToParse == null) return "";
 		
 		String flatLore = "";
 		//Read lore if present.
@@ -59,8 +58,7 @@ public class ItemJSONResolver {
 		}
 		
 		String name = MCPrettyName.getPrettyName(itemToParse, "de_DE");
-		
-		int typeID = itemToParse.getTypeId();
+		String idString = VollotileCodeManager.getVollotileCode().generateItemIDString(itemToParse);
 		short damage = itemToParse.getDurability();
 		
 		String enchantFormat = "";
@@ -144,7 +142,7 @@ public class ItemJSONResolver {
 		
 		
 		return  "{"
-				+ "id:" + typeID + ",Damage:" + damage + ",tag:"
+				+ "id:" + idString + ",Damage:" + damage + ",tag:"
 				+ "{"
 					+ "display:"
 					+ "{"
@@ -159,7 +157,8 @@ public class ItemJSONResolver {
 			+ "}";
 	}
 	
-	
+
+
 	/**
 	 * Returns an Item Hovering Format.
 	 * 

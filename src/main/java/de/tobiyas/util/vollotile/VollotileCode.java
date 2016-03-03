@@ -365,6 +365,18 @@ public abstract class VollotileCode {
 	public String toString(){
 		return "Vollotile: " + CB_RELOCATION;
 	}
+	
+
+	/**
+	 * Generates a String for Json-ItemStack.
+	 * @param item to parse
+	 * @return the String to use.
+	 */
+	@SuppressWarnings("deprecation")
+	public String generateItemIDString(ItemStack item){
+		if(item == null) return "";
+		return String.valueOf(item.getType().getId());
+	}
 
 	
 	
