@@ -96,8 +96,12 @@ public class MC_1_8_R2_VollotileCode extends VollotileCode {
 	public void sendCustomPayload(Player player, String channel, String message) {
 		ByteBuf buffer = Unpooled.buffer();
 		buffer.writeBytes(message.getBytes(Charset.forName("UTF-8")));
+		sendCustomPayload(player, channel, buffer);
+	}
+	
+	@Override
+	public void sendCustomPayload(Player player, String channel, ByteBuf buffer) {
 		PacketDataSerializer serializer = new PacketDataSerializer(buffer);
-		
 		PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(channel, serializer);
 		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 	}

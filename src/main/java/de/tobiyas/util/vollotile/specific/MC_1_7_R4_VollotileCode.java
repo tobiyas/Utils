@@ -20,19 +20,6 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import net.minecraft.server.v1_7_R4.EntityHuman;
-import net.minecraft.server.v1_7_R4.EntityInsentient;
-import net.minecraft.server.v1_7_R4.EntityLiving;
-import net.minecraft.server.v1_7_R4.NBTTagCompound;
-import net.minecraft.server.v1_7_R4.NBTTagInt;
-import net.minecraft.server.v1_7_R4.PacketPlayOutCustomPayload;
-import net.minecraft.server.v1_7_R4.PacketPlayOutWorldParticles;
-import net.minecraft.server.v1_7_R4.PathEntity;
-import net.minecraft.server.v1_7_R4.PathfinderGoal;
-import net.minecraft.server.v1_7_R4.PathfinderGoalFloat;
-import net.minecraft.server.v1_7_R4.PathfinderGoalLookAtPlayer;
-import net.minecraft.server.v1_7_R4.PathfinderGoalSelector;
-
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftArrow;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftLivingEntity;
@@ -48,6 +35,19 @@ import org.bukkit.util.Vector;
 import de.tobiyas.util.vollotile.ParticleEffects;
 import de.tobiyas.util.vollotile.ReflectionsHelper;
 import de.tobiyas.util.vollotile.VollotileCode;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.server.v1_7_R4.EntityHuman;
+import net.minecraft.server.v1_7_R4.EntityInsentient;
+import net.minecraft.server.v1_7_R4.EntityLiving;
+import net.minecraft.server.v1_7_R4.NBTTagCompound;
+import net.minecraft.server.v1_7_R4.NBTTagInt;
+import net.minecraft.server.v1_7_R4.PacketPlayOutCustomPayload;
+import net.minecraft.server.v1_7_R4.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_7_R4.PathEntity;
+import net.minecraft.server.v1_7_R4.PathfinderGoal;
+import net.minecraft.server.v1_7_R4.PathfinderGoalFloat;
+import net.minecraft.server.v1_7_R4.PathfinderGoalLookAtPlayer;
+import net.minecraft.server.v1_7_R4.PathfinderGoalSelector;
 
 public class MC_1_7_R4_VollotileCode extends VollotileCode {
 
@@ -93,8 +93,13 @@ public class MC_1_7_R4_VollotileCode extends VollotileCode {
 
 	@Override
 	public void sendCustomPayload(Player player, String channel, String message) {
-		PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(
-				channel, message.getBytes(Charset.forName("UTF-8")));
+		PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(channel, message.getBytes(Charset.forName("UTF-8")));
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+	}
+	
+	@Override
+	public void sendCustomPayload(Player player, String channel, ByteBuf buffer) {
+		PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(channel, buffer.array());
 		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 	}
 

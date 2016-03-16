@@ -40,6 +40,7 @@ import org.bukkit.util.Vector;
 import de.tobiyas.util.vollotile.ParticleEffects;
 import de.tobiyas.util.vollotile.ReflectionsHelper;
 import de.tobiyas.util.vollotile.VollotileCode;
+import io.netty.buffer.ByteBuf;
 
 public class MC_1_7_R1_VollotileCode extends VollotileCode {
 
@@ -78,6 +79,12 @@ public class MC_1_7_R1_VollotileCode extends VollotileCode {
 	@Override
 	public void sendCustomPayload(Player player, String channel, String message) {
 		PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(channel, message.getBytes(Charset.forName("UTF-8")));
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+	}
+	
+	@Override
+	public void sendCustomPayload(Player player, String channel, ByteBuf buffer) {
+		PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(channel, buffer.array());
 		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 	}
 	

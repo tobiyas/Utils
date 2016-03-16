@@ -17,6 +17,7 @@ package de.tobiyas.util.vollotile;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -32,6 +33,8 @@ import org.bukkit.util.Vector;
 import de.tobiyas.util.UtilsUsingPlugin;
 import de.tobiyas.util.chat.components.TellRawChatMessage;
 import de.tobiyas.util.player.PlayerUtils;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 
 public abstract class VollotileCode {
 	
@@ -127,7 +130,20 @@ public abstract class VollotileCode {
 	 * @param channel to send to
 	 * @param message to send.
 	 */
-	public abstract void sendCustomPayload(Player player, String channel, String message);
+	public void sendCustomPayload(Player player, String channel, String message) {
+		ByteBuf buffer = Unpooled.buffer();
+		buffer.writeBytes(message.getBytes(Charset.forName("UTF-8")));
+		sendCustomPayload(player, channel, buffer);
+	}
+	
+
+	/**
+	 * Sends a custom Payload to the Player by Byte buffer:
+	 * @param player to send to 
+	 * @param channel to send to 
+	 * @param buffer to use.
+	 */
+	public abstract void sendCustomPayload(Player player, String channel, ByteBuf buffer);
 	
 	
 	
@@ -378,6 +394,16 @@ public abstract class VollotileCode {
 		return String.valueOf(item.getType().getId());
 	}
 
+	
+	/**
+	 * Returns the Language of the Player.
+	 * <br>This is the language selected in the Settings.
+	 * @return the language.
+	 */
+	public String getPlayerLanguage(Player player){
+		return "en_US";
+	}
+	
 	
 	
 	public static enum MCVersion{

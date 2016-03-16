@@ -1,36 +1,16 @@
 package de.tobiyas.util.vollotile.specific;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.nio.charset.Charset;
 import java.util.List;
-
-import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.EnumParticle;
-import net.minecraft.server.v1_8_R1.EnumTitleAction;
-import net.minecraft.server.v1_8_R1.IChatBaseComponent;
-import net.minecraft.server.v1_8_R1.PacketDataSerializer;
-import net.minecraft.server.v1_8_R1.PacketPlayOutChat;
-import net.minecraft.server.v1_8_R1.PacketPlayOutCustomPayload;
-import net.minecraft.server.v1_8_R1.PacketPlayOutWorldParticles;
-import net.minecraft.server.v1_8_R1.BlockPosition;
-import net.minecraft.server.v1_8_R1.EntityInsentient;
-import net.minecraft.server.v1_8_R1.PathEntity;
-import net.minecraft.server.v1_8_R1.NBTTagCompound;
-import net.minecraft.server.v1_8_R1.NBTTagInt;
-import net.minecraft.server.v1_8_R1.PacketPlayOutTitle;
-import net.minecraft.server.v1_8_R1.PlayerConnection;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftArrow;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -44,6 +24,22 @@ import de.tobiyas.util.chat.components.TellRawChatMessage;
 import de.tobiyas.util.vollotile.ParticleEffects;
 import de.tobiyas.util.vollotile.ReflectionsHelper;
 import de.tobiyas.util.vollotile.VollotileCode;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.server.v1_8_R1.BlockPosition;
+import net.minecraft.server.v1_8_R1.ChatSerializer;
+import net.minecraft.server.v1_8_R1.EntityInsentient;
+import net.minecraft.server.v1_8_R1.EnumParticle;
+import net.minecraft.server.v1_8_R1.EnumTitleAction;
+import net.minecraft.server.v1_8_R1.IChatBaseComponent;
+import net.minecraft.server.v1_8_R1.NBTTagCompound;
+import net.minecraft.server.v1_8_R1.NBTTagInt;
+import net.minecraft.server.v1_8_R1.PacketDataSerializer;
+import net.minecraft.server.v1_8_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_8_R1.PacketPlayOutCustomPayload;
+import net.minecraft.server.v1_8_R1.PacketPlayOutTitle;
+import net.minecraft.server.v1_8_R1.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_8_R1.PathEntity;
+import net.minecraft.server.v1_8_R1.PlayerConnection;
 
 public class MC_1_8_R1_VollotileCode extends VollotileCode {
 
@@ -93,11 +89,8 @@ public class MC_1_8_R1_VollotileCode extends VollotileCode {
 	}
 	
 	@Override
-	public void sendCustomPayload(Player player, String channel, String message) {
-		ByteBuf buffer = Unpooled.buffer();
-		buffer.writeBytes(message.getBytes(Charset.forName("UTF-8")));
+	public void sendCustomPayload(Player player, String channel, ByteBuf buffer) {
 		PacketDataSerializer serializer = new PacketDataSerializer(buffer);
-		
 		PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(channel, serializer);
 		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 	}

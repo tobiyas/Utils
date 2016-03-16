@@ -2,7 +2,6 @@ package de.tobiyas.util.vollotile.specific;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.nio.charset.Charset;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -30,10 +29,10 @@ import de.tobiyas.util.vollotile.ParticleEffects;
 import de.tobiyas.util.vollotile.ReflectionsHelper;
 import de.tobiyas.util.vollotile.VollotileCode;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_9_R1.BlockPosition;
 import net.minecraft.server.v1_9_R1.EntityArrow.PickupStatus;
 import net.minecraft.server.v1_9_R1.EntityInsentient;
+import net.minecraft.server.v1_9_R1.EntityPlayer;
 import net.minecraft.server.v1_9_R1.IChatBaseComponent;
 import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_9_R1.Item;
@@ -85,13 +84,8 @@ public class MC_1_9_R1_VollotileCode extends VollotileCode {
 	}
 	
 	@Override
-	public void sendCustomPayload(Player player, String channel, String message) {
-		byte[] messageBytes = message.getBytes(Charset.forName("UTF-8"));
-		ByteBuf buffer = Unpooled.buffer();
-		buffer.writeByte(messageBytes.length);
-		buffer.writeBytes(messageBytes);
+	public void sendCustomPayload(Player player, String channel, ByteBuf buffer) {
 		PacketDataSerializer serializer = new PacketDataSerializer(buffer);
-		
 		PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(channel, serializer);
 		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 	}
@@ -305,6 +299,31 @@ public class MC_1_9_R1_VollotileCode extends VollotileCode {
 			PacketPlayOutTitle titlePacket2 = new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, ChatSerializer.a(obj.toString()));
 			pc.sendPacket(titlePacket2);
 		}
+	}
+	
+	
+	/**
+	 * The Field containing the Language.
+	 */
+	private Field localeField;
+	
+	
+	@Override
+	public String getPlayerLanguage(Player player) {
+		if(localeField == null){
+			try{
+				Field field = EntityPlayer.class.getDeclaredField("locale");
+				field.setAccessible(true);
+				localeField = field;
+			}catch(Throwable exp){
+				return "en_US";
+			}
+		}
+		
+		EntityPlayer ePl = ((CraftPlayer) player).getHandle();
+		try{
+			return localeField.get(ePl).toString();
+		}catch(Throwable exp) { return "en_US"; }
 	}
 	
 	

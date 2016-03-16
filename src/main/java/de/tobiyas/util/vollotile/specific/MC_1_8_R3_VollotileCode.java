@@ -1,28 +1,8 @@
 package de.tobiyas.util.vollotile.specific;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.nio.charset.Charset;
 import java.util.List;
-
-import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.EntityInsentient;
-import net.minecraft.server.v1_8_R3.EnumParticle;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import net.minecraft.server.v1_8_R3.NBTTagInt;
-import net.minecraft.server.v1_8_R3.PacketDataSerializer;
-import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
-import net.minecraft.server.v1_8_R3.PacketPlayOutCustomPayload;
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
-import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
-import net.minecraft.server.v1_8_R3.PathEntity;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -44,6 +24,23 @@ import de.tobiyas.util.chat.components.TellRawChatMessage;
 import de.tobiyas.util.vollotile.ParticleEffects;
 import de.tobiyas.util.vollotile.ReflectionsHelper;
 import de.tobiyas.util.vollotile.VollotileCode;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.EntityInsentient;
+import net.minecraft.server.v1_8_R3.EnumParticle;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.NBTTagInt;
+import net.minecraft.server.v1_8_R3.PacketDataSerializer;
+import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
+import net.minecraft.server.v1_8_R3.PacketPlayOutCustomPayload;
+import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
+import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction;
+import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_8_R3.PathEntity;
+import net.minecraft.server.v1_8_R3.PlayerConnection;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
 
 public class MC_1_8_R3_VollotileCode extends VollotileCode {
 
@@ -92,12 +89,10 @@ public class MC_1_8_R3_VollotileCode extends VollotileCode {
 		}
 	}
 	
+
 	@Override
-	public void sendCustomPayload(Player player, String channel, String message) {
-		ByteBuf buffer = Unpooled.buffer();
-		buffer.writeBytes(message.getBytes(Charset.forName("UTF-8")));
+	public void sendCustomPayload(Player player, String channel, ByteBuf buffer) {
 		PacketDataSerializer serializer = new PacketDataSerializer(buffer);
-		
 		PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(channel, serializer);
 		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 	}
@@ -207,6 +202,32 @@ public class MC_1_8_R3_VollotileCode extends VollotileCode {
 	@Override
 	public MCVersion getVersion() {
 		return MCVersion.v1_8_R3;
+	}
+	
+	
+	
+	/**
+	 * The Field containing the Language.
+	 */
+	private Field localeField;
+	
+	
+	@Override
+	public String getPlayerLanguage(Player player) {
+		if(localeField == null){
+			try{
+				Field field = EntityPlayer.class.getDeclaredField("locale");
+				field.setAccessible(true);
+				localeField = field;
+			}catch(Throwable exp){
+				return "en_US";
+			}
+		}
+		
+		EntityPlayer ePl = ((CraftPlayer) player).getHandle();
+		try{
+			return localeField.get(ePl).toString();
+		}catch(Throwable exp) { return "en_US"; }
 	}
 	
 	

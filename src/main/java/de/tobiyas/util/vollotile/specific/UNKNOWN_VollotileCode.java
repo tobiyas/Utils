@@ -28,6 +28,7 @@ import org.bukkit.util.Vector;
 import de.tobiyas.util.chat.components.TellRawChatMessage;
 import de.tobiyas.util.vollotile.ParticleEffects;
 import de.tobiyas.util.vollotile.VollotileCode;
+import io.netty.buffer.ByteBuf;
 
 /**
  * This is a dummy implementation for some dummy
@@ -52,9 +53,9 @@ public class UNKNOWN_VollotileCode extends VollotileCode {
 	@Override
 	public void sendParticleEffect(ParticleEffects effect, Location loc, Vector width, float speed, int amount, Player player) {
 	}
-	
+
 	@Override
-	public void sendCustomPayload(Player player, String channel, String message) {
+	public void sendCustomPayload(Player player, String channel, ByteBuf buffer) {
 	}
 
 	@Override

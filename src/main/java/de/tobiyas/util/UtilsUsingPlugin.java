@@ -293,4 +293,11 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 		else run.runTask(this);
 	}
 	
+	
+	//Making public to other Classes!
+	@Override
+	public void installDDL() {
+		super.installDDL();
+	}
+	
 }

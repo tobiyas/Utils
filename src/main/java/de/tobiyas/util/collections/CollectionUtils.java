@@ -44,6 +44,17 @@ public class CollectionUtils {
 		return getRandomElement(collection, rand);
 	}
 	
+	/**
+	 * Returns a random item in the Array.
+	 * 
+	 * @param array to use
+	 * @return the random item.
+	 */
+	public static <T> T getRandomElement(T[] array){
+		if(array == null || array.length == 0) return null;
+		return array[rand.nextInt(array.length)];
+	}
+	
 	
 	/**
 	 * Translates ChatColors.

@@ -19,7 +19,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
 import java.util.logging.Level;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -49,18 +48,12 @@ public class SQL {
 	 * @throws SQLException on no connection can be established
 	 */
 	public static Connection getSQLConnection(SQLProperties sqlProperties) throws SQLException{
-		Properties connectionProperties = new Properties();
-		connectionProperties.put("user", sqlProperties.userName);
-		connectionProperties.put("password", sqlProperties.password);
-		connectionProperties.put("autoReconnect", "false");
-		connectionProperties.put("maxReconnects", "0");
-		
-		return DriverManager.getConnection(
-				"jdbc:mysql://"
+		String url = "jdbc:mysql://"
 				+ sqlProperties.serverName + ":"
 				+ sqlProperties.serverPort + "/"
-				+ sqlProperties.serverDB  ,
-				connectionProperties);
+				+ sqlProperties.serverDB;
+		
+		return DriverManager.getConnection( url, sqlProperties.userName, sqlProperties.password );
 	}
 	
 	
