@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.9-R0.1-SNAPSHOT</version>
+			<version>1.9.2-R0.1-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 		
@@ -293,8 +293,8 @@
    			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit_1_9_R1</artifactId>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/cb/cb-1.9.jar</systemPath>
-			<version>1.8.6</version>
+			<systemPath>${project.basedir}/libs/cb/cb-1.9.2.jar</systemPath>
+			<version>1.9</version>
 			<optional>true</optional>
 		</dependency>
 
