@@ -52,7 +52,7 @@ public abstract class DebugBukkitRunnable extends BukkitRunnable {
 		
 		startMS = System.currentTimeMillis() - startMS;
 		startNano = System.nanoTime() - startNano;
-		if(plugin != null) Statistics.log(plugin, sync, name, startMS, startNano);
+		if(plugin != null) try{ Statistics.log(plugin, sync, name, startMS, startNano); }catch(Throwable exp){}
 	}
 	
 	
