@@ -74,6 +74,28 @@ public class AutoCompleteUtils {
 		return list;
 	}
 	
+	/**
+	 * Returns a list of all AutoCompletes from the passed object list.
+	 * 
+	 * @param names the names to check
+	 * @param pre to check against
+	 * 
+	 * @return the list with the auto completed values.
+	 */
+	public static List<String> getAllObjectNamesWithReplaceSpace(Collection<? extends Object> objects, String pre){
+		List<String> list = new LinkedList<String>();
+		
+		for(Object obj : objects){
+			String name = obj.toString().replace(" ", "_");
+			if(name.toLowerCase().startsWith(pre.toLowerCase())
+					|| "".equals(pre)){
+				list.add(name);
+			}
+		}
+		
+		return list;
+	}
+	
 	
 	/**
 	 * Returns a list of all AutoCompletes from the passed list.
