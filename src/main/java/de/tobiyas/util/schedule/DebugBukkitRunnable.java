@@ -30,6 +30,7 @@ public abstract class DebugBukkitRunnable extends BukkitRunnable {
 		this.name = name == null ? "UNKNOWN" : name;
 	}
 	
+	
 	public DebugBukkitRunnable() {
 		this.name = getClass().getSimpleName();
 	}

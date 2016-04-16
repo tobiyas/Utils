@@ -19,11 +19,11 @@ public class CommandFormatUtils {
 	 */
 	public static <T> List<T> getElements(List<T> data, int page, int pageSize){
 		int maxPage = (int)Math.ceil((double)data.size() / (double)pageSize);
-		page = Math2.clamp(1, pageSize, maxPage);
+		page = Math2.clamp(1, page, maxPage);
 		
-		int maxIndex = data.size()-1;
+		int maxIndex = data.size();
 		int start = (page-1) * pageSize;
-		int end = Math.min(page * pageSize - 1, maxIndex);
+		int end = Math.min((page * pageSize) - 1, maxIndex);
 		
 		return data.subList(start, end);
 	}
