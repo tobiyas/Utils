@@ -276,7 +276,7 @@ public class YAMLConfigExtended extends YamlConfiguration {
 		} catch (Exception e) {
 			this.validLoad = false;
 			this.lastParseException = e;
-			System.out.println("Error on loading YamlConfig: " + saveFile.getAbsolutePath());
+			System.out.println("Error on loading YamlConfig: " + saveFile.getAbsolutePath() + ", error: " + e.getMessage());
 			
 			return this;
 		}
