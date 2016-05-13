@@ -11,6 +11,7 @@ public class CommandFormatUtils {
 	/**
 	 * Gets the Page from the Data passed.
 	 * <br>Assuming the Data is already sorted!
+	 * <br>Pages start at 1.
 	 * 
 	 * @param data to use
 	 * @param page to use.
