@@ -184,4 +184,72 @@ public class CollectionUtils {
 		return array2;
 	}
 	
+	
+	/**
+	 * Joins 2 collections.
+	 * @param collection1 to join
+	 * @param collection2 to join.
+	 * @return returns the collection 1 for chaining.
+	 */
+	public static<T> Collection<T> joinCollection(Collection<T> collection1, Collection<T> collection2){
+		collection1.addAll(collection2);
+		return collection1;
+	}
+	
+	/**
+	 * Joins an element to a collection.
+	 * @param collection1 to join
+	 * @param element to add.
+	 * @return returns the collection 1 for chaining.
+	 */
+	public static<T> Collection<T> joinCollection(Collection<T> collection, T element){
+		collection.add(element);
+		return collection;
+	}
+	
+	/**
+	 * Joins many elements to a collection.
+	 * @param collection to join
+	 * @param elements to add.
+	 * @return returns the collection for chaining.
+	 */
+	public static<T> Collection<T> joinCollection(List<T> collection, T... elements){
+		for(T element : elements) collection.add(element);
+		return collection;
+	}
+	
+	/**
+	 * Joins 2 collections.
+	 * @param list1 to join
+	 * @param list2 to join.
+	 * @return returns the collection 1 for chaining.
+	 */
+	public static<T> List<T> joinList(List<T> list1, List<T> list2){
+		list1.addAll(list2);
+		return list1;
+	}
+	
+	/**
+	 * Joins an element to a collection.
+	 * @param list to join
+	 * @param element to add.
+	 * @return returns the list for chaining.
+	 */
+	public static<T> List<T> joinList(List<T> list, T element){
+		list.add(element);
+		return list;
+	}
+	
+	/**
+	 * Joins many elements to a collection.
+	 * @param list to join
+	 * @param element to add.
+	 * @return returns the list for chaining.
+	 */
+	public static<T> List<T> joinList(List<T> list, T... elements){
+		for(T element : elements) list.add(element);
+		return list;
+	}
+	
+	
 }
