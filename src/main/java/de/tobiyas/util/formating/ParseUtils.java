@@ -1,5 +1,6 @@
 package de.tobiyas.util.formating;
 
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 public class ParseUtils {
@@ -220,6 +221,38 @@ public class ParseUtils {
 	 */
 	public static DamageCause parseDamageCause(String[] args, int index, DamageCause defaultValue){
 		try{ return DamageCause.valueOf(args[index].toUpperCase()); }catch(Throwable exp){ return defaultValue; }
+	}
+	
+	/**
+	 * Parses an EntityType from a String.
+	 * @param value to parse
+	 * @param defaultValue to use if failed.
+	 * @return the parsed value or default value.
+	 */
+	public static EntityType parseEntityType(String value, EntityType defaultValue){
+		try{ return EntityType.valueOf(value.toUpperCase()); }catch(Throwable exp){ return defaultValue; }
+	}
+	
+	/**
+	 * Parses an EntityType from an Object.
+	 * @param value to parse
+	 * @param defaultValue to use if failed.
+	 * @return the parsed value or default value.
+	 */
+	public static EntityType parseEntityType(Object value, EntityType defaultValue){
+		if(value == null) return defaultValue;
+		try{ return EntityType.valueOf(value.toString().toUpperCase()); }catch(Throwable exp){ return defaultValue; }
+	}
+	
+	/**
+	 * Parses an EntityType from an String Array.
+	 * @param args to parse
+	 * @param index to use
+	 * @param defaultValue to use if failed.
+	 * @return the parsed value or default value.
+	 */
+	public static EntityType parseEntityType(String[] args, int index, EntityType defaultValue){
+		try{ return EntityType.valueOf(args[index].toUpperCase()); }catch(Throwable exp){ return defaultValue; }
 	}
 
 
