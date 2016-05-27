@@ -197,4 +197,12 @@ public class BarHandler implements Listener {
 		for(int i = 0; i < 9; i++) player.getInventory().setItem(i, oldHotBar.get(i));
 	}
 
+
+	/**
+	 * Returns if the Handler is still active.
+	 */
+	public boolean isActive() {
+		return currentBar != null || !barBackStack.isEmpty();
+	}
+
 }

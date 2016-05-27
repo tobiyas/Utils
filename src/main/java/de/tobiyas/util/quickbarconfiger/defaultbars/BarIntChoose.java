@@ -71,6 +71,7 @@ public class BarIntChoose extends Bar {
 		current += 1;
 		
 		if(nextNumber == 10) current -= 10;
+		this.redraw();
 	}
 	
 	private void increase_10s(Block unused){
@@ -78,6 +79,7 @@ public class BarIntChoose extends Bar {
 		current += 10;
 		
 		if(nextNumber == 10) current -= 100;
+		this.redraw();
 	}
 	
 	private void increase_100s(Block unused){
@@ -85,6 +87,7 @@ public class BarIntChoose extends Bar {
 		current += 100;
 		
 		if(nextNumber == 10) current -= 1000;
+		this.redraw();
 	}
 	
 	private void increase_1000s(Block unused){
@@ -92,6 +95,7 @@ public class BarIntChoose extends Bar {
 		current += 1000;
 		
 		if(nextNumber == 10) current -= 10000;
+		this.redraw();
 	}
 	
 	private void increase_10000s(Block unused){
@@ -99,12 +103,14 @@ public class BarIntChoose extends Bar {
 		current += 10000;
 		
 		if(nextNumber == 10) current -= 100000;
+		this.redraw();
 	}
 
 
 	
 	private void accept(Block unused){
 		callback.selectedInt(current);
+		barHandler.backPressed();
 	}
 	
 	

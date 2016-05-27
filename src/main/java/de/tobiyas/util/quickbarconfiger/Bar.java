@@ -150,7 +150,7 @@ public abstract class Bar {
 	public static interface ItemClickedCallback{
 		void itemClicked(Block block);
 	}
-
+	
 	protected static ItemStack generateItem(Material material, short damageValue, String name, String... lore){
 		ItemStack item = new ItemStack(material, 1, damageValue);
 		ItemMeta meta = item.getItemMeta();
