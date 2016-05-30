@@ -1,5 +1,8 @@
 package de.tobiyas.util.quickbarconfiger.defaultbars;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -11,9 +14,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.tobiyas.util.autocomplete.AutoCompleteUtils;
 import de.tobiyas.util.quickbarconfiger.Bar;
 import de.tobiyas.util.quickbarconfiger.BarHandler;
 
@@ -34,13 +39,26 @@ public class BarStringChooser extends Bar implements Listener {
 	 */
 	private String currentValue;
 	
+	/**
+	 * The collection of auto-completes.
+	 */
+	private final Collection<String> autoCompletes = new HashSet<String>();
+	
+	
 	
 	public BarStringChooser(JavaPlugin plugin, BarHandler barHandler, Player player, String oldValue, StringChosenCallback callback) {
+		this(plugin, barHandler, player, oldValue, callback, null);
+	}
+	
+	public BarStringChooser(JavaPlugin plugin, BarHandler barHandler, Player player, String oldValue, StringChosenCallback callback,
+			Collection<String> autoCompletes) {
 		super(barHandler, player);
 		
 		this.oldValue = oldValue;
 		this.currentValue = oldValue;
 		this.callback = callback;
+		
+		if(autoCompletes != null) this.autoCompletes.addAll(autoCompletes);
 		
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 		player.sendMessage(ChatColor.GREEN + "Neuen Text eingeben und auf " + ChatColor.LIGHT_PURPLE + "APPLY" + ChatColor.GREEN + " drücken!");
@@ -91,6 +109,16 @@ public class BarStringChooser extends Bar implements Listener {
 		
 		event.setMessage("");
 		event.setCancelled(true);
+	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onChatAutoComplete(PlayerChatTabCompleteEvent event){
+		if(event.getPlayer() != player) return;
+		
+		String token = event.getLastToken();
+		event.getTabCompletions().clear();
+		
+		event.getTabCompletions().addAll(AutoCompleteUtils.getAllNamesWith(autoCompletes, token));
 	}
 	
 	
