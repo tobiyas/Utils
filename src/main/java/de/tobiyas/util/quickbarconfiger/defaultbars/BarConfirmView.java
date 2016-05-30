@@ -29,8 +29,8 @@ public class BarConfirmView extends Bar {
 		ItemStack itemYes = generateItem(Material.WOOL, DyeColor.GREEN.getWoolData(), callBack.getYesText());
 		ItemStack itemNo = generateItem(Material.WOOL, DyeColor.RED.getWoolData(), callBack.getNoText());
 		
-		this.clickList.set(1, new ItemClickBi(itemYes, new ItemClickedCallback() { @Override public void itemClicked(Block block) { yes(block); } }));
-		this.clickList.add(2, new ItemClickBi(itemNo, new ItemClickedCallback() { @Override public void itemClicked(Block block) { no(block); } }));
+		this.clickList.set(1, new ItemClickBi(itemYes, new ItemClickedCallback() { @Override public void itemClicked(boolean shift, Block block) { yes(block); } }));
+		this.clickList.add(2, new ItemClickBi(itemNo, new ItemClickedCallback() { @Override public void itemClicked(boolean shift, Block block) { no(block); } }));
 	}
 	
 	

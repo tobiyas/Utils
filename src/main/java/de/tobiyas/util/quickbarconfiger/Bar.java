@@ -62,8 +62,10 @@ public abstract class Bar {
 	 * @param block to use.
 	 */
 	public void slotPressed(int slot, Block block){
+		boolean shift = player.isSneaking();
+		
 		ItemClickBi bi = clickList.get(slot);
-		if(bi != null) bi.getValue().itemClicked(block);
+		if(bi != null) bi.getValue().itemClicked(shift, block);
 	}
 	
 	/**
@@ -74,7 +76,7 @@ public abstract class Bar {
 		updateItemsIntern();
 		
 		clickList.set(8, new ItemClickBi(barHandler.isRootView(this) ? itemExit : itemBack, new ItemClickedCallback() {
-			@Override public void itemClicked(Block block) { back(block); }
+			@Override public void itemClicked(boolean shift, Block block) { back(shift, block); }
 		}));
 	}
 	
@@ -82,7 +84,7 @@ public abstract class Bar {
 	/**
 	 * Go back to last layer.
 	 */
-	protected void back(Block unused){
+	protected void back(boolean shift, Block unused){
 		barHandler.backPressed();
 	}
 	
@@ -135,7 +137,7 @@ public abstract class Bar {
 	public static class ItemShowBi extends ItemClickBi{
 		public ItemShowBi(ItemStack val1) {
 			super(val1, new ItemClickedCallback() {
-				@Override public void itemClicked(Block block) {}
+				@Override public void itemClicked(boolean shift, Block block) {}
 			});
 		}
 	}
@@ -148,9 +150,9 @@ public abstract class Bar {
 	
 	
 	public static interface ItemClickedCallback{
-		void itemClicked(Block block);
+		void itemClicked(boolean shift, Block block);
 	}
-	
+
 	protected static ItemStack generateItem(Material material, short damageValue, String name, String... lore){
 		ItemStack item = new ItemStack(material, 1, damageValue);
 		ItemMeta meta = item.getItemMeta();

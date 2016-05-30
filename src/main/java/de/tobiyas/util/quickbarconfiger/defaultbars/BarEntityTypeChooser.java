@@ -39,9 +39,9 @@ public class BarEntityTypeChooser extends AbstractMultiBar implements Listener {
 	
 	
 	@Override
-	protected void back(Block unused) {
+	protected void back(boolean shift, Block unused) {
 		callback.newEntityTypeChosen(true, oldValue, oldValue);
-		super.back(unused);
+		super.back(shift, unused);
 	}
 	
 	
@@ -52,7 +52,7 @@ public class BarEntityTypeChooser extends AbstractMultiBar implements Listener {
 				generateItem(Material.ANVIL, (short)0, "Typ: " + type.getName(), "Ändert den Typen auf diesen."),
 				new ItemClickedCallback() {
 					@Override
-					public void itemClicked(Block block) {
+					public void itemClicked(boolean shift, Block block) {
 						callback.newEntityTypeChosen(false, oldValue, type);
 					}
 				});

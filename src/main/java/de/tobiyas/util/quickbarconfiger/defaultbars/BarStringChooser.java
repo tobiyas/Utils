@@ -70,7 +70,7 @@ public class BarStringChooser extends Bar implements Listener {
 	protected void updateItemsIntern() {
 		this.clickList.set(0, new ItemClickBi(
 				generateItem(Material.WOOL, DyeColor.GREEN.getWoolData(), ChatColor.GREEN + "Apply" , ChatColor.GREEN + "Nimmt den Aktuellen Wert."),
-				new ItemClickedCallback() { @Override public void itemClicked(Block block) { applyString(); } }
+				new ItemClickedCallback() { @Override public void itemClicked(boolean shift, Block block) { applyString(); } }
 			));
 		
 		this.clickList.set(3, new ItemShowBi(
@@ -93,6 +93,8 @@ public class BarStringChooser extends Bar implements Listener {
 		event.setFormat("");
 		event.setMessage("");
 		event.setCancelled(true);
+		
+		this.redraw();
 	}
 	
 	
@@ -109,6 +111,8 @@ public class BarStringChooser extends Bar implements Listener {
 		
 		event.setMessage("");
 		event.setCancelled(true);
+		
+		this.redraw();
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -134,11 +138,11 @@ public class BarStringChooser extends Bar implements Listener {
 	
 	
 	@Override
-	protected void back(Block unused) {
+	protected void back(boolean shift, Block unused) {
 		HandlerList.unregisterAll(this);
 		
 		this.callback.newStringChosen(true, oldValue, oldValue);
-		super.back(unused);
+		super.back(shift, unused);
 	}
 	
 	

@@ -47,13 +47,13 @@ public class BarIntChoose extends Bar {
 		setAmount(item_1000s, (current / 1000) % 10);
 		setAmount(item_10000s, (current / 10000) % 10);
 		
-		this.clickList.set(0, new ItemClickBi(itemAccept, new ItemClickedCallback() { @Override public void itemClicked(Block block) { accept(block); } }));
+		this.clickList.set(0, new ItemClickBi(itemAccept, new ItemClickedCallback() { @Override public void itemClicked(boolean shift, Block block) { accept(); } }));
 
-		this.clickList.set(6, new ItemClickBi(item_1s, new ItemClickedCallback() { @Override public void itemClicked(Block block) { increase_1s(block); } }));
-		this.clickList.set(5, new ItemClickBi(item_10s, new ItemClickedCallback() { @Override public void itemClicked(Block block) { increase_10s(block); } }));
-		this.clickList.set(4, new ItemClickBi(item_100s, new ItemClickedCallback() { @Override public void itemClicked(Block block) { increase_100s(block); } }));
-		this.clickList.set(3, new ItemClickBi(item_1000s, new ItemClickedCallback() { @Override public void itemClicked(Block block) { increase_1000s(block); } }));
-		this.clickList.set(2, new ItemClickBi(item_10000s, new ItemClickedCallback() { @Override public void itemClicked(Block block) { increase_10000s(block); } }));
+		this.clickList.set(6, new ItemClickBi(item_1s, new ItemClickedCallback() { @Override public void itemClicked(boolean shift, Block block) { if(!shift) increase_1s(); else decrease_1s(); } }));
+		this.clickList.set(5, new ItemClickBi(item_10s, new ItemClickedCallback() { @Override public void itemClicked(boolean shift, Block block) { if(!shift) increase_10s(); else decrease_10s(); } }));
+		this.clickList.set(4, new ItemClickBi(item_100s, new ItemClickedCallback() { @Override public void itemClicked(boolean shift, Block block) { if(!shift) increase_100s(); else decrease_100s(); } }));
+		this.clickList.set(3, new ItemClickBi(item_1000s, new ItemClickedCallback() { @Override public void itemClicked(boolean shift, Block block) { if(!shift) increase_1000s(); else decrease_1000s(); } }));
+		this.clickList.set(2, new ItemClickBi(item_10000s, new ItemClickedCallback() { @Override public void itemClicked(boolean shift, Block block) { if(!shift) increase_10000s(); else decrease_10000s(); } }));
 	}
 	
 	
@@ -66,49 +66,59 @@ public class BarIntChoose extends Bar {
 		item.setDurability((short)0);
 	}
 
-	private void increase_1s(Block unused){
-		int nextNumber = current % 10;
+	private void increase_1s(){
 		current += 1;
-		
-		if(nextNumber == 10) current -= 10;
 		this.redraw();
 	}
 	
-	private void increase_10s(Block unused){
-		int nextNumber = (current / 10) % 10;
+	private void decrease_1s(){
+		current -= 1;
+		this.redraw();
+	}
+	
+	private void increase_10s(){
 		current += 10;
-		
-		if(nextNumber == 10) current -= 100;
 		this.redraw();
 	}
 	
-	private void increase_100s(Block unused){
-		int nextNumber = (current / 100) % 10;
+	private void decrease_10s(){
+		current -= 10;
+		this.redraw();
+	}
+	
+	private void increase_100s(){
 		current += 100;
-		
-		if(nextNumber == 10) current -= 1000;
 		this.redraw();
 	}
 	
-	private void increase_1000s(Block unused){
-		int nextNumber = (current / 1000) % 10;
+	private void decrease_100s(){
+		current -= 100;
+		this.redraw();
+	}
+	
+	private void increase_1000s(){
 		current += 1000;
-		
-		if(nextNumber == 10) current -= 10000;
 		this.redraw();
 	}
 	
-	private void increase_10000s(Block unused){
-		int nextNumber = (current / 10000) % 10;
+	private void decrease_1000s(){
+		current -= 1000;
+		this.redraw();
+	}
+	
+	private void increase_10000s(){
 		current += 10000;
-		
-		if(nextNumber == 10) current -= 100000;
+		this.redraw();
+	}
+
+	private void decrease_10000s(){
+		current -= 10000;
 		this.redraw();
 	}
 
 
 	
-	private void accept(Block unused){
+	private void accept(){
 		callback.selectedInt(current);
 		barHandler.backPressed();
 	}

@@ -39,14 +39,14 @@ public abstract class AbstractMultiBar extends Bar {
 		if(barNr > 0){
 			clickList.set(0, new ItemClickBi(
 				generateItem(Material.FLINT, (short)0, ChatColor.YELLOW+"Zurück", ChatColor.AQUA+"Gehe zu Ebene " + barNr),
-				new ItemClickedCallback(){@Override public void itemClicked(Block block) { layerBackClicked(); }}));
+				new ItemClickedCallback(){@Override public void itemClicked(boolean shift, Block block) { layerBackClicked(); }}));
 		}
 		
 		//Set for items:
 		if(barNr < maxBars-1){
 			clickList.set(7, new ItemClickBi(
 				generateItem(Material.FLINT, (short)0, ChatColor.YELLOW+"Weiter", ChatColor.AQUA+"Gehe zu Ebene " + (barNr+2)),
-				new ItemClickedCallback(){@Override public void itemClicked(Block block) { layerForClicked(); }}));
+				new ItemClickedCallback(){@Override public void itemClicked(boolean shift, Block block) { layerForClicked(); }}));
 		}
 	}
 	

@@ -61,8 +61,8 @@ public class BarMaterialChooser extends Bar {
 		}
 		
 		
-		if(startSlot != 0) this.clickList.set(0, new ItemClickBi(itemPrev, new ItemClickedCallback() { @Override public void itemClicked(Block block) {prev();} }));
-		if(startSlot+6 <= toChooseFrom.size()) this.clickList.set(7, new ItemClickBi(itemNext, new ItemClickedCallback() { @Override public void itemClicked(Block block) {next();} }));
+		if(startSlot != 0) this.clickList.set(0, new ItemClickBi(itemPrev, new ItemClickedCallback() { @Override public void itemClicked(boolean shift, Block block) {prev();} }));
+		if(startSlot+6 <= toChooseFrom.size()) this.clickList.set(7, new ItemClickBi(itemNext, new ItemClickedCallback() { @Override public void itemClicked(boolean shift, Block block) {next();} }));
 	}
 	
 	
@@ -85,9 +85,9 @@ public class BarMaterialChooser extends Bar {
 		}
 		
 		@Override
-		public void itemClicked(Block block) {
+		public void itemClicked(boolean shift, Block block) {
 			callback.materialChanged(mat);
-			back(null);
+			back(shift, null);
 		}
 	}
 	
