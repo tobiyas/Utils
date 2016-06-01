@@ -195,6 +195,8 @@ public class BarHandler implements Listener {
 	private void exit() {
 		HandlerList.unregisterAll(this);
 		for(int i = 0; i < 9; i++) player.getInventory().setItem(i, oldHotBar.get(i));
+		currentBar = null;
+		barBackStack.clear();
 	}
 
 
