@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,11 +47,15 @@ import org.bukkit.plugin.Plugin;
 
 import de.tobiyas.util.UtilsUsingPlugin;
 import de.tobiyas.util.config.returncontainer.DropContainer;
+import de.tobiyas.util.formating.ParseUtils;
 import de.tobiyas.util.schedule.DebugBukkitRunnable;
 
 
 public class YAMLConfigExtended extends YamlConfiguration {
 
+	private static final String PATH_SPLIT_PATTERN = Pattern.quote(".");
+	
+	
 	/**
 	 * If the Config is dirty and has to be flushed.
 	 */
@@ -536,6 +541,30 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	}
 	
 	public Location getLocation(String path, Location defaultLocation){
+		//If this is a one-liner, parse: [world]#x#y#z#[yaw]#[pitch]
+		if(this.isString(path)){
+			String toParse = this.getString(path, null);
+			if(toParse != null){
+				String[] split = toParse.split(Pattern.quote("#"));
+				if(split.length < 3) return defaultLocation;
+				
+				World world = Bukkit.getWorld(split[0]);
+				boolean hasWorld = world != null;
+				if(world == null) world = Bukkit.getWorlds().get(0);
+				
+				double x = ParseUtils.parseDouble(split, hasWorld ? 1 : 0, Double.MIN_VALUE);
+				double y = ParseUtils.parseDouble(split, hasWorld ? 2 : 1, Double.MIN_VALUE);
+				double z = ParseUtils.parseDouble(split, hasWorld ? 3 : 2, Double.MIN_VALUE);
+				
+				float yaw = ParseUtils.parseFloat(split, hasWorld ? 4 : 3, 0);
+				float pitch = ParseUtils.parseFloat(split, hasWorld ? 5 : 4, 0);
+				
+				if(x == Double.MIN_VALUE || y == Double.MIN_VALUE || z == Double.MIN_VALUE) return defaultLocation;
+				return new Location(world, x, y, z, yaw, pitch);
+			}
+		}
+		
+		//Parse the underlying structure:
 		double locX = getDouble(path + ".x");
 		double locY = getDouble(path + ".y");
 		double locZ = getDouble(path + ".z");
@@ -796,6 +825,18 @@ public class YAMLConfigExtended extends YamlConfiguration {
 	 */
 	public Throwable getLastParseException() {
 		return lastParseException;
+	}
+	
+	/**
+	 * Gets the last part of the Path.
+	 * @param path to use.
+	 * @return the last part.
+	 */
+	public static String getLastPartOfPath(String path){
+		if(path == null || path.isEmpty()) return "";
+		
+		String[] split = path.split(PATH_SPLIT_PATTERN);
+		return split[split.length-1];
 	}
 
 }

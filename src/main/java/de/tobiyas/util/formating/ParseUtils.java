@@ -158,6 +158,16 @@ public class ParseUtils {
 		return value.toString();
 	}
 	
+	/**
+	 * Parses an String from a String[].
+	 * @param value to parse
+	 * @param defaultValue to use if failed.
+	 * @return the parsed value or default value.
+	 */
+	public static String parseString(String[] values, int index, String defaultValue){
+		try{ return values[index]; }catch(Throwable exp){ return defaultValue; }
+	}
+	
 
 	/**
 	 * Parses an Long from a String.
