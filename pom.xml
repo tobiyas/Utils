@@ -306,6 +306,15 @@
 			<version>1.9.4</version>
 			<optional>true</optional>
 		</dependency>
+		
+		<dependency>
+   			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit_1_10_R1</artifactId>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/cb/cb-1.10.jar</systemPath>
+			<version>1.9.4</version>
+			<optional>true</optional>
+		</dependency>
 
 	</dependencies>
 

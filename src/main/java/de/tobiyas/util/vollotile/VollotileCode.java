@@ -422,7 +422,8 @@ public abstract class VollotileCode {
 		v1_8_R2,
 		v1_8_R3,
 		v1_9_R1,
-		v1_9_R2;
+		v1_9_R2,
+		v1_10_R1;
 		
 		
 		
