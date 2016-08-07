@@ -236,7 +236,7 @@ public class CollectionUtils {
 	 * @return returns the list for chaining.
 	 */
 	public static<T> List<T> joinList(List<T> list, T element){
-		list.add(element);
+		if(element != null) list.add(element);
 		return list;
 	}
 	
@@ -247,7 +247,7 @@ public class CollectionUtils {
 	 * @return returns the list for chaining.
 	 */
 	public static<T> List<T> joinList(List<T> list, T... elements){
-		for(T element : elements) list.add(element);
+		for(T element : elements) if(element != null) list.add(element);
 		return list;
 	}
 	

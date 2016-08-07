@@ -15,9 +15,26 @@
  ******************************************************************************/
 package de.tobiyas.util.items;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import de.tobiyas.util.collections.CollectionUtils;
+import de.tobiyas.util.formating.ParseUtils;
 
 public class ItemUtils {
 
@@ -280,6 +297,168 @@ public class ItemUtils {
 		
 		//dead code.
 		return null;
+	}
+	
+	
+	/**
+	 * Generates an Item from a line.
+	 * @param line to generate from.
+	 * @return the item or null if not parseable.
+	*/
+	public static ItemStack generateFromLine(String line){
+		return generateFromLine(line, new ItemStack(Material.AIR));
+	}
+	
+	
+	/**
+	 * Generates an Item from a line.
+	 * @param line to generate from.
+	 * @param defaultItem the default item to return if failed.
+	 * @return the item or null if not parseable.
+	 */
+	public static ItemStack generateFromLine(String line, ItemStack defaultItem){
+		String[] split = line.split(Pattern.quote("#"));
+		Material mat = null;
+		short damage = 0;
+		int amount = 1;
+		String name = null;
+		List<String> lore = new ArrayList<String>();
+		Map<Enchantment,Integer> enchants = new HashMap<Enchantment,Integer>();
+		boolean unbreakable = false;
+		Set<ItemFlag> flags = new HashSet<ItemFlag>();
+		
+		for(String part : split){
+			if(!part.contains(":")) continue;
+			
+			String[] partSplit = part.split(Pattern.quote(":"), 2);
+			if(partSplit.length != 2) continue;
+			
+			//Read the Stuff:
+			String key = partSplit[0];
+			String value = partSplit[1];
+			
+			//Now parse:
+			//Material
+			if(key.equalsIgnoreCase("material")){
+				mat = Material.matchMaterial(value.toUpperCase());
+				continue;
+			}
+			
+			//Damage:
+			if(key.equalsIgnoreCase("damage")){
+				damage = ParseUtils.parseShort(value, (short)0);
+				continue;
+			}
+			
+			//Amount:
+			if(key.equalsIgnoreCase("amount")){
+				amount = ParseUtils.parseInt(value, 1);
+				continue;
+			}
+			
+			//Name:
+			if(key.equalsIgnoreCase("name")){
+				name = ChatColor.translateAlternateColorCodes('&', value);
+				continue;
+			}
+			
+			//lore:
+			if(key.equalsIgnoreCase("lore")){
+				String[] loreSplit = value.split(Pattern.quote("~"));
+				lore.addAll(Arrays.asList(loreSplit));
+				CollectionUtils.translateChatColors(lore);
+				continue;
+			}
+			
+			//enchant:
+			if(key.equalsIgnoreCase("enchant")){
+				if(value.trim().equals("true")){
+					enchants.put(Enchantment.DURABILITY, 1);
+					continue;
+				}
+				
+				String[] enchantSplit = value.split(Pattern.quote("~"));
+				for(String enchantLine : enchantSplit){
+					String[] enchantSplit2 = enchantLine.split(Pattern.quote(":"));
+					if(enchantSplit2.length != 2) continue;
+					
+					Enchantment ench = Enchantment.getByName(enchantSplit2[0]);
+					int level = 1; ParseUtils.parseInt(value, 1);
+					if(ench != null) enchants.put(ench,level);
+				}
+				
+				continue;
+			}
+			
+			//Parse the Item-Flags:
+			if(key.equalsIgnoreCase("flags")){
+				String[] flagSplit = value.split("~");
+				for(String flagPart : flagSplit){
+					try{
+						ItemFlag flag = ItemFlag.valueOf(flagPart.toUpperCase());
+						if(flag != null) flags.add(flag);
+					}catch(Throwable exp){}
+				}
+			}
+			
+			//Parse unbreakable:
+			if(key.equalsIgnoreCase("unbreakable")){
+				unbreakable = ParseUtils.parseBoolean(value.trim(), false);
+				if(unbreakable) flags.add(ItemFlag.HIDE_UNBREAKABLE);
+				continue;
+			}
+		}
+		
+		//If no mat found -> Return default value:
+		if(mat == null) return defaultItem;
+		
+		//Now generate the Item:
+		ItemStack item = new ItemStack(mat, amount, damage);
+		ItemMeta meta = item.getItemMeta();
+		if(meta != null){
+			//Add Name:
+			if(name != null) meta.setDisplayName(name);
+			
+			//add lore:
+			if(!lore.isEmpty()) meta.setLore(lore);
+			
+			//Add item flags:
+			if(!flags.isEmpty()) meta.addItemFlags(flags.toArray(new ItemFlag[flags.size()]));
+			
+			//Add unbreakable if Spigot is present.
+			try{
+				Object spigot = meta.getClass().getMethod("spigot").invoke(meta);
+				spigot.getClass().getMethod("setUnbreakable", boolean.class).invoke(spigot, unbreakable);
+			}catch(Throwable exp){}
+			
+			//Add enchantments:
+			if(!enchants.isEmpty()){
+				for(Map.Entry<Enchantment,Integer> entry : enchants.entrySet()){
+					meta.addEnchant(entry.getKey(), entry.getValue(), true);
+				}
+			}
+		}
+		
+		item.setItemMeta(meta);
+		return item;
+	}
+	
+	
+	/**
+	 * Sets the item unbreakable.
+	 * @param item to set
+	 * @param unbreakable to set.
+	 */
+	public static void setUnbreakable(ItemStack item, boolean unbreakable){
+		try{
+			ItemMeta meta = item.getItemMeta();
+			Method method = meta.getClass().getDeclaredMethod("spigot");
+			Object spigot = method.invoke(meta);
+			Method method2 = spigot.getClass().getMethod("setUnbreakable", boolean.class);
+			method2.invoke(spigot, unbreakable);
+			
+			item.setItemMeta(meta);
+		}catch(Throwable exp){}
 	}
 	
 }

@@ -158,6 +158,15 @@ public abstract class VollotileCode {
 	
 	
 	/**
+	 * Sets the header + Footer of the Tab list of the Player.
+	 * @param player to set.
+	 * @param header to set
+	 * @param footer to set.
+	 */
+	public void setTabHeaderFooter(Player player, String header, String footer){ /* Empty Impl */ };
+	
+	
+	/**
 	 * Sends a packet to the player that contains a Particle effect
 	 * 
 	 * @param effect to send

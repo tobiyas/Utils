@@ -96,9 +96,14 @@ public class SearchEntity {
 	 * @return the Found entity or null if none found.
 	 */
 	public static Entity getEntityInLineOfSight(int maxDistance, LivingEntity toSearchFrom){
+		if(toSearchFrom == null) return null;
+		
 		List<Entity> nearEntities = toSearchFrom.getNearbyEntities(maxDistance * 2, maxDistance * 2, maxDistance * 2);
 		
-		Iterator<Block> blockIt = new BlockIterator(toSearchFrom, maxDistance);
+		
+		Iterator<Block> blockIt = null;
+		try{ blockIt = new BlockIterator(toSearchFrom, maxDistance); } catch(IllegalStateException exp){ return null; }
+		
 		while(blockIt.hasNext()){
 			Block block = blockIt.next();
 			if(block.getType().isOccluding()) return null;

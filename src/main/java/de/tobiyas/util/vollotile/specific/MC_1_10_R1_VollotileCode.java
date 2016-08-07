@@ -39,6 +39,7 @@ import net.minecraft.server.v1_10_R1.MinecraftKey;
 import net.minecraft.server.v1_10_R1.PacketDataSerializer;
 import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_10_R1.PacketPlayOutCustomPayload;
+import net.minecraft.server.v1_10_R1.PacketPlayOutPlayerListHeaderFooter;
 import net.minecraft.server.v1_10_R1.PacketPlayOutTitle;
 import net.minecraft.server.v1_10_R1.PacketPlayOutTitle.EnumTitleAction;
 import net.minecraft.server.v1_10_R1.PathEntity;
@@ -96,6 +97,51 @@ public class MC_1_10_R1_VollotileCode extends VollotileCode {
 		
 		CraftArrow craftArrow = (CraftArrow) arrow;
 		craftArrow.getHandle().fromPlayer =  mayBePickedUp ? PickupStatus.ALLOWED : PickupStatus.DISALLOWED;
+	}
+	
+	@Override
+	public void setTabHeaderFooter(Player player, String header, String footer) {
+		if(player == null) return;
+		if(header == null) header = "";
+		if(footer == null) footer = "";
+		
+		initHeaderFooterField();
+		PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
+		try{
+			headerPacketField.set(packet, textToChatBase(header));
+			footerPacketField.set(packet, textToChatBase(footer));
+		}catch(Throwable exp){ exp.printStackTrace(); }
+		
+		
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerListHeaderFooter());
+	}
+	
+	
+	/**
+	 * Converts a Text to an ChatBase.
+	 * @param text to compile.
+	 * @return the compiled text.
+	 */
+	private static IChatBaseComponent textToChatBase(String text){
+		String compiledText = text.isEmpty() ? "{\"translate\":\"\"}" : "{\"text\":\""+text+"\"}";
+		return IChatBaseComponent.ChatSerializer.a(compiledText);
+	}
+	
+	
+	private static Field headerPacketField;
+	private static Field footerPacketField;
+	
+	
+	private static void initHeaderFooterField(){
+		if(footerPacketField != null) return;
+		
+		try{
+			headerPacketField = PacketPlayOutPlayerListHeaderFooter.class.getDeclaredField("a");
+			headerPacketField.setAccessible(true);
+			
+			footerPacketField = PacketPlayOutPlayerListHeaderFooter.class.getDeclaredField("b");
+			footerPacketField.setAccessible(true);
+		}catch(Throwable exp){ exp.printStackTrace(); }
 	}
 
 	
@@ -173,7 +219,6 @@ public class MC_1_10_R1_VollotileCode extends VollotileCode {
 		}
 		
 	}
-
 
 
 	@Override

@@ -127,7 +127,6 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 	 */
 	protected void firstTick(){}
 	
-
 	
 	/**
 	 * Registers the Events for the Plugin.

@@ -66,6 +66,9 @@ public class UNKNOWN_VollotileCode extends VollotileCode {
 	public void overwriteAIToDoNothing(LivingEntity entity) {
 	}
 	
+	@Override
+	public void setTabHeaderFooter(Player player, String header, String footer) {}
+	
 	
 	@Override
 	public MCVersion getVersion() {
