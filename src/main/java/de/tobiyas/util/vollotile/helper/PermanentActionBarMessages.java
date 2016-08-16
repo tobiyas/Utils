@@ -78,10 +78,9 @@ public class PermanentActionBarMessages {
 	 * @param player to remove from.
 	 */
 	public void removeMessage(Player player){
-		synchronized (messageMap) {
-			messageMap.remove(player.getUniqueId());
-		}
+		if(player == null) return;
 		
+		synchronized (messageMap) { if(messageMap.remove(player.getUniqueId()) == null) return; }
 		VollotileCodeManager.getVollotileCode().sendActionBarMessage(player, "");
 	}
 
