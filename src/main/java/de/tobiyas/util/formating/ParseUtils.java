@@ -1,5 +1,6 @@
 package de.tobiyas.util.formating;
 
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
@@ -263,6 +264,39 @@ public class ParseUtils {
 	 */
 	public static EntityType parseEntityType(String[] args, int index, EntityType defaultValue){
 		try{ return EntityType.valueOf(args[index].toUpperCase()); }catch(Throwable exp){ return defaultValue; }
+	}
+	
+	
+	/**
+	 * Parses an Material from a String.
+	 * @param value to parse
+	 * @param defaultValue to use if failed.
+	 * @return the parsed value or default value.
+	 */
+	public static Material parseMaterial(String value, Material defaultValue){
+		try{ return Material.matchMaterial(value); }catch(Throwable exp){ return defaultValue; }
+	}
+	
+	/**
+	 * Parses an Material from an Object.
+	 * @param value to parse
+	 * @param defaultValue to use if failed.
+	 * @return the parsed value or default value.
+	 */
+	public static Material parseMaterial(Object value, Material defaultValue){
+		if(value == null) return defaultValue;
+		try{ return Material.matchMaterial(value.toString()); }catch(Throwable exp){ return defaultValue; }
+	}
+	
+	/**
+	 * Parses an Material from an String Array.
+	 * @param args to parse
+	 * @param index to use
+	 * @param defaultValue to use if failed.
+	 * @return the parsed value or default value.
+	 */
+	public static Material parseMaterial(String[] args, int index, Material defaultValue){
+		try{ return Material.matchMaterial(args[index]); }catch(Throwable exp){ return defaultValue; }
 	}
 
 

@@ -214,6 +214,15 @@ public class MC_1_10_R1_VollotileCode extends VollotileCode {
 			return Particle.TOWN_AURA;
 		case WITCH_MAGIC:
 			return Particle.SPELL_WITCH;
+		case SWEEP_ATTACK:
+			return Particle.SWEEP_ATTACK;
+		case DAMAGEINDICATOR:
+			return Particle.DAMAGE_INDICATOR;
+		case DRAGON_BREATH:
+			return Particle.DRAGON_BREATH;
+		case ENDROD:
+			return Particle.END_ROD;
+			
 		default:
 			return Particle.CRIT;
 		}

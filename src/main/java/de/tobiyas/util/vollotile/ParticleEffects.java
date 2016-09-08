@@ -34,7 +34,12 @@ public enum ParticleEffects {
     SLIME("slime", 29),
     HEART("heart", 30),
     ANGRY_VILLAGER("angryVillager", 31),
-    HAPPY_VILLAGER("happyVillager", 32);
+    HAPPY_VILLAGER("happyVillager", 32),
+    
+    DRAGON_BREATH("dragonbreath", 42),
+    ENDROD("endrod", 43),
+	DAMAGEINDICATOR("damageindicator", 44),
+	SWEEP_ATTACK("sweepAttack", 45);
     
     
     

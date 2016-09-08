@@ -15,4 +15,11 @@ public class Math2 {
 	public static int clamp(int min, int value, int max){
 		return (int)clamp((double)min, (double)value, (double)max);
 	}
+	
+	/**
+	 * Clamps between the 2 values.
+	 */
+	public static float clamp(float min, float value, float max){
+		return (float)clamp((double)min, (double)value, (double)max);
+	}
 }
