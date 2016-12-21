@@ -18,6 +18,7 @@ package de.tobiyas.util.vollotile;
 import de.tobiyas.util.UtilsUsingPlugin;
 import de.tobiyas.util.vollotile.VollotileCode.MCVersion;
 import de.tobiyas.util.vollotile.specific.MC_1_10_R1_VollotileCode;
+import de.tobiyas.util.vollotile.specific.MC_1_11_R1_VollotileCode;
 import de.tobiyas.util.vollotile.specific.MC_1_6_R1_VollotileCode;
 import de.tobiyas.util.vollotile.specific.MC_1_6_R2_VollotileCode;
 import de.tobiyas.util.vollotile.specific.MC_1_6_R3_VollotileCode;
@@ -58,6 +59,12 @@ public class VollotileCodeManager {
 		if(ver == null) {
 			code = new UNKNOWN_VollotileCode();
 			System.out.println("Could not find a Vollotile for the Current MC Version. Using Fallback.");
+			return;
+		}
+		
+		
+		if("v1_11_R1".equalsIgnoreCase(ver)){
+			code = new MC_1_11_R1_VollotileCode();
 			return;
 		}
 		

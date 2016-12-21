@@ -56,6 +56,7 @@ public class PEXPermissions implements PermissionPlugin {
 		ArrayList<String> groups = new ArrayList<String>();
 		if(!isActive()) return groups;
 		
+		
 		List<PermissionGroup> pexGroups = PermissionsEx.getPermissionManager().getGroupList();
 		for(PermissionGroup pexGroup : pexGroups){
 			groups.add(pexGroup.getName());

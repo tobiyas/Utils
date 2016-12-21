@@ -49,6 +49,13 @@
 			<name>Comphenix Repository</name>
 			<url>http://repo.comphenix.net/content/groups/public</url>
 		</repository>
+		
+		
+		<!-- Pex Repo: -->
+		<repository>
+			<id>pex-repo</id>
+   	 		<url>http://pex-repo.aoeu.xyz</url>
+		</repository>
 	</repositories>
 
 	<properties>
@@ -62,7 +69,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.10.2-R0.1-SNAPSHOT</version>
+			<version>1.11-R0.1-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 		
@@ -90,12 +97,6 @@
 	      <version>2.1</version>
 	      <optional>false</optional>
 	    </dependency>
-
-		<dependency>
-			<groupId>net.milkbowl.vault</groupId>
-			<artifactId>VaultAPI</artifactId>
-			<optional>true</optional>
-		</dependency>
 
 		<dependency>
 			<groupId>org.easymock</groupId>
@@ -168,8 +169,6 @@
 		<dependency>
 			<groupId>ru.tehkode</groupId>
 			<artifactId>PermissionsEx</artifactId>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/Permissions/PermissionsEx.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
 
@@ -186,6 +185,12 @@
 			<artifactId>essentials</artifactId>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/libs/Money/Essentials.jar</systemPath>
+			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+			<groupId>net.milkbowl.vault</groupId>
+			<artifactId>VaultAPI</artifactId>
 			<optional>true</optional>
 		</dependency>
 		
@@ -307,6 +312,16 @@
 			<version>1.10.2</version>
 			<optional>true</optional>
 		</dependency>
+		
+				
+		<dependency>
+   			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit_1_11_R1</artifactId>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/cb/cb-1.11.jar</systemPath>
+			<version>1.11.0</version>
+			<optional>true</optional>
+		</dependency>
 
 	</dependencies>
 
@@ -369,7 +384,7 @@
 			<dependency>
 				<groupId>net.milkbowl.vault</groupId>
 				<artifactId>VaultAPI</artifactId>
-				<version>1.4</version>
+				<version>1.6</version>
 			</dependency>
 			<dependency>
 				<groupId>org.easymock</groupId>
@@ -414,7 +429,7 @@
 			<dependency>
 				<groupId>ru.tehkode</groupId>
 				<artifactId>PermissionsEx</artifactId>
-				<version>1.19.2</version>
+				<version>1.23.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>com.iCo6</groupId>

@@ -80,11 +80,9 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 	 * @param dataFolder
 	 * @param file
 	 */
-	@SuppressWarnings("deprecation")
 	protected UtilsUsingPlugin(Server server, JavaPluginLoader loader,
 			PluginDescriptionFile description, File dataFolder, File file) {
-		super(loader, server, description, dataFolder, file);
-		
+		super(loader, description, dataFolder, file);
 	}
 
 	
