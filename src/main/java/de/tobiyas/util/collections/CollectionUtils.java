@@ -28,7 +28,7 @@ public class CollectionUtils {
 		//Now really search:
 		int num = rand.nextInt(collection.size());
 		Iterator<T> it = collection.iterator();
-		for(int i = 0; i < num-1; i++) it.next();
+		for(int i = 0; i < num; i++) it.next();
 		
 		return it.next();
 	}

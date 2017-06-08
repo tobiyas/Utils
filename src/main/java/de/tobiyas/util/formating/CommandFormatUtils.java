@@ -1,5 +1,9 @@
 package de.tobiyas.util.formating;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import de.tobiyas.util.math.Math2;
@@ -27,6 +31,73 @@ public class CommandFormatUtils {
 		int end = Math.min((page * pageSize) - 1, maxIndex);
 		
 		return data.subList(start, end);
+	}
+	
+	
+	
+	public static class PagePackage<T> {
+		
+		/**
+		 * The set of sorted stuff.
+		 */
+		private final List<T> sorted;
+		
+		/**
+		 * The size of the Page
+		 */
+		private final int pageSize;
+		
+		/**
+		 * The last page of the Package.
+		 */
+		private final int lastPage;
+		
+		
+		public PagePackage(Collection<T> collection, Comparator<T> sorter, int pageSize){
+			this.sorted = new ArrayList<T>(collection);
+			Collections.sort(sorted, sorter);
+			
+			this.pageSize = pageSize;
+			
+			double size = sorted.size();
+			double pSize = pageSize;
+			this.lastPage = (int) Math.ceil(size / pSize);
+		}
+		
+		
+		/**
+		 * gets the Page for the Data.
+		 * @param page to get.
+		 * @return the data for the page.
+		 */
+		public List<T> getPage(int page){
+			page = Math2.clamp(1, page, lastPage);
+			
+			int maxIndex = sorted.size();
+			int start = (page-1) * pageSize;
+			int end = Math.min((page * pageSize), maxIndex);
+			
+			return sorted.subList(start, end);
+		}
+		
+		
+		/**
+		 * Gets the last page of the Package.
+		 * @return the last page.
+		 */
+		public int getLastPage() {
+			return lastPage;
+		}
+		
+		/**
+		 * Gets the amount of items in the page.
+		 * @return the amount of items on a page.
+		 */
+		public int getPageSize() {
+			return pageSize;
+		}
+		
+		
 	}
 	
 }

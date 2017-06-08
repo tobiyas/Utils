@@ -150,7 +150,12 @@ public class SearchEntity {
 	public static Entity getEntityInLineOfSight(int maxDistance, LivingEntity toSearchFrom, Set<EntityType> toSkip){
 		List<Entity> nearEntities = toSearchFrom.getNearbyEntities(maxDistance * 2, maxDistance * 2, maxDistance * 2);
 		
-		Iterator<Block> blockIt = new BlockIterator(toSearchFrom, maxDistance);
+		//This seems to be a problem if the Player is not really 100% online yet.
+		Iterator<Block> blockIt = null;
+		try{
+			blockIt = new BlockIterator(toSearchFrom, maxDistance);
+		}catch(IllegalStateException exp){ return null; }
+		
 		while(blockIt.hasNext()){
 			Block block = blockIt.next();
 			if(block.getType().isOccluding()) return null;

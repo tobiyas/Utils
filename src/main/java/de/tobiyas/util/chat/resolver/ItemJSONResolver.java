@@ -60,6 +60,7 @@ public class ItemJSONResolver {
 		String name = MCPrettyName.getPrettyName(itemToParse, "de_DE");
 		String idString = VollotileCodeManager.getVollotileCode().generateItemIDString(itemToParse);
 		short damage = itemToParse.getDurability();
+		int count = itemToParse.getAmount();
 		
 		String enchantFormat = "";
 		//Read enchants if present
@@ -142,7 +143,7 @@ public class ItemJSONResolver {
 		
 		
 		return  "{"
-				+ "id:" + idString + ",Damage:" + damage + ",tag:"
+				+ "id:" + idString + ",Count:" + count + ",Damage:" + damage + ",tag:"
 				+ "{"
 					+ "display:"
 					+ "{"

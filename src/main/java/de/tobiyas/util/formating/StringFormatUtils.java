@@ -83,4 +83,16 @@ public class StringFormatUtils {
 		return chatString;
 	}
 	
+	
+	/**
+	 * If the main string equals any ignore cased.
+	 * @param main to check
+	 * @param part to check against.
+	 * @return
+	 */
+	public static boolean equalsAny(String main, String... part){
+		for(String par : part) if(par.equalsIgnoreCase(main)) return true;
+		return false;
+	}
+	
 }

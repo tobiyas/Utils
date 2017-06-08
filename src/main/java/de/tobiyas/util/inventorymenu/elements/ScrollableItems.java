@@ -166,7 +166,7 @@ public class ScrollableItems {
 		if(hasInventoryHeadSupport()) return generateHead("MHF_ArrowUp", ChatColor.RED + "Scroll Up", "Scrolls the List down.");
 		
 		ItemStack item = new ItemStack(Material.ARROW);
-		ItemMeta meta = upButton.getItemMeta();
+		ItemMeta meta = item.getItemMeta();
 		List<String> lore = new LinkedList<String>();
 		lore.add("MORE");
 		meta.setLore(lore);

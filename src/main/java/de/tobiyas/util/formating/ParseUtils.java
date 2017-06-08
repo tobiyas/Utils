@@ -100,7 +100,17 @@ public class ParseUtils {
 	 * @return the parsed value or default value.
 	 */
 	public static boolean parseBoolean(String value, boolean defaultValue){
-		try{ return Boolean.parseBoolean(value); }catch(Throwable exp){ return defaultValue; }
+		if(value.equalsIgnoreCase("true")) return true;
+		if(value.equalsIgnoreCase("yes")) return true;
+		if(value.equalsIgnoreCase("ja")) return true;
+		if(value.equalsIgnoreCase("on")) return true;
+		
+		if(value.equalsIgnoreCase("false")) return false;
+		if(value.equalsIgnoreCase("no")) return false;
+		if(value.equalsIgnoreCase("nein")) return false;
+		if(value.equalsIgnoreCase("off")) return false;
+		
+		return defaultValue;
 	}
 	
 	/**
@@ -111,7 +121,7 @@ public class ParseUtils {
 	 */
 	public static boolean parseBoolean(Object value, boolean defaultValue){
 		if(value == null) return defaultValue;
-		try{ return Boolean.parseBoolean(value.toString()); }catch(Throwable exp){ return defaultValue; }
+		return parseBoolean(value.toString(), defaultValue);
 	}
 	
 	/**
@@ -122,7 +132,7 @@ public class ParseUtils {
 	 * @return the parsed value or default value.
 	 */
 	public static boolean parseBoolean(String[] args, int index, boolean defaultValue){
-		try{ return Boolean.parseBoolean(args[index]); }catch(Throwable exp){ return defaultValue; }
+		return parseBoolean(args[index], defaultValue);
 	}
 	
 	

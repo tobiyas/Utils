@@ -1,5 +1,6 @@
 package de.tobiyas.util.items;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,27 @@ public class ItemBuilder {
 	private String name = null;
 	private List<String> lore = null;
 	private Map<Enchantment,Integer> enchants = new HashMap<Enchantment,Integer>();
+	
+	
+
+	/**
+	 * Loads the builder from the item passed.
+	 * @param itemToChange to use.
+	 */
+	public void loadFromItem(ItemStack itemToChange) {
+		if(itemToChange == null) return;
+		
+		this.mat = itemToChange.getType();
+		this.damage = itemToChange.getDurability();
+		this.amount = itemToChange.getAmount();
+		
+		if(itemToChange.hasItemMeta()){
+			ItemMeta meta = itemToChange.getItemMeta();
+			if(meta.hasDisplayName()) this.name = meta.getDisplayName();
+			if(meta.hasLore()) this.lore = new ArrayList<String>(meta.getLore());
+			if(meta.hasEnchants()) { this.enchants.clear(); this.enchants.putAll(meta.getEnchants()); }
+		}
+	}
 	
 	
 	public Material getMat() {

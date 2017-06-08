@@ -27,6 +27,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.mcstats.Metrics;
 
 import de.tobiyas.util.chat.commands.ClickCommandManager;
@@ -34,6 +35,7 @@ import de.tobiyas.util.debug.logger.DebugLogger;
 import de.tobiyas.util.economy.MoneyManager;
 import de.tobiyas.util.permissions.PermissionManager;
 import de.tobiyas.util.schedule.DebugBukkitRunnable;
+import de.tobiyas.util.schedule.RunBukkitRunnable;
 import de.tobiyas.util.vollotile.VollotileCodeManager;
 
 public abstract class UtilsUsingPlugin extends JavaPlugin {
@@ -63,11 +65,18 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 	 */
 	private ClickCommandManager clickCommandManager;
 	
+	/**
+	 * The Copy of the Plugins. May be null if not inited yet.
+	 */
+	private static UtilsUsingPlugin plugin;
+	
 	
 	/**
 	 * Default constructor
 	 */
-	public UtilsUsingPlugin() {}
+	public UtilsUsingPlugin() {
+		plugin = this;
+	}
 	
 	
 	
@@ -83,6 +92,8 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 	protected UtilsUsingPlugin(Server server, JavaPluginLoader loader,
 			PluginDescriptionFile description, File dataFolder, File file) {
 		super(loader, description, dataFolder, file);
+		
+		plugin = this;
 	}
 
 	
@@ -291,10 +302,41 @@ public abstract class UtilsUsingPlugin extends JavaPlugin {
 	}
 	
 	
-	//Making public to other Classes!
-	@Override
-	public void installDDL() {
-		super.installDDL();
+	
+	/**
+	 * Runs the Runnable sync.
+	 * @param run to run sync
+	 */
+	public static BukkitTask RunSync(Runnable run){
+		if(!plugin.isEnabled()) return null;
+		return plugin == null ? null : new RunBukkitRunnable(run).runTask(plugin);
+	}
+	
+	/**
+	 * Runs the Runnable sync.
+	 * @param run to run sync
+	 */
+	public static BukkitTask RunSync(Runnable run, int ticks){
+		if(!plugin.isEnabled()) return null;
+		return plugin == null ? null : new RunBukkitRunnable(run).runTaskLater(plugin, ticks);
+	}
+	
+	/**
+	 * Runs the Runnable sync.
+	 * @param run to run sync
+	 */
+	public static BukkitTask RunAsync(Runnable run){
+		if(!plugin.isEnabled()) return null;
+		return plugin == null ? null : new RunBukkitRunnable(run).runTaskAsynchronously(plugin);
+	}
+
+	/**
+	 * Runs the Runnable sync.
+	 * @param run to run sync
+	 */
+	public static BukkitTask RunAsync(Runnable run, int ticks){
+		if(!plugin.isEnabled()) return null;
+		return plugin == null ? null : new RunBukkitRunnable(run).runTaskLaterAsynchronously(plugin, ticks);
 	}
 	
 }

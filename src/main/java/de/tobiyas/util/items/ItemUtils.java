@@ -327,6 +327,10 @@ public class ItemUtils {
 		boolean unbreakable = false;
 		Set<ItemFlag> flags = new HashSet<ItemFlag>();
 		
+		//Only 1 split -> Material?!
+		if(split.length == 1) mat = Material.matchMaterial(split[0]);
+		
+		//Go for the Splits!
 		for(String part : split){
 			if(!part.contains(":")) continue;
 			
