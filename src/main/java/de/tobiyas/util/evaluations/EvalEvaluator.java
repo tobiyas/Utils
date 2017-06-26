@@ -44,7 +44,7 @@ public class EvalEvaluator {
 			index++;
 			
 			//Check for variable end:
-			if(currentChar == '%' && isCurrentlyVariable){
+			if((currentChar == '%' || currentChar == '}') && isCurrentlyVariable){
 				currentData += currentChar;
 				splittet.add(currentData);
 				currentData = "";
@@ -53,7 +53,7 @@ public class EvalEvaluator {
 			}
 			
 			//Check for Variable start:
-			if(currentChar == '%' && !isCurrentlyVariable){
+			if((currentChar == '%' || currentChar == '{') && !isCurrentlyVariable){
 				currentData += currentChar;
 				isCurrentlyVariable = true;
 				continue;
@@ -98,6 +98,7 @@ public class EvalEvaluator {
 			
 			//check if is variable:
 			if(key.length() > 2 && key.startsWith("%") && key.endsWith("%")) continue;
+			if(key.length() > 2 && key.startsWith("{") && key.endsWith("}")) continue;
 			
 			//Last check if we have a number:
 			try{ Double.parseDouble(key); continue; }catch(Throwable exp){} 
