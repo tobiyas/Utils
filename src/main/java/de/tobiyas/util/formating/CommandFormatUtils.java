@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import de.tobiyas.util.chat.components.TellRawChatMessage;
 import de.tobiyas.util.math.Math2;
 
 public class CommandFormatUtils {
@@ -95,6 +96,26 @@ public class CommandFormatUtils {
 		 */
 		public int getPageSize() {
 			return pageSize;
+		}
+		
+		
+		/**
+		 * Generates a Bottom row / Line with Tell-Raw.
+		 * @param page to set.
+		 * @param command to  use. This will be formated!!!! use %s for the page number!!
+		 * @return the generated Chat Message to send.
+		 */
+		public TellRawChatMessage generateBottomLine(int page, String command){
+			TellRawChatMessage message = new TellRawChatMessage().addSimpleText("        ");
+			
+			if(page > 1) message = message.addSimpleCommand("<<", "Page " + (page - 1), String.format(command, page - 1));
+			else message = message.addSimpleText("    ");
+			
+			message = message.addSimpleText(" | ");
+			
+			if(page < getLastPage()) message = message.addSimpleCommand(">>", "Page " + (page + 1), String.format(command, page + 1));
+			
+			return message;
 		}
 		
 		

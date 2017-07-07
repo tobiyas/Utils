@@ -1,5 +1,8 @@
 package de.tobiyas.util.formating;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.bukkit.ChatColor;
 
 import de.tobiyas.util.math.Math2;
@@ -93,6 +96,29 @@ public class StringFormatUtils {
 	public static boolean equalsAny(String main, String... part){
 		for(String par : part) if(par.equalsIgnoreCase(main)) return true;
 		return false;
+	}
+	
+	
+	public static String join(String delimiter, Object... data){
+		String result = "";
+		for(int i = 0; i < data.length; i++) {
+			if(i != 0) result += delimiter;
+			result += data[i];
+		}
+		
+		return result;
+	}
+	
+	public static String join(String delimiter, Collection<?> data){
+		String result = "";
+		Iterator<?> it = data.iterator();
+		
+		while(it.hasNext()){
+			if(!result.isEmpty()) result += delimiter;
+			result += it.next();
+		}
+		
+		return result;
 	}
 	
 }
