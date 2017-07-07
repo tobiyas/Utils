@@ -1,6 +1,6 @@
 package de.tobiyas.util.evaluations.parts;
 
-public abstract class AbstractOperator implements Operator {
+public abstract class Abstract2PartOperator implements Operator {
 
 	
 	protected Calculation part1;

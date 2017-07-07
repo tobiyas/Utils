@@ -12,17 +12,21 @@ import org.apache.commons.lang.StringUtils;
 
 import de.tobiyas.util.evaluations.parts.Calculation;
 import de.tobiyas.util.evaluations.parts.Operator;
+import de.tobiyas.util.evaluations.parts.SinglePartOperator;
 import de.tobiyas.util.evaluations.parts.leafs.Number;
 import de.tobiyas.util.evaluations.parts.leafs.Variable;
-import de.tobiyas.util.evaluations.parts.operators.Add;
-import de.tobiyas.util.evaluations.parts.operators.Divide;
-import de.tobiyas.util.evaluations.parts.operators.Multiply;
-import de.tobiyas.util.evaluations.parts.operators.Subtract;
+import de.tobiyas.util.evaluations.parts.operators.multi.Add;
+import de.tobiyas.util.evaluations.parts.operators.multi.Divide;
+import de.tobiyas.util.evaluations.parts.operators.multi.Multiply;
+import de.tobiyas.util.evaluations.parts.operators.multi.Subtract;
+import de.tobiyas.util.evaluations.parts.operators.single.Square;
+import de.tobiyas.util.evaluations.parts.operators.single.SquareRoot;
 
 public class EvalEvaluator {
 
 	private static final Collection<Character> operators = Arrays.asList('+','-','*','/');
 	private static final Collection<Character> bracket = Arrays.asList('(',')');
+	private static final Collection<String> singleOps = Arrays.asList("SQRT");
 	
 	/**
 	 * Splits the String by number / eval expressions.
@@ -75,11 +79,26 @@ public class EvalEvaluator {
 				continue;
 			}
 			
+			//Check for single Ops.
+			if(singleOps.contains(currentData.toUpperCase())){
+				splittet.add(currentData.toUpperCase());
+				currentData = "";
+			}
+			
 			//Well we have a number or something like that...
 			currentData += currentChar;
 		}
 		
 		return splittet;
+	}
+	
+	/**
+	 * Gets a list of all wrong / not readable parts.
+	 * @param calcString to calc.
+	 * @return a list of all broken parts.
+	 */
+	public static List<String> getWrongElements(String calcString){
+		return getWrongElements(splitStuff(calcString));
 	}
 	
 
@@ -103,8 +122,27 @@ public class EvalEvaluator {
 			//Last check if we have a number:
 			try{ Double.parseDouble(key); continue; }catch(Throwable exp){} 
 			
+			//Check for Single Operators:
+			if(singleOps.contains(key)) continue;
+			
 			//It's nothing that we know!
 			wrongElements.add(key);
+		}
+		
+		//Check if the ending is a Operator or SingleOp:
+		//Get the last thing NOT beeing a ')'
+		String last = "";
+		for(int i = toCheck.size() - 1; i >= 0; i--){
+			last = toCheck.get(i); 
+			if(!last.equals(")")) {
+				break; 
+			}
+		}
+		
+		//Now really check:
+		if(singleOps.contains(last) || operators.contains(last.charAt(0))){
+			//The calculation may NOT end with an Pre-fixed Operator:
+			wrongElements.add(last + " (operator at the end)");
 		}
 		
 		return wrongElements;
@@ -223,6 +261,9 @@ public class EvalEvaluator {
 			if(toParse.equals("-")) calculations.set(i, new Subtract());
 			if(toParse.equals("*")) calculations.set(i, new Multiply());
 			if(toParse.equals("/")) calculations.set(i, new Divide());
+			
+			if(toParse.equals("SQRT")) calculations.set(i, new SquareRoot());
+			if(toParse.equals("SQR")) calculations.set(i, new Square());
 		}
 	}
 	
@@ -272,8 +313,30 @@ public class EvalEvaluator {
 			else throw new RuntimeException("Was not a list or Calculation!");
 		}
 		
-		//First right-bind Multiplications:
+		//First right-Bind Single part Operators:
 		boolean gotOne = true;
+		while(gotOne){
+			gotOne = false;
+			for(int i = calcs.size()-2; i >= 0; i--){
+				Calculation current = calcs.get(i);
+				Calculation right = calcs.get(i+1);
+				
+				if(current instanceof SinglePartOperator){
+					SinglePartOperator operator = (SinglePartOperator) current;
+					if(operator.getPart() != null) continue;
+					
+					operator.setPart(right);
+					calcs.remove(i+1);
+					gotOne = true;
+					break;
+				}
+
+			}
+		}
+
+		
+		//First right-bind Multiplications:
+		gotOne = true;
 		while(gotOne){
 			gotOne = false;
 			for(int i = calcs.size()-2; i >= 0; i--){

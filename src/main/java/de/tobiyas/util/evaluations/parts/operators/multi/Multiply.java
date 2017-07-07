@@ -1,11 +1,11 @@
-package de.tobiyas.util.evaluations.parts.operators;
+package de.tobiyas.util.evaluations.parts.operators.multi;
 
 import java.util.Map;
 
-import de.tobiyas.util.evaluations.parts.AbstractOperator;
+import de.tobiyas.util.evaluations.parts.Abstract2PartOperator;
 import de.tobiyas.util.evaluations.parts.Calculation;
 
-public class Multiply extends AbstractOperator {
+public class Multiply extends Abstract2PartOperator {
 
 	
 	public Multiply(Calculation part1, Calculation part2) {

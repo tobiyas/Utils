@@ -1,11 +1,11 @@
-package de.tobiyas.util.evaluations.parts.operators;
+package de.tobiyas.util.evaluations.parts.operators.multi;
 
 import java.util.Map;
 
-import de.tobiyas.util.evaluations.parts.AbstractOperator;
+import de.tobiyas.util.evaluations.parts.Abstract2PartOperator;
 import de.tobiyas.util.evaluations.parts.Calculation;
 
-public class Divide extends AbstractOperator {
+public class Divide extends Abstract2PartOperator {
 
 	
 	public Divide(Calculation part1, Calculation part2) {
