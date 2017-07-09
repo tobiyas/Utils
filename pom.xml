@@ -20,6 +20,19 @@
 	<artifactId>Utils</artifactId>
 	<version>1.0.14</version>
 	<name>Utils</name>
+	
+	
+	<!--  Use the MyMavenRepo Service -->
+    <distributionManagement>
+        <repository>
+            <id>MyMaven.write</id>
+            <url>${myMavenRepo.write.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>MyMaven.write</id>
+            <url>${myMavenRepo.write.url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 	<repositories>
 		<repository>
@@ -452,12 +465,5 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-	<distributionManagement>
-		<repository>
-			<id>home-pi-maven</id>
-			<url>sftp://192.168.192.48/var/www/maven/</url>
-		</repository>
-	</distributionManagement>
 	
 </project>
