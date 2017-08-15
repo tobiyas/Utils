@@ -131,8 +131,8 @@ public class JSONRawSender {
 	 * Appends a message to the resolver
 	 * <br>This adds the URL text
 	 * 
-	 * @param message to append
-	 * @param type to convert to
+	 * @param url to popup on click
+	 * @param label to show
 	 * 
 	 * @return this for building
 	 */
