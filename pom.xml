@@ -82,7 +82,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.12-R0.1-SNAPSHOT</version>
+			<version>1.13-R0.1-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 		
@@ -342,6 +342,15 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/libs/cb/cb-1.12.jar</systemPath>
 			<version>1.12.0</version>
+			<optional>true</optional>
+		</dependency>
+				
+		<dependency>
+   			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit_1_13_R1</artifactId>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/cb/cb-1.13.jar</systemPath>
+			<version>1.13.0</version>
 			<optional>true</optional>
 		</dependency>
 
