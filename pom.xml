@@ -56,19 +56,6 @@
 			<url>http://tobiyas.de/maven</url>
 		</repository>
 	
-		<!-- Protocol Lib -->
-		<repository>
-			<id>comphenix-rep</id>
-			<name>Comphenix Repository</name>
-			<url>http://repo.dmulloy2.net/content/groups/public/</url>
-		</repository>
-		
-		
-		<!-- Pex Repo: -->
-		<repository>
-			<id>pex-repo</id>
-   	 		<url>http://pex-repo.aoeu.xyz</url>
-		</repository>
 	</repositories>
 
 	<properties>
@@ -125,14 +112,6 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- Protocol Lib -->
-		<dependency>
-			<groupId>com.comphenix.protocol</groupId>
-			<artifactId>ProtocolLib</artifactId>
-			<version>4.2.0</version>
-			<optional>true</optional>
-		</dependency>
-		
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
@@ -182,6 +161,8 @@
 		<dependency>
 			<groupId>ru.tehkode</groupId>
 			<artifactId>PermissionsEx</artifactId>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/Permissions/PermissionsEx.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
 
