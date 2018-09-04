@@ -15,6 +15,8 @@
  ******************************************************************************/
 package de.tobiyas.util.entitysearch;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -301,6 +303,49 @@ public class SearchEntity {
 		}
 		
 		return entities;
+	}
+	
+	
+	/**
+	 * Returns all Entities in the Range of the Entity.
+	 * 
+	 * @param base the base location.
+	 * @param range around to search.
+	 * @return
+	 */
+	public static Collection<Entity> inCircleAround(Location base, double range){
+		Collection<Entity> entities = base.getWorld().getNearbyEntities( base, range, range, range );
+		double rangeSpauare = range * range;
+		
+		Iterator<Entity> it = entities.iterator();
+		while(it.hasNext()){
+			if(it.next().getLocation().distanceSquared(base) > rangeSpauare) it.remove();
+		}
+		
+		return entities;
+	}
+	
+	
+	/**
+	 * Returns all Entities in the Range of the Entity.
+	 * 
+	 * @param base the base location.
+	 * @param range around to search.
+	 * @return
+	 */
+	public static Collection<LivingEntity> inCircleAroundLiving(Location base, double range){
+		Collection<Entity> entities = base.getWorld().getNearbyEntities( base, range, range, range );
+		double rangeSqauare = range * range;
+		
+		Collection<LivingEntity> result = new ArrayList<LivingEntity>();
+		for( Entity entity : entities){
+			if( !(entity instanceof LivingEntity ) ) continue;
+			if( entity.getLocation().distanceSquared( base ) > rangeSqauare ) continue;
+			
+			result.add( ( LivingEntity ) entity );
+		}
+		
+		return result;
 	}
 	
 	

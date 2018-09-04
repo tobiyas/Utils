@@ -203,7 +203,7 @@ public class EvalEvaluator {
 		
 		List<String> wrongElements = getWrongElements(toParse);
 		if(!wrongElements.isEmpty()){
-			throw new IllegalArgumentException("Some elements are not correct: " + StringUtils.join(wrongElements, " "));
+			throw new IllegalArgumentException("Some elements are not correct or can not be identified: " + StringUtils.join(wrongElements, " "));
 		}
 		
 		List<Object> calculations = new ArrayList<Object>(toParse);

@@ -1,8 +1,14 @@
 package de.tobiyas.util.formating;
 
+import java.util.regex.Pattern;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.util.Vector;
 
 public class ParseUtils {
 
@@ -308,6 +314,113 @@ public class ParseUtils {
 	public static Material parseMaterial(String[] args, int index, Material defaultValue){
 		try{ return Material.matchMaterial(args[index]); }catch(Throwable exp){ return defaultValue; }
 	}
-
+	
+	
+	/**
+	 * Parses a location from a String.
+	 * @param value to parse
+	 * @param defaultValue to use if failed.
+	 * @return the parsed value or default value.
+	 */
+	public static Location parseLocation(String value, Location defaultValue){
+		try{
+			String[] parts = value.split( Pattern.quote(";") );
+			if( parts.length != 4 ) {
+				parts = value.split( Pattern.quote( "#" ) );
+				if( parts.length != 4 ) return defaultValue;
+			}
+			
+			World world = Bukkit.getWorld( parts[0] );
+			double x = Double.parseDouble( parts[1] );
+			double y = Double.parseDouble( parts[2] );
+			double z = Double.parseDouble( parts[3] );
+			
+			if( world == null ) return defaultValue;
+			return new Location( world, x, y, z );
+		}catch(Throwable exp){ 
+			return defaultValue; 
+		}
+	}
+	
+	/**
+	 * Parses an Location from an Object.
+	 * @param value to parse
+	 * @param defaultValue to use if failed.
+	 * @return the parsed value or default value.
+	 */
+	public static Location parseLocationObj( Object value, Location defaultValue ){
+		if(value == null) return defaultValue;
+		try{ 
+			if( value instanceof Location ) return (Location) value;
+			
+			return parseLocation( value.toString(), defaultValue ); 
+		}catch(Throwable exp){ return defaultValue; }
+	}
+	
+	/**
+	 * Parses an Location from an String Array.
+	 * @param args to parse
+	 * @param index to use
+	 * @param defaultValue to use if failed.
+	 * @return the parsed value or default value.
+	 */
+	public static Location parseLocation( String[] args, int index, Location defaultValue ){
+		try{ 
+			return parseLocation( args[index], defaultValue );
+		}catch(Throwable exp){ return defaultValue; }
+	}
+	
+	
+	/**
+	 * Parses a Vector from a String.
+	 * @param value to parse
+	 * @param defaultValue to use if failed.
+	 * @return the parsed value or default value.
+	 */
+	public static Vector parseVector(String value, Vector defaultValue){
+		try{
+			String[] parts = value.split( Pattern.quote(";") );
+			if( parts.length != 3 ) {
+				parts = value.split( Pattern.quote( "#" ) );
+				if( parts.length != 3 ) return defaultValue;
+			}
+			
+			double x = Double.parseDouble( parts[0] );
+			double y = Double.parseDouble( parts[1] );
+			double z = Double.parseDouble( parts[2] );
+			
+			return new Vector( x, y, z );
+		}catch(Throwable exp){ 
+			return defaultValue; 
+		}
+	}
+	
+	/**
+	 * Parses an Vector from an Object.
+	 * @param value to parse
+	 * @param defaultValue to use if failed.
+	 * @return the parsed value or default value.
+	 */
+	public static Vector parseLocation( Object value, Vector defaultValue ){
+		if(value == null) return defaultValue;
+		try{
+			if( value instanceof Vector ) return (Vector) value;
+			
+			return parseVector( value.toString(), defaultValue ); 
+		}catch(Throwable exp){ return defaultValue; }
+	}
+	
+	/**
+	 * Parses an Vector from an String Array.
+	 * @param args to parse
+	 * @param index to use
+	 * @param defaultValue to use if failed.
+	 * @return the parsed value or default value.
+	 */
+	public static Vector parseVector( String[] args, int index, Vector defaultValue ){
+		try{ 
+			return parseVector( args[index], defaultValue );
+		}catch(Throwable exp){ return defaultValue; }
+	}
 
 }
